@@ -1,5 +1,5 @@
 import { useRoutes } from "react-router-dom";
-import SideMenu from "../layouts/SideMenu";
+import Layout from "../layouts";
 import DashboardOverview4 from "../pages/DashboardOverview4";
 import Categories from "../pages/Categories";
 import ProductList from "../pages/ProductList";
@@ -18,7 +18,7 @@ function Router() {
   const routes = [
     {
       path: "/",
-      element: <SideMenu />,
+      element: <Layout />,
       children: [
         {
           path: "/",

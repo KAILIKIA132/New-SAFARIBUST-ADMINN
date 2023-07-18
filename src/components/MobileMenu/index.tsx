@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toRaw } from "../../utils/helper";
 import { selectSideMenu } from "../../stores/sideMenuSlice";
 import { useAppSelector } from "../../stores/hooks";
-import { FormattedMenu, nestedMenu } from "../../layouts/SideMenu/side-menu";
+import { FormattedMenu, nestedMenu } from "../../layouts/side-menu";
 import { linkTo, enter, leave } from "./mobile-menu";
 import Lucide from "../../base-components/Lucide";
 import logoUrl from "../../assets/images/logo.png";

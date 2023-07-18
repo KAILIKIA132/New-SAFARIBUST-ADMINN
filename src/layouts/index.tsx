@@ -1,16 +1,16 @@
 import { Transition } from "react-transition-group";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { selectSideMenu } from "../../stores/sideMenuSlice";
-import { useAppSelector } from "../../stores/hooks";
+import { selectSideMenu } from "../stores/sideMenuSlice";
+import { useAppSelector } from "../stores/hooks";
 import { FormattedMenu, linkTo, nestedMenu, enter, leave } from "./side-menu";
-import Lucide from "../../base-components/Lucide";
+import Lucide from "../base-components/Lucide";
 import clsx from "clsx";
-import TopBar from "../../components/TopBar";
-import MobileMenu from "../../components/MobileMenu";
-import DarkModeSwitcher from "../../components/DarkModeSwitcher";
-import MainColorSwitcher from "../../components/MainColorSwitcher";
-import SideMenuTooltip from "../../components/SideMenuTooltip";
+import TopBar from "../components/TopBar";
+import MobileMenu from "../components/MobileMenu";
+import DarkModeSwitcher from "../components/DarkModeSwitcher";
+import MainColorSwitcher from "../components/MainColorSwitcher";
+import SideMenuTooltip from "../components/SideMenuTooltip";
 
 function Main() {
   const location = useLocation();

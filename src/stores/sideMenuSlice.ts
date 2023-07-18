@@ -64,10 +64,27 @@ const initialState: SideMenuState = {
         }
       ],
     },
+
     {
       icon: "CreditCard",
-      pathname: "/transaction-list",
-      title: "Transactions"
+      title: "Payments",
+      subMenu: [
+        {
+          icon: "Activity",
+          pathname: "/wallets",
+          title: "Wallets",
+        },
+        {
+          icon: "Activity",
+          pathname: "/transaction-list",
+          title: "Transactions",
+        }
+      ],
+    },
+    {
+      icon: "PhoneCall",
+      pathname: "/simcards",
+      title: "Sim Cards"
     },
     "divider",
     {
@@ -75,22 +92,22 @@ const initialState: SideMenuState = {
       title: "Security",
       subMenu: [
         {
-          icon: "UserCheck",
+          icon: "Activity",
           pathname: "/roles-permissions",
           title: "Roles & Permissions",
         },
         {
-          icon: "Users",
+          icon: "Activity",
           pathname: "/system-users",
           title: "System Users",
         },
         {
-          icon: "File",
+          icon: "Activity",
           pathname: "/access-logs",
           title: "Access Logs",
         },
         {
-          icon: "Lock",
+          icon: "Activity",
           pathname: "/change-password",
           title: "Change Password",
         },
@@ -103,7 +120,7 @@ const initialState: SideMenuState = {
       title: "Profile",
     },
     {
-      icon: "ToggleRight",
+      icon: "Power",
       pathname: "/signout",
       title: "Sign Out",
     }

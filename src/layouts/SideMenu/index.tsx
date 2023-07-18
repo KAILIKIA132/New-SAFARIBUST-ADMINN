@@ -27,7 +27,7 @@ function Main() {
   return (
     <div className="py-5 md:py-0">
       <DarkModeSwitcher />
-      {/* <MainColorSwitcher /> */}
+      <MainColorSwitcher />
       <MobileMenu />
       <TopBar layout="side-menu" />
       <div className="flex overflow-hidden">

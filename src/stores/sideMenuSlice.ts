@@ -84,7 +84,7 @@ const initialState: SideMenuState = {
     {
       icon: "PhoneCall",
       pathname: "/simcards",
-      title: "Sim Cards"
+      title: "Simcard Booking"
     },
     "divider",
     {

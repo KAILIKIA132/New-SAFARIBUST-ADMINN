@@ -1594,7 +1594,7 @@ function Main() {
                             <div className="h-56 px-2">
                               <div className="h-full overflow-hidden rounded-md image-fit">
                                 <img
-                                  alt="Midone Tailwind HTML Admin Template"
+                                  alt=""
                                   src={fakerData[0].images[0]}
                                 />
                               </div>
@@ -1602,7 +1602,7 @@ function Main() {
                             <div className="h-56 px-2">
                               <div className="h-full overflow-hidden rounded-md image-fit">
                                 <img
-                                  alt="Midone Tailwind HTML Admin Template"
+                                  alt=""
                                   src={fakerData[0].images[1]}
                                 />
                               </div>
@@ -1610,7 +1610,7 @@ function Main() {
                             <div className="h-56 px-2">
                               <div className="h-full overflow-hidden rounded-md image-fit">
                                 <img
-                                  alt="Midone Tailwind HTML Admin Template"
+                                  alt=""
                                   src={fakerData[0].images[2]}
                                 />
                               </div>
@@ -1618,7 +1618,7 @@ function Main() {
                             <div className="h-56 px-2">
                               <div className="h-full overflow-hidden rounded-md image-fit">
                                 <img
-                                  alt="Midone Tailwind HTML Admin Template"
+                                  alt=""
                                   src={fakerData[0].images[3]}
                                 />
                               </div>
@@ -1675,7 +1675,7 @@ function Main() {
                         <div className="h-56 px-2">
                           <div className="h-full overflow-hidden rounded-md image-fit">
                             <img
-                              alt="Midone Tailwind HTML Admin Template"
+                              alt=""
                               src={fakerData[0].images[0]}
                             />
                           </div>
@@ -1683,7 +1683,7 @@ function Main() {
                         <div className="h-56 px-2">
                           <div className="h-full overflow-hidden rounded-md image-fit">
                             <img
-                              alt="Midone Tailwind HTML Admin Template"
+                              alt=""
                               src={fakerData[0].images[1]}
                             />
                           </div>
@@ -1691,7 +1691,7 @@ function Main() {
                         <div className="h-56 px-2">
                           <div className="h-full overflow-hidden rounded-md image-fit">
                             <img
-                              alt="Midone Tailwind HTML Admin Template"
+                              alt=""
                               src={fakerData[0].images[2]}
                             />
                           </div>
@@ -1699,7 +1699,7 @@ function Main() {
                         <div className="h-56 px-2">
                           <div className="h-full overflow-hidden rounded-md image-fit">
                             <img
-                              alt="Midone Tailwind HTML Admin Template"
+                              alt=""
                               src={fakerData[0].images[3]}
                             />
                           </div>

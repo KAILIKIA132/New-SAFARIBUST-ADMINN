@@ -275,7 +275,7 @@ function Main() {
                     <div className="flex items-center px-4 py-4 mb-3 box zoom-in">
                       <div className="flex-none w-10 h-10 overflow-hidden rounded-md image-fit">
                         <img
-                          alt="Midone Tailwind HTML Admin Template"
+                          alt=""
                           src={faker.photos[0]}
                         />
                       </div>
@@ -547,7 +547,7 @@ function Main() {
                             <div className="w-10 h-10 image-fit zoom-in">
                               <Tippy
                                 as="img"
-                                alt="Midone Tailwind HTML Admin Template"
+                                alt=""
                                 className="rounded-full shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
                                 src={faker.images[0]}
                                 content={`Uploaded at ${faker.dates[0]}`}
@@ -556,7 +556,7 @@ function Main() {
                             <div className="w-10 h-10 -ml-5 image-fit zoom-in">
                               <Tippy
                                 as="img"
-                                alt="Midone Tailwind HTML Admin Template"
+                                alt=""
                                 className="rounded-full shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
                                 src={faker.images[1]}
                                 content={`Uploaded at ${faker.dates[1]}`}
@@ -565,7 +565,7 @@ function Main() {
                             <div className="w-10 h-10 -ml-5 image-fit zoom-in">
                               <Tippy
                                 as="img"
-                                alt="Midone Tailwind HTML Admin Template"
+                                alt=""
                                 className="rounded-full shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
                                 src={faker.images[2]}
                                 content={`Uploaded at ${faker.dates[2]}`}
@@ -787,7 +787,7 @@ function Main() {
                     <div className="before:block before:absolute before:w-20 before:h-px before:bg-slate-200 before:dark:bg-darkmode-400 before:mt-5 before:ml-5">
                       <div className="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
                         <img
-                          alt="Midone Tailwind HTML Admin Template"
+                          alt=""
                           src={fakerData[9].photos[0]}
                         />
                       </div>
@@ -810,7 +810,7 @@ function Main() {
                     <div className="before:block before:absolute before:w-20 before:h-px before:bg-slate-200 before:dark:bg-darkmode-400 before:mt-5 before:ml-5">
                       <div className="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
                         <img
-                          alt="Midone Tailwind HTML Admin Template"
+                          alt=""
                           src={fakerData[8].photos[0]}
                         />
                       </div>
@@ -833,7 +833,7 @@ function Main() {
                             content={fakerData[0].products[0].name}
                           >
                             <img
-                              alt="Midone Tailwind HTML Admin Template"
+                              alt=""
                               className="border border-white rounded-md"
                               src={fakerData[8].images[0]}
                             />
@@ -844,7 +844,7 @@ function Main() {
                             content={fakerData[1].products[0].name}
                           >
                             <img
-                              alt="Midone Tailwind HTML Admin Template"
+                              alt=""
                               className="border border-white rounded-md"
                               src={fakerData[8].images[1]}
                             />
@@ -855,7 +855,7 @@ function Main() {
                             content={fakerData[2].products[0].name}
                           >
                             <img
-                              alt="Midone Tailwind HTML Admin Template"
+                              alt=""
                               className="border border-white rounded-md"
                               src={fakerData[8].images[2]}
                             />
@@ -871,7 +871,7 @@ function Main() {
                     <div className="before:block before:absolute before:w-20 before:h-px before:bg-slate-200 before:dark:bg-darkmode-400 before:mt-5 before:ml-5">
                       <div className="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
                         <img
-                          alt="Midone Tailwind HTML Admin Template"
+                          alt=""
                           src={fakerData[7].photos[0]}
                         />
                       </div>
@@ -898,7 +898,7 @@ function Main() {
                     <div className="before:block before:absolute before:w-20 before:h-px before:bg-slate-200 before:dark:bg-darkmode-400 before:mt-5 before:ml-5">
                       <div className="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
                         <img
-                          alt="Midone Tailwind HTML Admin Template"
+                          alt=""
                           src={fakerData[6].photos[0]}
                         />
                       </div>
@@ -937,7 +937,7 @@ function Main() {
                       <div className="flex items-center px-5 py-3 mb-3 box zoom-in">
                         <div className="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
                           <img
-                            alt="Midone Tailwind HTML Admin Template"
+                            alt=""
                             src={faker.photos[0]}
                           />
                         </div>

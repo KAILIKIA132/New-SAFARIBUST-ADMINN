@@ -1,7 +1,7 @@
 import DarkModeSwitcher from "../../components/DarkModeSwitcher";
 import MainColorSwitcher from "../../components/MainColorSwitcher";
 import logoUrl from "../../assets/images/logo.png";
-import illustrationUrl from "../../assets/images/illustration.svg";
+import illustrationUrl from "../../assets/images/illustration.png";
 import { FormInput, FormCheck } from "../../base-components/Form";
 import Button from "../../base-components/Button";
 import clsx from "clsx";
@@ -23,26 +23,25 @@ function Main() {
             {/* BEGIN: Login Info */}
             <div className="flex-col hidden min-h-screen xl:flex">
               <a href="" className="flex items-center pt-5 -intro-x">
-                <img
+                {/* <img
                   alt="ACS"
                   className="w-20"
                   src={logoUrl}
-                />
-                <span className="ml-3 text-lg text-white"> Rubick </span>
+                /> */}
+                {/* <span className="ml-3 text-lg text-white"> Rubick </span> */}
               </a>
               <div className="my-auto">
                 <img
-                  alt="Midone Tailwind HTML Admin Template"
+                  alt=""
                   className="w-1/2 -mt-16 -intro-x"
                   src={illustrationUrl}
                 />
-                <div className="mt-10 text-4xl font-medium leading-tight text-white -intro-x">
-                  A few more clicks to <br />
-                  sign in to your account.
-                </div>
-                <div className="mt-5 text-lg text-white -intro-x text-opacity-70 dark:text-slate-400">
+                {/* <div className="mt-10 text-4xl font-medium leading-tight text-white -intro-x">
+                  Driving Green Growth & <br/> Climate Finance Solutions <br/>For Africa And The World
+                </div> */}
+                {/* <div className="mt-5 text-lg text-white -intro-x text-opacity-70 dark:text-slate-400">
                   Manage all your e-commerce accounts in one place
-                </div>
+                </div> */}
               </div>
             </div>
             {/* END: Login Info */}

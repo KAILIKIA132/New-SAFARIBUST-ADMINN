@@ -120,7 +120,7 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
                 >
                   <div className="relative flex-none w-12 h-12 mr-1 image-fit">
                     <img
-                      alt="Midone Tailwind HTML Admin Template"
+                      alt=""
                       className="rounded-full"
                       src={faker.photos[0]}
                     />
@@ -148,7 +148,7 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
           <Menu>
             <Menu.Button className="block w-8 h-8 overflow-hidden rounded-full shadow-lg image-fit zoom-in intro-x">
               <img
-                alt="Midone Tailwind HTML Admin Template"
+                alt=""
                 src={fakerData[9].photos[0]}
               />
             </Menu.Button>

@@ -32,7 +32,7 @@ function Main() {
               </a>
               <div className="my-auto">
                 <img
-                  alt="Midone Tailwind HTML Admin Template"
+                  alt=""
                   className="w-1/2 -mt-16 -intro-x"
                   src={illustrationUrl}
                 />

@@ -189,7 +189,7 @@ function Main() {
                             >
                               <img
                                 className="rounded-md"
-                                alt="Midone Tailwind HTML Admin Template"
+                                alt=""
                                 src={faker.images[0]}
                               />
                               <Tippy
@@ -237,7 +237,7 @@ function Main() {
                   <div className="w-6 h-6 mr-3 image-fit">
                     <img
                       className="rounded"
-                      alt="Midone Tailwind HTML Admin Template"
+                      alt=""
                       src={fakerData[0].photos[0]}
                     />
                   </div>
@@ -250,7 +250,7 @@ function Main() {
                       <div className="absolute w-6 h-6 mr-3 image-fit">
                         <img
                           className="rounded"
-                          alt="Midone Tailwind HTML Admin Template"
+                          alt=""
                           src={faker.photos[0]}
                         />
                       </div>

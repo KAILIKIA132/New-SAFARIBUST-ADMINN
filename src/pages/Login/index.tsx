@@ -1,6 +1,6 @@
 import DarkModeSwitcher from "../../components/DarkModeSwitcher";
 import MainColorSwitcher from "../../components/MainColorSwitcher";
-import logoUrl from "../../assets/images/logo.svg";
+import logoUrl from "../../assets/images/logo.png";
 import illustrationUrl from "../../assets/images/illustration.svg";
 import { FormInput, FormCheck } from "../../base-components/Form";
 import Button from "../../base-components/Button";
@@ -24,8 +24,8 @@ function Main() {
             <div className="flex-col hidden min-h-screen xl:flex">
               <a href="" className="flex items-center pt-5 -intro-x">
                 <img
-                  alt="Midone Tailwind HTML Admin Template"
-                  className="w-6"
+                  alt="ACS"
+                  className="w-20"
                   src={logoUrl}
                 />
                 <span className="ml-3 text-lg text-white"> Rubick </span>

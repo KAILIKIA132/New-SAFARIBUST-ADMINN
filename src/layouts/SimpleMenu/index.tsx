@@ -6,7 +6,6 @@ import { useAppSelector } from "../../stores/hooks";
 import { FormattedMenu, linkTo, nestedMenu, enter, leave } from "./simple-menu";
 import Lucide from "../../base-components/Lucide";
 import Tippy from "../../base-components/Tippy";
-import logoUrl from "../../assets/images/logo.svg";
 import clsx from "clsx";
 import TopBar from "../../components/TopBar";
 import MobileMenu from "../../components/MobileMenu";

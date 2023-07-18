@@ -1,7 +1,7 @@
 import { useState, Fragment } from "react";
 import { Link } from "react-router-dom";
 import Lucide from "../../base-components/Lucide";
-import logoUrl from "../../assets/images/logo.svg";
+import logoUrl from "../../assets/images/logo.png";
 import Breadcrumb from "../../base-components/Breadcrumb";
 import { FormInput } from "../../base-components/Form";
 import { Menu, Popover } from "../../base-components/Headless";
@@ -41,20 +41,10 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
             ])}
           >
             <img
-              alt="Enigma Tailwind HTML Admin Template"
-              className="w-6"
+              alt="ACS"
+              className="w-20"
               src={logoUrl}
             />
-            <span
-              className={clsx([
-                "ml-3 text-lg text-white",
-                props.layout == "side-menu" && "hidden xl:block",
-                props.layout == "simple-menu" && "hidden",
-              ])}
-            >
-              {" "}
-              Enigma{" "}
-            </span>
           </Link>
           {/* END: Logo */}
           {/* BEGIN: Breadcrumb */}
@@ -66,10 +56,10 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
               props.layout == "top-menu" && "md:pl-10",
             ])}
           >
-            <Breadcrumb.Link to="/">Application</Breadcrumb.Link>
+            {/* <Breadcrumb.Link to="/">Application</Breadcrumb.Link>
             <Breadcrumb.Link to="/" active={true}>
               Dashboard
-            </Breadcrumb.Link>
+            </Breadcrumb.Link> */}
           </Breadcrumb>
           {/* END: Breadcrumb */}
           {/* BEGIN: Search */}
@@ -102,69 +92,7 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
             >
               <div className="absolute right-0 z-10 mt-[3px]">
                 <div className="w-[450px] p-5 box">
-                  <div className="mb-2 font-medium">Pages</div>
-                  <div className="mb-5">
-                    <a href="" className="flex items-center">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-success/20 dark:bg-success/10 text-success">
-                        <Lucide icon="Inbox" className="w-4 h-4" />
-                      </div>
-                      <div className="ml-3">Mail Settings</div>
-                    </a>
-                    <a href="" className="flex items-center mt-2">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-pending/10 text-pending">
-                        <Lucide icon="Users" className="w-4 h-4" />
-                      </div>
-                      <div className="ml-3">Users & Permissions</div>
-                    </a>
-                    <a href="" className="flex items-center mt-2">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary/80">
-                        <Lucide icon="CreditCard" className="w-4 h-4" />
-                      </div>
-                      <div className="ml-3">Transactions Report</div>
-                    </a>
-                  </div>
-                  <div className="mb-2 font-medium">Users</div>
-                  <div className="mb-5">
-                    {_.take(fakerData, 4).map((faker, fakerKey) => (
-                      <a
-                        key={fakerKey}
-                        href=""
-                        className="flex items-center mt-2"
-                      >
-                        <div className="w-8 h-8 image-fit">
-                          <img
-                            alt="Midone Tailwind HTML Admin Template"
-                            className="rounded-full"
-                            src={faker.photos[0]}
-                          />
-                        </div>
-                        <div className="ml-3">{faker.users[0].name}</div>
-                        <div className="w-48 ml-auto text-xs text-right truncate text-slate-500">
-                          {faker.users[0].email}
-                        </div>
-                      </a>
-                    ))}
-                  </div>
-                  <div className="mb-2 font-medium">Products</div>
-                  {_.take(fakerData, 4).map((faker, fakerKey) => (
-                    <a
-                      key={fakerKey}
-                      href=""
-                      className="flex items-center mt-2"
-                    >
-                      <div className="w-8 h-8 image-fit">
-                        <img
-                          alt="Midone Tailwind HTML Admin Template"
-                          className="rounded-full"
-                          src={faker.images[0]}
-                        />
-                      </div>
-                      <div className="ml-3">{faker.products[0].name}</div>
-                      <div className="w-48 ml-auto text-xs text-right truncate text-slate-500">
-                        {faker.products[0].category}
-                      </div>
-                    </a>
-                  ))}
+                  
                 </div>
               </div>
             </Transition>
@@ -236,17 +164,11 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
                 <Lucide icon="User" className="w-4 h-4 mr-2" /> Profile
               </Menu.Item>
               <Menu.Item className="hover:bg-white/5">
-                <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Add Account
-              </Menu.Item>
-              <Menu.Item className="hover:bg-white/5">
-                <Lucide icon="Lock" className="w-4 h-4 mr-2" /> Reset Password
-              </Menu.Item>
-              <Menu.Item className="hover:bg-white/5">
                 <Lucide icon="HelpCircle" className="w-4 h-4 mr-2" /> Help
               </Menu.Item>
               <Menu.Divider className="bg-white/[0.08]" />
               <Menu.Item className="hover:bg-white/5">
-                <Lucide icon="ToggleRight" className="w-4 h-4 mr-2" /> Logout
+                <Lucide icon="ToggleRight" className="w-4 h-4 mr-2" /> Sign Out
               </Menu.Item>
             </Menu.Items>
           </Menu>

@@ -2,16 +2,12 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import darkModeReducer from "./darkModeSlice";
 import colorSchemeReducer from "./colorSchemeSlice";
 import sideMenuReducer from "./sideMenuSlice";
-import simpleMenuReducer from "./simpleMenuSlice";
-import topMenuReducer from "./topMenuSlice";
 
 export const store = configureStore({
   reducer: {
     darkMode: darkModeReducer,
     colorScheme: colorSchemeReducer,
-    sideMenu: sideMenuReducer,
-    simpleMenu: simpleMenuReducer,
-    topMenu: topMenuReducer,
+    sideMenu: sideMenuReducer
   },
 });
 

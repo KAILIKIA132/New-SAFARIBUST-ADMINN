@@ -13,7 +13,7 @@ import { useAppSelector } from "../../stores/hooks";
 import { FormattedMenu, nestedMenu } from "../../layouts/SideMenu/side-menu";
 import { linkTo, enter, leave } from "./mobile-menu";
 import Lucide from "../../base-components/Lucide";
-import logoUrl from "../../assets/images/logo.svg";
+import logoUrl from "../../assets/images/logo.png";
 import clsx from "clsx";
 import SimpleBar from "simplebar";
 
@@ -48,8 +48,8 @@ function Main() {
         <div className="h-[70px] px-3 sm:px-8 flex items-center">
           <a href="" className="flex mr-auto">
             <img
-              alt="Midone Tailwind HTML Admin Template"
-              className="w-6"
+              alt="ACS"
+              className="w-20"
               src={logoUrl}
             />
           </a>

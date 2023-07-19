@@ -12,6 +12,8 @@ import Table from "../../base-components/Table";
 
 function Main() {
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
+  const [superlargeModalSizePreview, setSuperlargeModalSizePreview] =
+    useState(false);
   const deleteButtonRef = useRef(null);
 
   return (
@@ -19,7 +21,10 @@ function Main() {
       <h2 className="mt-10 text-lg font-medium intro-y">Categories</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">
-          <Button variant="primary" className="mr-2 shadow-md">
+          <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
+            event.preventDefault();
+            setSuperlargeModalSizePreview(true);
+          }}>
             Add New Category
           </Button>
           <Menu>
@@ -241,6 +246,14 @@ function Main() {
         </Dialog.Panel>
       </Dialog>
       {/* END: Delete Confirmation Modal */}
+      <Dialog staticBackdrop size="lg" open={superlargeModalSizePreview} onClose={() => {
+        setSuperlargeModalSizePreview(false);
+      }}
+      >
+        <Dialog.Panel className="p-10 text-center">
+          This is totally awesome superlarge modal!
+        </Dialog.Panel>
+      </Dialog>
     </>
   );
 }

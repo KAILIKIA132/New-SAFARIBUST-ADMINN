@@ -1,14 +1,14 @@
 import { useRoutes } from "react-router-dom";
 import Layout from "../layouts";
-import DashboardOverview4 from "../pages/DashboardOverview4";
+import Dashboard from "../pages/Dashboard";
 import Categories from "../pages/Categories";
 import ProductList from "../pages/ProductList";
 import TransactionList from "../pages/TransactionList";
 import TransactionDetail from "../pages/TransactionDetail";
 import SellerList from "../pages/SellerList";
 import SellerDetail from "../pages/SellerDetail";
-import UsersLayout1 from "../pages/UsersLayout1";
-import ProfileOverview1 from "../pages/ProfileOverview1";
+import Users from "../pages/Users";
+import Profile from "../pages/Profile";
 import Login from "../pages/Login";
 import ErrorPage from "../pages/ErrorPage";
 import UpdateProfile from "../pages/UpdateProfile";
@@ -22,7 +22,7 @@ function Router() {
       children: [
         {
           path: "/",
-          element: <DashboardOverview4 />,
+          element: <Dashboard />,
         },
         {
           path: "categories",
@@ -50,11 +50,11 @@ function Router() {
         },
         {
           path: "users-layout-1",
-          element: <UsersLayout1 />,
+          element: <Users />,
         },
         {
           path: "profile-overview-1",
-          element: <ProfileOverview1 />,
+          element: <Profile />,
         },
         {
           path: "update-profile",

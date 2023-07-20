@@ -14,12 +14,17 @@ import Login from "../pages/Login";
 import ErrorPage from "../pages/ErrorPage";
 import UpdateProfile from "../pages/UpdateProfile";
 import ChangePassword from "../pages/ChangePassword";
+import AuthGuard from "../utils/route-guard/AuthGuard";
+import GuestGuard from "../utils/route-guard/GuestGuard";
 
 function Router() {
   const routes = [
     {
       path: "/",
-      element: <Layout />,
+      element:
+        <AuthGuard>
+          <Layout />
+        </AuthGuard>,
       children: [
         {
           path: "/",
@@ -73,7 +78,10 @@ function Router() {
     },
     {
       path: "/login",
-      element: <Login />,
+      element:
+        <GuestGuard>
+          <Login />
+        </GuestGuard>,
     },
     {
       path: "/error-page",

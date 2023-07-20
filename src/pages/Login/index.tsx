@@ -1,11 +1,51 @@
+import React, { useState, useEffect, useRef } from 'react';
 import DarkModeSwitcher from "../../components/DarkModeSwitcher";
 import MainColorSwitcher from "../../components/MainColorSwitcher";
 import illustrationUrl from "../../assets/images/illustration.png";
 import { FormInput, FormCheck } from "../../base-components/Form";
 import Button from "../../base-components/Button";
 import clsx from "clsx";
+import { useAuth } from '../../contexts/Auth';
+import * as ApiService from "../../services/auth";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import Toastify from "toastify-js";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-function Main() {
+const Login = () => {
+  const auth = useAuth();
+  const [loading, isLoading] = useState(false);
+  const [email, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const schema = yup
+    .object({
+      email: yup.string().required().email(),
+      password: yup.string().required().min(4)
+    }).required();
+
+  const {
+    register,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = await getValues();
+    isLoading(true);
+    try {
+      let res = await ApiService.login(data);
+      isLoading(false);
+      await auth.signIn(res.data);
+    } catch (error) {
+      isLoading(false);
+    }
+  };
+
   return (
     <>
       <div
@@ -28,10 +68,10 @@ function Main() {
                   src={illustrationUrl}
                 />
                 <div className="mt-10 text-4xl font-medium leading-tight text-white -intro-x">
-                1 Declaration 55 Countries<br/> 3 Days
+                  1 Declaration 55 Countries<br /> 3 Days
                 </div>
                 <div className="mt-5 text-lg text-white -intro-x text-opacity-70 dark:text-slate-400">
-                Driving green growth & climate finance solutions <br/>For Africa And The World
+                  Driving green growth & climate finance solutions <br />For Africa And The World
                 </div>
               </div>
             </div>
@@ -45,42 +85,66 @@ function Main() {
                 <div className="mt-2 text-center intro-x text-slate-400 xl:hidden">
                   A few more clicks to sign in to your account.
                 </div>
-                <div className="mt-8 intro-x">
-                  <FormInput
-                    type="text"
-                    className="block px-4 py-3 intro-x min-w-full xl:min-w-[350px]"
-                    placeholder="Email"
-                  />
-                  <FormInput
-                    type="password"
-                    className="block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]"
-                    placeholder="Password"
-                  />
-                </div>
-                <div className="flex mt-4 text-xs intro-x text-slate-600 dark:text-slate-500 sm:text-sm">
-                  <div className="flex items-center mr-auto">
-                    <FormCheck.Input
-                      id="remember-me"
-                      type="checkbox"
-                      className="mr-2 border"
-                    />
-                    <label
-                      className="cursor-pointer select-none"
-                      htmlFor="remember-me"
-                    >
-                      Remember me
-                    </label>
+                <form className="validate-form" onSubmit={onSubmit}>
+                  <div className="mt-8 intro-x">
+                    <div className="input-form">
+                      <FormInput
+                        {...register("email")}
+                        id="validation-form-2"
+                        type="email"
+                        name="email"
+                        className={errors.email ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
+                        placeholder="Email"
+                      />
+                      {errors.email && (
+                        <div className="mt-2 text-danger">
+                          {typeof errors.email.message === "string" &&
+                            errors.email.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="input-form">
+                      <FormInput
+                        {...register("password")}
+                        id="validation-form-3"
+                        type="password"
+                        name="password"
+                        className={errors.password ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
+                        placeholder="Password"
+                      />
+                      {errors.password && (
+                        <div className="mt-2 text-danger">
+                          {typeof errors.password.message === "string" &&
+                            errors.password.message}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <a href="">Forgot Password?</a>
-                </div>
-                <div className="mt-5 text-center intro-x xl:mt-8 xl:text-left">
-                  <Button
-                    variant="primary"
-                    className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3"
-                  >
-                    Login
-                  </Button>
-                </div>
+                  <div className="flex mt-4 text-xs intro-x text-slate-600 dark:text-slate-500 sm:text-sm">
+                    <div className="flex items-center mr-auto">
+                      <FormCheck.Input
+                        id="remember-me"
+                        type="checkbox"
+                        className="mr-2 border"
+                      />
+                      <label
+                        className="cursor-pointer select-none"
+                        htmlFor="remember-me"
+                      >
+                        Remember me
+                      </label>
+                    </div>
+                    <a href="">Forgot Password?</a>
+                  </div>
+                  <div className="mt-5 text-center intro-x xl:mt-8 xl:text-left">
+                    <Button
+                      variant="primary"
+                      className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3"
+                    >
+                      Login
+                    </Button>
+                  </div>
+                </form>
               </div>
             </div>
             {/* END: Login Form */}
@@ -91,4 +155,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default Login;

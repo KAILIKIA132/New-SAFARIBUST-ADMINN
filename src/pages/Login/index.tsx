@@ -9,15 +9,18 @@ import { useAuth } from '../../contexts/Auth';
 import * as ApiService from "../../services/auth";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import Toastify from "toastify-js";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Notification from "../../base-components/Notification";
+import Lucide from "../../base-components/Lucide";
 
 const Login = () => {
   const auth = useAuth();
   const [loading, isLoading] = useState(false);
-  const [email, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [success, setSuccess] = useState(true);
+  const [message, setMessage] = useState("");
 
+  // Success notification
+  const notify = useRef<Notification>();
   const schema = yup
     .object({
       email: yup.string().required().email(),
@@ -26,6 +29,7 @@ const Login = () => {
 
   const {
     register,
+    trigger,
     getValues,
     formState: { errors },
   } = useForm({
@@ -35,15 +39,25 @@ const Login = () => {
 
   const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = await getValues();
-    isLoading(true);
-    try {
-      let res = await ApiService.login(data);
-      isLoading(false);
-      await auth.signIn(res.data);
-    } catch (error) {
-      isLoading(false);
+    const result = await trigger();
+    if (result) {
+      isLoading(true);
+      try {
+        const data = await getValues();
+        let res = await ApiService.login(data);
+        isLoading(false);
+        await auth.signIn(res.data);
+        setSuccess(true);
+        setMessage("Authenticated successfully");
+        notify.current?.showToast();
+      } catch (error) {
+        isLoading(false);
+        setSuccess(false);
+        setMessage("Incorrect credetials.");
+        notify.current?.showToast();
+      }
     }
+
   };
 
   return (
@@ -151,6 +165,21 @@ const Login = () => {
           </div>
         </div>
       </div>
+      {/* BEGIN: Success Notification Content */}
+      <Notification getRef={(el) => { notify.current = el; }}
+        options={{
+          duration: 3000,
+        }}
+        className="flex"
+      >
+        <Lucide icon={success ? "CheckCircle" : "XCircle"} className={success ? "text-success" : "text-danger"} />
+        <div className="ml-4 mr-4">
+          <div className="font-medium">{success ? "Success" : "Failed"}</div>
+          <div className="mt-1 text-slate-500">
+            {message}
+          </div>
+        </div>
+      </Notification>
     </>
   );
 }

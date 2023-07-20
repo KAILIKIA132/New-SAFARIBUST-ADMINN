@@ -81,9 +81,10 @@ const initialState: SideMenuState = {
         }
       ],
     },
+    // 
     {
       icon: "PhoneCall",
-      pathname: "/simcards",
+      pathname: "/simcards", 
       title: "Simcard Booking"
     },
     "divider",

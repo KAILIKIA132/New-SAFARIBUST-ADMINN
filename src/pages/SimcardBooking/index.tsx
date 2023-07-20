@@ -27,6 +27,9 @@ import {
 } from "@react-pdf/renderer";
 import { PDFViewer } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
+// import * from 'jspdf';
 
 
 interface SimCard {
@@ -61,7 +64,7 @@ function Main() {
     const itemsPerPage = 10;
   
     useEffect(() => {
-      axios.get("http://localhost:8083/simcards").then(
+      axios.get("https://www.staging-acs-mobile.bayesconsultants.com/api/simcard-service/bookings").then(
         (response) => {
           setSimCardsData(response.data);
           console.log(response.data);
@@ -91,63 +94,21 @@ function Main() {
         });
       };
 
-    const handleExportPDF = async () => {
-      try {
-        const response = await axios.get<SimCard[]>("http://localhost:8083/simcards");
-        const data = response.data;
-        console.log(data);
-        const pdfBlob = await generatePDFBlob(data);
-        saveAs(pdfBlob, "simcards-list.pdf");
-      } catch (error) {
-        console.error("Error exporting PDF:", error);
-      }
-    };
-    
-    const generatePDFBlob = async (data: SimCard[]) => {
-      const pdfBlob = await new Promise<Blob>((resolve) => {
-        const pdfString = renderPDFToString(data);
-        const blob = new Blob([pdfString], { type: "application/pdf" });
-        resolve(blob);
-      });
-  
-      return pdfBlob;
-    };
-    
-    const renderPDFToString = (data: SimCard[]) => {
-      const pdfString = (
-        <Document>
-          <Page size="A4" style={styles.page}>
-            {data.map((item) => (
-              <View key={item.id} style={styles.section}>
-                <Text style={styles.text}>
-                  {item.name} - {item.providerName} - {item.collectionPoint}
-                </Text>
-              </View>
-            ))}
-          </Page>
-        </Document>
-      );
-            
-      return pdfString;
-    };
-
-const styles = {
-  page: {
-    fontFamily: 'Helvetica',
-    fontSize: 12,
-    paddingTop: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 40,
-  },
-  section: {
-    marginBottom: 10,
-  },
-  text: {
-    color: 'black',
-  },
-};
-
+      const exportToPDF = () => {
+        // const doc = new jsPDF();
+        const doc = new jsPDF() as any;
+        doc.autoTable({
+          head: [["Name", "Simcard Provider", "Collection Point", "Issue Status", "Travel Date"]],
+          body: simCardsData.map((simCard) => [
+            simCard.name,
+            simCard.providerName,
+            simCard.collectionPoint,
+            simCard.issueStatus,
+            dayjs(simCard.createdAt).format("DD-MM-YYYY"),
+          ]),
+        });
+        doc.save("simcard-bookings.pdf");
+      };
 
     const totalPages = Math.ceil(simCardsData.length / itemsPerPage);
   
@@ -201,7 +162,7 @@ const styles = {
                 <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to Excel
             </Button>
             {/* Export to PDF Button */}
-            <Button variant="primary" className="mr-2 shadow-md" onClick={handleExportPDF}>
+            <Button variant="primary" className="mr-2 shadow-md" onClick={exportToPDF}>
                 <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to PDF
             </Button>
             <Menu>

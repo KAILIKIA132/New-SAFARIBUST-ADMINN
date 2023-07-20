@@ -1131,6 +1131,13 @@
   resolved "https://registry.npmjs.org/@types/js-beautify/-/js-beautify-1.13.3.tgz"
   integrity sha512-ucIPw5gmNyvRKi6mpeojlqp+T+6ZBJeU+kqMDnIEDlijEU4QhLTon90sZ3cz9HZr+QTwXILjNsMZImzA7+zuJA==
 
+"@types/jspdf@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/jspdf/-/jspdf-2.0.0.tgz#c64d63e9248a62849902085c1cd4753b33f8ee0c"
+  integrity sha512-oonYDXI4GegGaG7FFVtriJ+Yqlh4YR3L3NVDiwCEBVG7sbya19SoGx4MW4kg1MCMRPgkbbFTck8YKJL8PrkDfA==
+  dependencies:
+    jspdf "*"
+
 "@types/leaflet.markercluster@^1.5.1":
   version "1.5.1"
   resolved "https://registry.npmjs.org/@types/leaflet.markercluster/-/leaflet.markercluster-1.5.1.tgz"
@@ -2811,7 +2818,7 @@ jspdf-autotable@^3.5.31:
   resolved "https://registry.yarnpkg.com/jspdf-autotable/-/jspdf-autotable-3.5.31.tgz#95f0d113639560ba27339e6eb9e2601881839bcc"
   integrity sha512-Lc1KuLGDQWW/5t57Z/+c2E94XQV3jV2QVU3xMRiwvcm/nMx79aCkpPCsxLzJZVFneZvz4XoA8+egQR1QajYiWw==
 
-jspdf@^2.5.1:
+jspdf@*, jspdf@^2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/jspdf/-/jspdf-2.5.1.tgz#00c85250abf5447a05f3b32ab9935ab4a56592cc"
   integrity sha512-hXObxz7ZqoyhxET78+XR34Xu2qFGrJJ2I2bE5w4SM8eFaFEkW2xcGRVUss360fYelwRSid/jT078kbNvmoW0QA==

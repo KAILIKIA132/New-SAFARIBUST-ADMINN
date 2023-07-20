@@ -1,6 +1,7 @@
 import { useRoutes } from "react-router-dom";
 import Layout from "../layouts";
 import Dashboard from "../pages/Dashboard";
+import SimcardBooking from "../pages/SimcardBooking";
 import Categories from "../pages/Categories";
 import ProductList from "../pages/ProductList";
 import TransactionList from "../pages/TransactionList";
@@ -40,6 +41,10 @@ function Router() {
         {
           path: "transaction-list",
           element: <TransactionList />,
+        },
+        {
+          path: "simcards",
+          element: <SimcardBooking />,
         },
         {
           path: "transaction-detail",

@@ -32,14 +32,11 @@ import "jspdf-autotable";
 // import * from 'jspdf';
 
 
-interface SimCard {
+interface Wallet {
     id: string;
   name: string;
-  providerName: string;
-  collectionPoint: string;
-  userId: string;
-  issueStatus: string;
-  createdAt: string;
+  balance: string;
+  
 }
 
 const styles = StyleSheet.create({
@@ -57,16 +54,16 @@ const styles = StyleSheet.create({
   });
 
 function Main() {
-    const [simCardsData, setSimCardsData] = useState<SimCard[]>([]);
+    const [walletsData, setWalletsData] = useState<Wallet[]>([]);
     const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
     const deleteButtonRef = createRef();
     let [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
   
     useEffect(() => {
-      axios.get("http://localhost:8083/simcards").then(
+      axios.get("http://localhost:8082/wallets").then(
         (response) => {
-          setSimCardsData(response.data);
+          setWalletsData(response.data);
           console.log(response.data);
         },
         (err) => {
@@ -76,14 +73,14 @@ function Main() {
     }, []);
 
     const handleExportExcel = () => {
-        axios.get("http://localhost:8083/simcards").then((response) => {
+        axios.get("http://localhost:8082/wallets").then((response) => {
           const data = response.data;
     
           const worksheet = XLSX.utils.json_to_sheet(data);
           const workbook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
     
-          const fileName = "simcards-list.xlsx";
+          const fileName = "wallets.xlsx";
     
           const excelBuffer = XLSX.write(workbook, { type: "array" });
           const excelBlob = new Blob([excelBuffer], {
@@ -98,37 +95,35 @@ function Main() {
         // const doc = new jsPDF();
         const doc = new jsPDF() as any;
         doc.autoTable({
-          head: [["Name", "Simcard Provider", "Collection Point", "Issue Status", "Travel Date"]],
-          body: simCardsData.map((simCard) => [
-            simCard.name,
-            simCard.providerName,
-            simCard.collectionPoint,
-            simCard.issueStatus,
-            dayjs(simCard.createdAt).format("DD-MM-YYYY"),
+          head: [["Wallet ID", "Name", "Balance"]],
+          body: walletsData.map((wallet) => [
+            wallet.id,
+            wallet.name,
+            wallet.balance,
           ]),
         });
-        doc.save("simcard-bookings.pdf");
+        doc.save("wallets.pdf");
       };
 
-    const totalPages = Math.ceil(simCardsData.length / itemsPerPage);
+    const totalPages = Math.ceil(walletsData.length / itemsPerPage);
   
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = simCardsData.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = walletsData.slice(indexOfFirstItem, indexOfLastItem);
   
     const handlePageChange = (page: number) => {
       setCurrentPage(page);
     };
 
-    const [selectedSimCard, setSelectedSimCard] = useState<SimCard | null>(null);
+    const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
 
-    const handleViewDetails = (simCard: SimCard) => {
-      setSelectedSimCard(simCard);
+    const handleViewDetails = (wallet: Wallet) => {
+      setSelectedWallet(wallet);
     };
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Booked Simcard List</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Wallets</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
           <div className="flex w-full sm:w-auto">
@@ -143,18 +138,13 @@ function Main() {
                 className="absolute inset-y-0 right-0 w-4 h-4 my-auto mr-3"
               />
             </div>
-            <FormSelect className="ml-2 !box">
-              <option>Status</option>
-              <option>Pending</option>
-              <option>Collected</option>
-            </FormSelect>
           </div>
           <div className="hidden mx-auto xl:block text-slate-500">
           {`Showing ${indexOfFirstItem + 1} to ${
-          indexOfLastItem > simCardsData.length
-            ? simCardsData.length
+          indexOfLastItem > walletsData.length
+            ? walletsData.length
             : indexOfLastItem
-        } of ${simCardsData.length} entries`}
+        } of ${walletsData.length} entries`}
           </div>
           <div className="flex items-center w-full mt-3 xl:w-auto xl:mt-0">
             {/* Export to Excel Button */}
@@ -196,19 +186,10 @@ function Main() {
                 <FormCheck.Input type="checkbox" />
               </Table.Th>
               <Table.Th className="border-b-0 whitespace-nowrap">
-                Attendee
+                Name
               </Table.Th>
               <Table.Th className="border-b-0 whitespace-nowrap">
-                Simcard Provider
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Collection Point
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Issue Status
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Date Requested
+                Wallet Balance
               </Table.Th>
               <Table.Th className="text-center border-b-0 whitespace-nowrap">
                 Actions
@@ -216,31 +197,23 @@ function Main() {
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
-            {currentItems.map((simCard) => (
-                <Table.Tr key={simCard.id} className="intro-y">
+            {currentItems.map((wallet) => (
+                <Table.Tr key={wallet.id} className="intro-y">
                 <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <FormCheck.Input type="checkbox" value={simCard._id} />
+                    <FormCheck.Input type="checkbox" value={wallet.id} />
                 </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 !py-4 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {simCard.name}
+                    {wallet.name}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {simCard.providerName}
+                    {wallet.balance}
                   </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {simCard.collectionPoint}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {simCard.issueStatus}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    { dayjs(simCard.createdAt).format('DD-MM-YYYY')}  
-                  </Table.Td>
+                  
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 text-right bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                   <div className="pr-16">
                     <Button
                       variant="primary"
-                      onClick={() => handleViewDetails(simCard)}
+                      onClick={() => handleViewDetails(wallet)}
                     >
                       <Lucide icon="CheckSquare" className="w-4 h-4 mr-1" />
                       View Details
@@ -265,21 +238,19 @@ function Main() {
       </div>
         {/* BEGIN: View Details Dialog */}
         <Dialog
-        open={!!selectedSimCard}
-        onClose={() => setSelectedSimCard(null)}
+        open={!!selectedWallet}
+        onClose={() => setSelectedWallet(null)}
         initialFocus={null}
       >
         <Dialog.Panel>
           <div className="p-5">
-            <h2 className="text-lg font-medium">User Details</h2>
-            {selectedSimCard && (
+            <h2 className="text-lg font-medium">Wallet Details</h2>
+            {selectedWallet && (
               <div>
-                <p>Name: {selectedSimCard.name}</p>
-                <p>Provider: {selectedSimCard.providerName}</p>
-                <p>Collection Point: {selectedSimCard.collectionPoint}</p>
-                <p>Issue Status: {selectedSimCard.issueStatus}</p>
-                <p>Date Requested: {dayjs(selectedSimCard.createdAt).format("DD-MM-YYYY")}</p>
-                {/* You can display more user details here as needed */}
+                <p>ID: {selectedWallet.id}</p>
+                <p>Name: {selectedWallet.name}</p>
+                <p>Balance: {selectedWallet.balance}</p>
+                {/* You can display more wallet details here as needed */}
               </div>
             )}
           </div>

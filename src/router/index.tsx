@@ -8,6 +8,7 @@ import TransactionDetail from "../pages/TransactionDetail";
 import SellerList from "../pages/SellerList";
 import SellerDetail from "../pages/SellerDetail";
 import SimcardBooking from "../pages/SimcardBooking";
+import Wallets from "../pages/Wallet";
 import Users from "../pages/Users";
 import Profile from "../pages/Profile";
 import Login from "../pages/Login";
@@ -36,6 +37,10 @@ function Router() {
         {
           path: "simcards",
           element: <SimcardBooking />,
+        },
+        {
+          path: "wallets",
+          element: <Wallets />,
         },
         {
           path: "transaction-list",

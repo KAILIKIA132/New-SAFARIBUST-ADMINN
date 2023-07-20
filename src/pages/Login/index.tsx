@@ -7,36 +7,45 @@ import Button from "../../base-components/Button";
 import clsx from "clsx";
 import { useAuth } from '../../contexts/Auth';
 import * as ApiService from "../../services/auth";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import Toastify from "toastify-js";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const Login = () => {
   const auth = useAuth();
   const [loading, isLoading] = useState(false);
   const [email, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [auth_code, setCode] = useState("");
-  const [error, setError] = useState("");
-  const [authenticated, setAuthenticated] = useState(true);
-  const [touch_id, useTouchId] = useState(false);
-  const auth_code_ref = useRef(null);
-  const signIn = async () => {
+
+  const schema = yup
+    .object({
+      email: yup.string().required().email(),
+      password: yup.string().required().min(4)
+    }).required();
+
+  const {
+    register,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = await getValues();
     isLoading(true);
     try {
-      let res = await ApiService.login({ email: email, password: password, auth_code: auth_code });
+      let res = await ApiService.login(data);
       isLoading(false);
-      if (res.data.auth_code) {
-        if (res.data.email == "solomon@zemocard.com") {
-          await auth.signIn(res.data);
-        } else {
-          setAuthenticated(false);
-        }
-      } else {
-        await auth.signIn(res.data);
-      }
-
+      await auth.signIn(res.data);
     } catch (error) {
-      isLoading(false)
+      isLoading(false);
     }
   };
+
   return (
     <>
       <div
@@ -76,42 +85,66 @@ const Login = () => {
                 <div className="mt-2 text-center intro-x text-slate-400 xl:hidden">
                   A few more clicks to sign in to your account.
                 </div>
-                <div className="mt-8 intro-x">
-                  <FormInput
-                    type="text"
-                    className="block px-4 py-3 intro-x min-w-full xl:min-w-[350px]"
-                    placeholder="Email"
-                  />
-                  <FormInput
-                    type="password"
-                    className="block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]"
-                    placeholder="Password"
-                  />
-                </div>
-                <div className="flex mt-4 text-xs intro-x text-slate-600 dark:text-slate-500 sm:text-sm">
-                  <div className="flex items-center mr-auto">
-                    <FormCheck.Input
-                      id="remember-me"
-                      type="checkbox"
-                      className="mr-2 border"
-                    />
-                    <label
-                      className="cursor-pointer select-none"
-                      htmlFor="remember-me"
-                    >
-                      Remember me
-                    </label>
+                <form className="validate-form" onSubmit={onSubmit}>
+                  <div className="mt-8 intro-x">
+                    <div className="input-form">
+                      <FormInput
+                        {...register("email")}
+                        id="validation-form-2"
+                        type="email"
+                        name="email"
+                        className={errors.email ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
+                        placeholder="Email"
+                      />
+                      {errors.email && (
+                        <div className="mt-2 text-danger">
+                          {typeof errors.email.message === "string" &&
+                            errors.email.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="input-form">
+                      <FormInput
+                        {...register("password")}
+                        id="validation-form-3"
+                        type="password"
+                        name="password"
+                        className={errors.password ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
+                        placeholder="Password"
+                      />
+                      {errors.password && (
+                        <div className="mt-2 text-danger">
+                          {typeof errors.password.message === "string" &&
+                            errors.password.message}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <a href="">Forgot Password?</a>
-                </div>
-                <div className="mt-5 text-center intro-x xl:mt-8 xl:text-left">
-                  <Button onClick={signIn}
-                    variant="primary"
-                    className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3"
-                  >
-                    Login
-                  </Button>
-                </div>
+                  <div className="flex mt-4 text-xs intro-x text-slate-600 dark:text-slate-500 sm:text-sm">
+                    <div className="flex items-center mr-auto">
+                      <FormCheck.Input
+                        id="remember-me"
+                        type="checkbox"
+                        className="mr-2 border"
+                      />
+                      <label
+                        className="cursor-pointer select-none"
+                        htmlFor="remember-me"
+                      >
+                        Remember me
+                      </label>
+                    </div>
+                    <a href="">Forgot Password?</a>
+                  </div>
+                  <div className="mt-5 text-center intro-x xl:mt-8 xl:text-left">
+                    <Button
+                      variant="primary"
+                      className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3"
+                    >
+                      Login
+                    </Button>
+                  </div>
+                </form>
               </div>
             </div>
             {/* END: Login Form */}

@@ -113,16 +113,10 @@ const initialState: SideMenuState = {
         },
       ],
     },
-
     {
       icon: "User",
       pathname: "/update-profile",
       title: "Profile",
-    },
-    {
-      icon: "Power",
-      pathname: "/signout",
-      title: "Sign Out",
     }
   ],
 };

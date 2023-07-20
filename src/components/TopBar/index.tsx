@@ -9,8 +9,13 @@ import fakerData from "../../utils/faker";
 import _ from "lodash";
 import clsx from "clsx";
 import { Transition } from "@headlessui/react";
+import { useAuth } from '../../contexts/Auth';
 
 function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
+  const auth = useAuth();
+  const signOut = () => {
+    auth.signOut();
+  };
   const [searchDropdown, setSearchDropdown] = useState(false);
   const showSearchDropdown = () => {
     setSearchDropdown(true);
@@ -92,7 +97,7 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
             >
               <div className="absolute right-0 z-10 mt-[3px]">
                 <div className="w-[450px] p-5 box">
-                  
+
                 </div>
               </div>
             </Transition>
@@ -167,7 +172,7 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
                 <Lucide icon="HelpCircle" className="w-4 h-4 mr-2" /> Help
               </Menu.Item>
               <Menu.Divider className="bg-white/[0.08]" />
-              <Menu.Item className="hover:bg-white/5">
+              <Menu.Item className="hover:bg-white/5" onClick={signOut}>
                 <Lucide icon="ToggleRight" className="w-4 h-4 mr-2" /> Sign Out
               </Menu.Item>
             </Menu.Items>

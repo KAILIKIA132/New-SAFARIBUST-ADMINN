@@ -1,11 +1,42 @@
+import React, { useState, useEffect, useRef } from 'react';
 import DarkModeSwitcher from "../../components/DarkModeSwitcher";
 import MainColorSwitcher from "../../components/MainColorSwitcher";
 import illustrationUrl from "../../assets/images/illustration.png";
 import { FormInput, FormCheck } from "../../base-components/Form";
 import Button from "../../base-components/Button";
 import clsx from "clsx";
+import { useAuth } from '../../contexts/Auth';
+import * as ApiService from "../../services/auth";
 
-function Main() {
+const Login = () => {
+  const auth = useAuth();
+  const [loading, isLoading] = useState(false);
+  const [email, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [auth_code, setCode] = useState("");
+  const [error, setError] = useState("");
+  const [authenticated, setAuthenticated] = useState(true);
+  const [touch_id, useTouchId] = useState(false);
+  const auth_code_ref = useRef(null);
+  const signIn = async () => {
+    isLoading(true);
+    try {
+      let res = await ApiService.login({ email: email, password: password, auth_code: auth_code });
+      isLoading(false);
+      if (res.data.auth_code) {
+        if (res.data.email == "solomon@zemocard.com") {
+          await auth.signIn(res.data);
+        } else {
+          setAuthenticated(false);
+        }
+      } else {
+        await auth.signIn(res.data);
+      }
+
+    } catch (error) {
+      isLoading(false)
+    }
+  };
   return (
     <>
       <div
@@ -28,10 +59,10 @@ function Main() {
                   src={illustrationUrl}
                 />
                 <div className="mt-10 text-4xl font-medium leading-tight text-white -intro-x">
-                1 Declaration 55 Countries<br/> 3 Days
+                  1 Declaration 55 Countries<br /> 3 Days
                 </div>
                 <div className="mt-5 text-lg text-white -intro-x text-opacity-70 dark:text-slate-400">
-                Driving green growth & climate finance solutions <br/>For Africa And The World
+                  Driving green growth & climate finance solutions <br />For Africa And The World
                 </div>
               </div>
             </div>
@@ -74,7 +105,7 @@ function Main() {
                   <a href="">Forgot Password?</a>
                 </div>
                 <div className="mt-5 text-center intro-x xl:mt-8 xl:text-left">
-                  <Button
+                  <Button onClick={signIn}
                     variant="primary"
                     className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3"
                   >
@@ -91,4 +122,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default Login;

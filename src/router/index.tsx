@@ -20,13 +20,13 @@ import GuestGuard from "../utils/route-guard/GuestGuard";
 function Router() {
   const routes = [
     {
-      path: "/",
-      element:
-        <AuthGuard>
-          <Layout />
-        </AuthGuard>,
-      children: [
-        {
+      // path: "/",
+      // element: 
+        // <AuthGuard>
+        //   <Layout />
+        // </AuthGuard>,
+      // children: [
+        // {
           path: "/",
           element: <Dashboard />,
         },
@@ -73,15 +73,16 @@ function Router() {
         {
           path: "change-password",
           element: <ChangePassword />,
-        }
-      ],
-    },
+        },
+      // ],
+    // },
     {
       path: "/login",
-      element:
-        <GuestGuard>
-          <Login />
-        </GuestGuard>,
+      element: <Login />,
+      // element:
+      //   <GuestGuard>
+      //     <Login />
+      //   </GuestGuard>,
     },
     {
       path: "/error-page",

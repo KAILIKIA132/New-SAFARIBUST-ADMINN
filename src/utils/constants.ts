@@ -1,7 +1,7 @@
 
 //API URL
 // export const BASE_URL = 'https://www.staging-acs-mobile.bayesconsultants.com/';
-export const BASE_URL = 'http://localhost:8000/';
+export const BASE_URL = 'http://localhost:8081/';
 
 //API End Points
 export const LOGIN = `${BASE_URL}auth-service/auth/login`;

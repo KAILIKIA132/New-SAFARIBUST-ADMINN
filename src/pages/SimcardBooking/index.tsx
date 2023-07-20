@@ -64,7 +64,7 @@ function Main() {
     const itemsPerPage = 10;
   
     useEffect(() => {
-      axios.get("https://www.staging-acs-mobile.bayesconsultants.com/api/simcard-service/bookings").then(
+      axios.get("http://localhost:8083/simcards").then(
         (response) => {
           setSimCardsData(response.data);
           console.log(response.data);

@@ -7,6 +7,7 @@ import TransactionList from "../pages/TransactionList";
 import TransactionDetail from "../pages/TransactionDetail";
 import SellerList from "../pages/SellerList";
 import SellerDetail from "../pages/SellerDetail";
+import SimcardBooking from "../pages/SimcardBooking";
 import Users from "../pages/Users";
 import Profile from "../pages/Profile";
 import Login from "../pages/Login";
@@ -31,6 +32,10 @@ function Router() {
         {
           path: "product-list",
           element: <ProductList />,
+        },
+        {
+          path: "simcards",
+          element: <SimcardBooking />,
         },
         {
           path: "transaction-list",

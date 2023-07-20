@@ -1,26 +1,31 @@
 import { useRoutes } from "react-router-dom";
 import Layout from "../layouts";
 import Dashboard from "../pages/Dashboard";
+import SimcardBooking from "../pages/SimcardBooking";
 import Categories from "../pages/Categories";
 import ProductList from "../pages/ProductList";
 import TransactionList from "../pages/TransactionList";
+import Wallets from "../pages/Wallet";
 import TransactionDetail from "../pages/TransactionDetail";
 import SellerList from "../pages/SellerList";
 import SellerDetail from "../pages/SellerDetail";
-import SimcardBooking from "../pages/SimcardBooking";
-import Wallets from "../pages/Wallet";
 import Users from "../pages/Users";
 import Profile from "../pages/Profile";
 import Login from "../pages/Login";
 import ErrorPage from "../pages/ErrorPage";
 import UpdateProfile from "../pages/UpdateProfile";
 import ChangePassword from "../pages/ChangePassword";
+import AuthGuard from "../utils/route-guard/AuthGuard";
+import GuestGuard from "../utils/route-guard/GuestGuard";
 
 function Router() {
   const routes = [
     {
       path: "/",
-      element: <Layout />,
+      element: 
+        <AuthGuard>
+          <Layout />
+        </AuthGuard>,
       children: [
         {
           path: "/",
@@ -73,12 +78,15 @@ function Router() {
         {
           path: "change-password",
           element: <ChangePassword />,
-        }
+        },
       ],
     },
     {
       path: "/login",
-      element: <Login />,
+      element:
+        <GuestGuard>
+          <Login />
+        </GuestGuard>,
     },
     {
       path: "/error-page",

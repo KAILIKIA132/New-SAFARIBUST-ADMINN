@@ -11,6 +11,7 @@ import SimcardBooking from "../pages/SimcardBooking";
 import Categories from "../pages/Categories";
 import ProductList from "../pages/ProductList";
 import TransactionList from "../pages/TransactionList";
+import Wallets from "../pages/Wallet";
 import TransactionDetail from "../pages/TransactionDetail";
 import SellerDetail from "../pages/SellerDetail";
 import Users from "../pages/Users";
@@ -26,7 +27,7 @@ function Router() {
   const routes = [
     {
       path: "/",
-      element:
+      element: 
         <AuthGuard>
           <Layout />
         </AuthGuard>,
@@ -44,12 +45,16 @@ function Router() {
           element: <ProductList />,
         },
         {
-          path: "transaction-list",
-          element: <TransactionList />,
-        },
-        {
           path: "simcards",
           element: <SimcardBooking />,
+        },
+        {
+          path: "wallets",
+          element: <Wallets />,
+        },
+        {
+          path: "transaction-list",
+          element: <TransactionList />,
         },
         {
           path: "transaction-detail",
@@ -98,7 +103,7 @@ function Router() {
         {
           path: "change-password",
           element: <ChangePassword />,
-        }
+        },
       ],
     },
     {

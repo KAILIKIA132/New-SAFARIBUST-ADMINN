@@ -1,296 +1,192 @@
-import React, { useState, useEffect, createRef } from "react";
-import axios from "axios";
+import _ from "lodash";
+import React, { useState, useEffect, createRef } from 'react';
 import Button from "../../base-components/Button";
-import Pagination from "../../components/Pagination";
+import Pagination from "../../base-components/Pagination";
 import { FormCheck, FormInput, FormSelect } from "../../base-components/Form";
 import Lucide from "../../base-components/Lucide";
 import { Dialog, Menu } from "../../base-components/Headless";
 import Table from "../../base-components/Table";
 import dayjs from "dayjs";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
-import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import * as paymentService from "../../services/paymentService";
+
 
 interface Transaction {
-  id: string;
-  name: string;
-  amount: string;
-  type: string;
-  referenceCode: string;
-  status: string;
-  createdAt: string;
+  _id: string;
+  userId:string;
+  amount:number;
+  type:string;
+  referenceCode:string;
+  status:string;
+  vendorId:string;
+  balance:string;
+  
 }
 
 function Main() {
+  const [superlargeModalSizePreview, setSuperlargeModalSizePreview] =
+    useState(false);
   const [transactionsData, setTransactionsData] = useState<Transaction[]>([]);
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
   const deleteButtonRef = createRef();
-  const [currentPage, setCurrentPage] = useState(1);
+  let [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
   const initialFocusRef = React.useRef<HTMLElement | null>(null);
 
-  const [nameFilter, setNameFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [typeFilter, setTypeFilter] = useState("");
-  const [referenceCodeFilter, setReferenceCodeFilter] = useState("");
 
+  const [pagination, setPagination] = useState({ current_page: 1, total: 1, total_pages: 1, per_page: 1 });
+  const [page, setPage] = useState(1);
+  const [next_page, setNextPage] = useState(1);
+  const [previous_page, setPreviousPage] = useState(1);
   useEffect(() => {
-    axios.get("http://localhost:8082/wallet-transactions").then(
-      (response) => {
-        setTransactionsData(response.data);
-        console.log(response.data);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    getTransactions();
   }, []);
 
-  const handleExportExcel = () => {
-    axios.get("http://localhost:8082/wallet-transactions").then((response) => {
-      const data = response.data;
-
-      const worksheet = XLSX.utils.json_to_sheet(data);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-
-      const fileName = "transactions-list.xlsx";
-
-      const excelBuffer = XLSX.write(workbook, { type: "array" });
-      const excelBlob = new Blob([excelBuffer], {
-        type:
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      saveAs(excelBlob, fileName);
-    });
+  const getTransactions = async () => {
+    let res = await paymentService.getTransactions({ page: 1 });
+    setTransactionsData(res.transactions);
+    setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
+    setPreviousPage((page > 1) ? page - 1 : 1);
+    setPagination({ current_page: res.current_page, total: res.total, total_pages: res.total_pages, per_page: res.per_page });
   };
 
-  const exportToPDF = () => {
-    const doc = new jsPDF() as any;
-    doc.autoTable({
-      head: [
-        ["Name", "Amount", "Type", "Reference Code", "Status", "Date"],
-      ],
-      body: transactionsData.map((Transaction) => [
-        Transaction.name,
-        Transaction.amount,
-        Transaction.type,
-        Transaction.referenceCode,
-        Transaction.status,
-        dayjs(Transaction.createdAt).format("DD-MM-YYYY"),
-      ]),
-    });
-    doc.save("transactions-list.pdf");
-  };
-
-  const totalPages = Math.ceil(transactionsData.length / itemsPerPage);
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = transactionsData.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const [selectedTransaction, setSelectedTransaction] = useState<
-    Transaction | null
-  >(null);
+  const [selectedWallet, setSelectedTransaction] = useState<Transaction | null>(null);
 
   const handleViewDetails = (transaction: Transaction) => {
     setSelectedTransaction(transaction);
   };
 
- useEffect(() => {
-    fetchTransactions();
-  }, []);
-
-  const fetchTransactions = () => {
-    axios
-      .get("http://localhost:8082/wallet-transactions", {
-        params: {
-          name: nameFilter,
-          status: statusFilter,
-          type: typeFilter,
-          referenceCode: referenceCodeFilter,
-        },
-      })
-      .then((response) => {
-        setTransactionsData(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleSearch = () => {
-    fetchTransactions();
-  };
-
-  const handleClearSearch = () => {
-    setNameFilter("");
-    setStatusFilter("");
-    setTypeFilter("");
-    setReferenceCodeFilter("");
-    fetchTransactions();
-  };
-
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Transactions List</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Transactions</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
-        <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
-          <div className="flex w-full sm:w-auto">
-            <div className="relative w-48 text-slate-500">
+        <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">
+          <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
+            event.preventDefault();
+            setSuperlargeModalSizePreview(true);
+          }}>
+            New Event
+          </Button>
+          <Menu>
+            <Menu.Button as={Button} className="px-2 !box">
+              <span className="flex items-center justify-center w-5 h-5">
+                <Lucide icon="Plus" className="w-4 h-4" />
+              </span>
+            </Menu.Button>
+            <Menu.Items className="w-40">
+              <Menu.Item>
+                <Lucide icon="Printer" className="w-4 h-4 mr-2" /> Print
+              </Menu.Item>
+              <Menu.Item>
+                <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
+                Excel
+              </Menu.Item>
+              <Menu.Item>
+                <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
+                PDF
+              </Menu.Item>
+            </Menu.Items>
+          </Menu>
+          <div className="hidden mx-auto md:block text-slate-500">
+            Showing {pagination.current_page + " to " + pagination.total_pages + " of " + pagination.total} entries
+          </div>
+          <div className="w-full mt-3 sm:w-auto sm:mt-0 sm:ml-auto md:ml-0">
+            <div className="relative w-56 text-slate-500">
               <FormInput
                 type="text"
-                className="w-48 pr-10 !box"
-                placeholder="Search by name..."
-                value={nameFilter}
-                onChange={(e) => setNameFilter(e.target.value)}
+                className="w-56 pr-10 !box"
+                placeholder="Search..."
               />
               <Lucide
                 icon="Search"
                 className="absolute inset-y-0 right-0 w-4 h-4 my-auto mr-3"
               />
             </div>
-            <FormSelect
-              className="ml-2 !box"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="">Status</option>
-              <option value="Completed">Completed</option>
-              <option value="Canceled">Canceled</option>
-              <option value="Failed">Failed</option>
-            </FormSelect>
-          </div>
-          <div className="hidden mx-auto xl:block text-slate-500">
-            {`Showing ${indexOfFirstItem + 1} to ${
-              indexOfLastItem > transactionsData.length
-                ? transactionsData.length
-                : indexOfLastItem
-            } of ${transactionsData.length} entries`}
-          </div>
-          <div className="flex items-center w-full mt-3 xl:w-auto xl:mt-0">
-            <Button
-              variant="primary"
-              className="mr-2 shadow-md"
-              onClick={handleSearch}
-            >
-              <Lucide icon="Filter" className="w-4 h-4 mr-1" />
-              Search
-            </Button>
-            <Button
-              variant="outline-secondary"
-              className="shadow-md"
-              onClick={handleClearSearch}
-            >
-              <Lucide icon="XCircle" className="w-4 h-4 mr-1" />
-              Clear
-            </Button>
-          {/* <div className="flex items-center w-full mt-3 xl:w-auto xl:mt-0"> */}
-            {/* Export to Excel Button */}
-            <Button variant="primary" className="mr-2 shadow-md" onClick={handleExportExcel}>
-                <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to Excel
-            </Button>
-            {/* Export to PDF Button */}
-            <Button variant="primary" className="mr-2 shadow-md" onClick={exportToPDF}>
-                <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to PDF
-            </Button>
-            <Menu>
-              <Menu.Button as={Button} className="px-2 !box">
-                <span className="flex items-center justify-center w-5 h-5">
-                  <Lucide icon="Plus" className="w-4 h-4" />
-                </span>
-              </Menu.Button>
-              <Menu.Items className="w-40">
-                <Menu.Item>
-                  <Lucide icon="Printer" className="w-4 h-4 mr-2" /> Print
-                </Menu.Item>
-                <Menu.Item>
-                  <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
-                  Excel
-                </Menu.Item>
-                <Menu.Item>
-                  <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
-                  PDF
-                </Menu.Item>
-              </Menu.Items>
-            </Menu>
           </div>
         </div>
         {/* BEGIN: Data List */}
-        <div className="col-span-12 overflow-auto intro-y 2xl:overflow-visible">
-          <Table className="border-spacing-y-[10px] border-separate -mt-2">
+        <div className="col-span-12 overflow-auto intro-y lg:overflow-visible">
+        <Table className="border-spacing-y-[10px] border-separate -mt-2">
           <Table.Thead>
-            <Table.Tr>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                <FormCheck.Input type="checkbox" />
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Name
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Amount
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Type
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Reference Code
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Status
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Date 
-              </Table.Th>
-              <Table.Th className="text-center border-b-0 whitespace-nowrap">
-                Actions
-              </Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {currentItems.map((transaction) => (
-                <Table.Tr key={transaction.id} className="intro-y">
+              <Table.Tr>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  <FormCheck.Input type="checkbox" />
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Name
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Amount
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Reference Code
+                </Table.Th>
+                {/* <Table.Th className="border-b-0 whitespace-nowrap">
+                  Vendor Name
+                </Table.Th> */}
+                {/* <Table.Th className="border-b-0 whitespace-nowrap">
+                  Type
+                </Table.Th> */}
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Balance
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Status
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Date
+                </Table.Th>
+                <Table.Th className="text-center border-b-0 whitespace-nowrap">
+                  Actions
+                </Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+            {transactionsData.map((transaction) => (
+              <Table.Tr
+                key={transaction._id}
+                className={`intro-y ${
+                  transaction.type === "Credit"
+                    ? "bg-red-100 text-red-600"
+                    : "bg-green-100 text-green-600"
+                }`}>
                 <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <FormCheck.Input type="checkbox" value={transaction.id} />
+                  <FormCheck.Input type="checkbox" value={transaction._id} />
                 </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 !py-4 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {transaction.name}
-                  </Table.Td>
+                <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 !py-4 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  {transaction.userId.firstName + " " + transaction.userId.lastName}
+                </Table.Td>
+                <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  {transaction.amount}
+                
+                </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {transaction.amount}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {transaction.type}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {transaction.referenceCode}
                   </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  {transaction.vendorId.firstName + " " + transaction.vendorId.lastName}
+                  </Table.Td> */}
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  {transaction.type === "Credit"
+                    ? transaction.userBalance 
+                    : transaction.vendorBalance 
+                  }
+                </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {transaction.status}
                   </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    { dayjs(transaction.createdAt).format('DD-MM-YYYY')}  
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  {dayjs(transaction.createdAt).format('DD-MM-YYYY')}
                   </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 text-right bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                  <div className="pr-16">
-                    <Button
-                      variant="primary"
-                      onClick={() => handleViewDetails(transaction)}
-                    >
-                      <Lucide icon="CheckSquare" className="w-4 h-4 mr-1" />
-                      View Details
-                    </Button>
-                  </div>
-                </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
+                    <div className="flex items-center justify-center">
+                      <a className="flex items-center mr-3" href=""
+                        onClick={() => handleViewDetails(transaction)}>
+                        <Lucide icon="View" className="w-4 h-4 mr-1" />
+                        View
+                      </a>
+                    </div>
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -298,35 +194,37 @@ function Main() {
         </div>
         {/* END: Data List */}
         {/* BEGIN: Pagination */}
-        <div className="col-span-12 mt-5">
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        onChange={handlePageChange}
-      />
-    </div>
+        <div className="flex flex-wrap items-center col-span-12 intro-y sm:flex-row sm:flex-nowrap">
+          <Pagination className="w-full sm:w-auto sm:mr-auto">
+            <Pagination.Link onClick={() => (setPage(previous_page), getTransactions())} >
+              <Lucide icon="ChevronLeft" className="w-4 h-4" />
+            </Pagination.Link>
+            {_.times(pagination.total_pages).map((page, key) => (
+              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getTransactions())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getTransactions())} key={key}>{page + 1}</Pagination.Link>
+            ))}
+            <Pagination.Link onClick={() => (setPage(next_page), getTransactions())} >
+              <Lucide icon="ChevronRight" className="w-4 h-4" />
+            </Pagination.Link>
+          </Pagination>
+          <FormSelect className="w-20 mt-3 !box sm:mt-0">
+            <option>10</option>
+            <option>25</option>
+            <option>35</option>
+            <option>50</option>
+          </FormSelect>
+        </div>
         {/* END: Pagination */}
       </div>
-        {/* BEGIN: View Details Dialog */}
-        <Dialog
-        open={!!selectedTransaction}
+      {/* BEGIN: View Details Dialog */}
+      <Dialog
+        open={!!selectedWallet}
         onClose={() => setSelectedTransaction(null)}
         initialFocus={initialFocusRef}
       >
         <Dialog.Panel>
           <div className="p-5">
             <h2 className="text-lg font-medium">Transaction Details</h2>
-            {selectedTransaction && (
-              <div>
-                <p>Name: {selectedTransaction.name}</p>
-                <p>Amount: {selectedTransaction.amount}</p>
-                <p>Type: {selectedTransaction.type}</p>
-                <p>Reference Code: {selectedTransaction.referenceCode}</p>
-                <p>Status: {selectedTransaction.status}</p>
-                <p>Date: {dayjs(selectedTransaction.createdAt).format("DD-MM-YYYY")}</p>
-                {/* You can display more user details here as needed */}
-              </div>
-            )}
+            
           </div>
         </Dialog.Panel>
       </Dialog>
@@ -338,7 +236,8 @@ function Main() {
         onClose={() => {
           setDeleteConfirmationModal(false);
         }}
-        // initialFocus={deleteButtonRef}
+      // initialFocus={deleteButtonRef}
+      // initialFocus={initialFocusRef}
       >
         <Dialog.Panel>
           <div className="p-5 text-center">
@@ -367,7 +266,7 @@ function Main() {
               variant="danger"
               type="button"
               className="w-24"
-              // ref={deleteButtonRef}
+            // ref={deleteButtonRef}
             >
               Delete
             </Button>
@@ -375,6 +274,14 @@ function Main() {
         </Dialog.Panel>
       </Dialog>
       {/* END: Delete Confirmation Modal */}
+      <Dialog staticBackdrop size="lg" open={superlargeModalSizePreview} onClose={() => {
+        setSuperlargeModalSizePreview(false);
+      }}
+      >
+        <Dialog.Panel className="p-10 text-center">
+          This is totally awesome superlarge modal!
+        </Dialog.Panel>
+      </Dialog>
     </>
   );
 }

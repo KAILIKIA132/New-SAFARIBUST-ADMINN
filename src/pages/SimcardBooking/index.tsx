@@ -14,7 +14,7 @@ import * as simcardService from "../../services/simcardService";
 interface SimCard {
   id: string;
   name: string;
-  providerName: string;
+  providerId: string;
   collectionPoint: string;
   userId: string;
   issueStatus: string;
@@ -22,6 +22,8 @@ interface SimCard {
 }
 
 function Main() {
+  const [superlargeModalSizePreview, setSuperlargeModalSizePreview] =
+    useState(false);
   const [simCardsData, setSimCardsData] = useState<SimCard[]>([]);
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
   const deleteButtonRef = createRef();
@@ -138,7 +140,7 @@ function Main() {
                     {simCard.userId.firstName + " " + simCard.userId.lastName}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {simCard.providerId}
+                    {simCard.providerId.name}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {simCard.collectionPoint}
@@ -173,7 +175,7 @@ function Main() {
               <Lucide icon="ChevronLeft" className="w-4 h-4" />
             </Pagination.Link>
             {_.times(pagination.total_pages).map((page, key) => (
-              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getBookings())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getEvents())} key={key}>{page + 1}</Pagination.Link>
+              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getBookings())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getBookings())} key={key}>{page + 1}</Pagination.Link>
             ))}
             <Pagination.Link onClick={() => (setPage(next_page), getBookings())} >
               <Lucide icon="ChevronRight" className="w-4 h-4" />
@@ -199,8 +201,8 @@ function Main() {
             <h2 className="text-lg font-medium">User Details</h2>
             {selectedSimCard && (
               <div>
-                <p>Name: {selectedSimCard.name}</p>
-                <p>Provider: {selectedSimCard.providerName}</p>
+                <p>Name: {selectedSimCard.userId.firstName + " " + selectedSimCard.userId.lastName}</p>
+                <p>Provider: {selectedSimCard.providerId.name}</p>
                 <p>Collection Point: {selectedSimCard.collectionPoint}</p>
                 <p>Issue Status: {selectedSimCard.issueStatus}</p>
                 <p>Date Requested: {dayjs(selectedSimCard.createdAt).format("DD-MM-YYYY")}</p>

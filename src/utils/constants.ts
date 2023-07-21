@@ -14,3 +14,8 @@ export const USERS = `${BASE_URL}auth-service/auth/users`;
 
 //Simcards Endpoints
 export const SIMCARDS = `${BASE_URL}simcard-service/simcards`;
+
+
+//Payments Endpoints
+export const WALLETS = `${BASE_URL}payments-service/wallets`;
+export const TRANSACTIONS = `${BASE_URL}payments-service/transactions`;

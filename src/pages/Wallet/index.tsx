@@ -1,113 +1,96 @@
 import _ from "lodash";
-import clsx from "clsx";
-import {
-  React,
-  useState,
-  useEffect,
-  createRef,
-  useRef, // Add this import
-} from "react";
-import axios from "axios";
+import React, { useState, useEffect, createRef } from 'react';
 import Button from "../../base-components/Button";
-import Pagination from "../../components/Pagination";
+import Pagination from "../../base-components/Pagination";
 import { FormCheck, FormInput, FormSelect } from "../../base-components/Form";
 import Lucide from "../../base-components/Lucide";
 import { Dialog, Menu } from "../../base-components/Headless";
 import Table from "../../base-components/Table";
-import { saveAs } from "file-saver";
-import * as XLSX from "xlsx";
-import { jsPDF } from "jspdf";
+import dayjs from "dayjs";
 import "jspdf-autotable";
+import * as paymentService from "../../services/paymentService";
 
 
 interface Wallet {
-    id: string;
+  _id: string;
   name: string;
   balance: string;
   
 }
 
 function Main() {
-    const [walletsData, setWalletsData] = useState<Wallet[]>([]);
-    const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
-    const deleteButtonRef = createRef();
-    let [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+  const [superlargeModalSizePreview, setSuperlargeModalSizePreview] =
+    useState(false);
+  const [walletsData, setWalletsData] = useState<Wallet[]>([]);
+  const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
+  const deleteButtonRef = createRef();
+  let [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const initialFocusRef = React.useRef<HTMLElement | null>(null);
 
-    const initialFocusRef = React.useRef<HTMLElement | null>(null);
-  
-    useEffect(() => {
-      axios.get("http://localhost:8082/wallets").then(
-        (response) => {
-          setWalletsData(response.data);
-          console.log(response.data);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-    }, []);
 
-    const handleExportExcel = () => {
-        axios.get("http://localhost:8082/wallets").then((response) => {
-          const data = response.data;
-    
-          const worksheet = XLSX.utils.json_to_sheet(data);
-          const workbook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    
-          const fileName = "wallets.xlsx";
-    
-          const excelBuffer = XLSX.write(workbook, { type: "array" });
-          const excelBlob = new Blob([excelBuffer], {
-            type:
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          });
-          saveAs(excelBlob, fileName);
-        });
-      };
+  const [pagination, setPagination] = useState({ current_page: 1, total: 1, total_pages: 1, per_page: 1 });
+  const [page, setPage] = useState(1);
+  const [next_page, setNextPage] = useState(1);
+  const [previous_page, setPreviousPage] = useState(1);
+  useEffect(() => {
+    getWallets();
+  }, []);
 
-      const exportToPDF = () => {
-        // const doc = new jsPDF();
-        const doc = new jsPDF() as any;
-        doc.autoTable({
-          head: [["Wallet ID", "Name", "Balance"]],
-          body: walletsData.map((wallet) => [
-            wallet.id,
-            wallet.name,
-            wallet.balance,
-          ]),
-        });
-        doc.save("wallets.pdf");
-      };
+  const getWallets = async () => {
+    let res = await paymentService.getWallets({ page: 1 });
+    setWalletsData(res.wallets);
+    setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
+    setPreviousPage((page > 1) ? page - 1 : 1);
+    setPagination({ current_page: res.current_page, total: res.total, total_pages: res.total_pages, per_page: res.per_page });
+  };
 
-    const totalPages = Math.ceil(walletsData.length / itemsPerPage);
-  
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = walletsData.slice(indexOfFirstItem, indexOfLastItem);
-  
-    const handlePageChange = (page: number) => {
-      setCurrentPage(page);
-    };
+  const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
 
-    const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
-
-    const handleViewDetails = (wallet: Wallet) => {
-      setSelectedWallet(wallet);
-    };
+  const handleViewDetails = (wallet: Wallet) => {
+    setSelectedWallet(wallet);
+  };
 
   return (
     <>
       <h2 className="mt-10 text-lg font-medium intro-y">Wallets</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
-        <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
-          <div className="flex w-full sm:w-auto">
-            <div className="relative w-48 text-slate-500">
+        <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">
+          <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
+            event.preventDefault();
+            setSuperlargeModalSizePreview(true);
+          }}>
+            New Event
+          </Button>
+          <Menu>
+            <Menu.Button as={Button} className="px-2 !box">
+              <span className="flex items-center justify-center w-5 h-5">
+                <Lucide icon="Plus" className="w-4 h-4" />
+              </span>
+            </Menu.Button>
+            <Menu.Items className="w-40">
+              <Menu.Item>
+                <Lucide icon="Printer" className="w-4 h-4 mr-2" /> Print
+              </Menu.Item>
+              <Menu.Item>
+                <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
+                Excel
+              </Menu.Item>
+              <Menu.Item>
+                <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
+                PDF
+              </Menu.Item>
+            </Menu.Items>
+          </Menu>
+          <div className="hidden mx-auto md:block text-slate-500">
+            Showing {pagination.current_page + " to " + pagination.total_pages + " of " + pagination.total} entries
+          </div>
+          <div className="w-full mt-3 sm:w-auto sm:mt-0 sm:ml-auto md:ml-0">
+            <div className="relative w-56 text-slate-500">
               <FormInput
                 type="text"
-                className="w-48 pr-10 !box"
-                placeholder="Search by name..."
+                className="w-56 pr-10 !box"
+                placeholder="Search..."
               />
               <Lucide
                 icon="Search"
@@ -115,87 +98,47 @@ function Main() {
               />
             </div>
           </div>
-          <div className="hidden mx-auto xl:block text-slate-500">
-          {`Showing ${indexOfFirstItem + 1} to ${
-          indexOfLastItem > walletsData.length
-            ? walletsData.length
-            : indexOfLastItem
-        } of ${walletsData.length} entries`}
-          </div>
-          <div className="flex items-center w-full mt-3 xl:w-auto xl:mt-0">
-            {/* Export to Excel Button */}
-            <Button variant="primary" className="mr-2 shadow-md" onClick={handleExportExcel}>
-                <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to Excel
-            </Button>
-            {/* Export to PDF Button */}
-            <Button variant="primary" className="mr-2 shadow-md" onClick={exportToPDF}>
-                <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to PDF
-            </Button>
-            <Menu>
-              <Menu.Button as={Button} className="px-2 !box">
-                <span className="flex items-center justify-center w-5 h-5">
-                  <Lucide icon="Plus" className="w-4 h-4" />
-                </span>
-              </Menu.Button>
-              <Menu.Items className="w-40">
-                <Menu.Item>
-                  <Lucide icon="Printer" className="w-4 h-4 mr-2" /> Print
-                </Menu.Item>
-                <Menu.Item>
-                  <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
-                  Excel
-                </Menu.Item>
-                <Menu.Item>
-                  <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
-                  PDF
-                </Menu.Item>
-              </Menu.Items>
-            </Menu>
-          </div>
         </div>
         {/* BEGIN: Data List */}
-        <div className="col-span-12 overflow-auto intro-y 2xl:overflow-visible">
+        <div className="col-span-12 overflow-auto intro-y lg:overflow-visible">
           <Table className="border-spacing-y-[10px] border-separate -mt-2">
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                <FormCheck.Input type="checkbox" />
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Name
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Wallet Balance
-              </Table.Th>
-              <Table.Th className="text-center border-b-0 whitespace-nowrap">
-                Actions
-              </Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {currentItems.map((wallet) => (
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  <FormCheck.Input type="checkbox" />
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Name
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Balance
+                </Table.Th>
+                <Table.Th className="text-center border-b-0 whitespace-nowrap">
+                  Actions
+                </Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {walletsData.map((wallet) => (
                 <Table.Tr key={wallet.id} className="intro-y">
-                <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <FormCheck.Input type="checkbox" value={wallet.id} />
-                </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    <FormCheck.Input type="checkbox" value={wallet._id} />
+                  </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 !py-4 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {wallet.name}
+                    {wallet.userId.firstName + " " + wallet.userId.lastName}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {wallet.balance}
                   </Table.Td>
-                  
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 text-right bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                  <div className="pr-16">
-                    <Button
-                      variant="primary"
-                      onClick={() => handleViewDetails(wallet)}
-                    >
-                      <Lucide icon="CheckSquare" className="w-4 h-4 mr-1" />
-                      View Details
-                    </Button>
-                  </div>
-                </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
+                    <div className="flex items-center justify-center">
+                      <a className="flex items-center mr-3" href=""
+                        onClick={() => handleViewDetails(wallet)}>
+                        <Lucide icon="View" className="w-4 h-4 mr-1" />
+                        View
+                      </a>
+                    </div>
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -203,30 +146,41 @@ function Main() {
         </div>
         {/* END: Data List */}
         {/* BEGIN: Pagination */}
-        <div className="col-span-12 mt-5">
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        onChange={handlePageChange}
-      />
-    </div>
+        <div className="flex flex-wrap items-center col-span-12 intro-y sm:flex-row sm:flex-nowrap">
+          <Pagination className="w-full sm:w-auto sm:mr-auto">
+            <Pagination.Link onClick={() => (setPage(previous_page), getBookings())} >
+              <Lucide icon="ChevronLeft" className="w-4 h-4" />
+            </Pagination.Link>
+            {_.times(pagination.total_pages).map((page, key) => (
+              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getWallets())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getWallets())} key={key}>{page + 1}</Pagination.Link>
+            ))}
+            <Pagination.Link onClick={() => (setPage(next_page), getWallets())} >
+              <Lucide icon="ChevronRight" className="w-4 h-4" />
+            </Pagination.Link>
+          </Pagination>
+          <FormSelect className="w-20 mt-3 !box sm:mt-0">
+            <option>10</option>
+            <option>25</option>
+            <option>35</option>
+            <option>50</option>
+          </FormSelect>
+        </div>
         {/* END: Pagination */}
       </div>
-        {/* BEGIN: View Details Dialog */}
-        <Dialog
+      {/* BEGIN: View Details Dialog */}
+      <Dialog
         open={!!selectedWallet}
         onClose={() => setSelectedWallet(null)}
-        // initialFocus={null}
+        initialFocus={initialFocusRef}
       >
         <Dialog.Panel>
           <div className="p-5">
-            <h2 className="text-lg font-medium">Wallet Details</h2>
+            <h2 className="text-lg font-medium">User Details</h2>
             {selectedWallet && (
               <div>
-                <p>ID: {selectedWallet.id}</p>
-                <p>Name: {selectedWallet.name}</p>
+                <p>Name: {selectedWallet.userId.firstName + " " + selectedWallet.userId.lastName}</p>
                 <p>Balance: {selectedWallet.balance}</p>
-                {/* You can display more wallet details here as needed */}
+                
               </div>
             )}
           </div>
@@ -240,7 +194,8 @@ function Main() {
         onClose={() => {
           setDeleteConfirmationModal(false);
         }}
-        // initialFocus={deleteButtonRef}
+      // initialFocus={deleteButtonRef}
+      // initialFocus={initialFocusRef}
       >
         <Dialog.Panel>
           <div className="p-5 text-center">
@@ -269,7 +224,7 @@ function Main() {
               variant="danger"
               type="button"
               className="w-24"
-              // ref={deleteButtonRef}
+            // ref={deleteButtonRef}
             >
               Delete
             </Button>
@@ -277,6 +232,14 @@ function Main() {
         </Dialog.Panel>
       </Dialog>
       {/* END: Delete Confirmation Modal */}
+      <Dialog staticBackdrop size="lg" open={superlargeModalSizePreview} onClose={() => {
+        setSuperlargeModalSizePreview(false);
+      }}
+      >
+        <Dialog.Panel className="p-10 text-center">
+          This is totally awesome superlarge modal!
+        </Dialog.Panel>
+      </Dialog>
     </>
   );
 }

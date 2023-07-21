@@ -1,36 +1,55 @@
 import _ from "lodash";
-import { useState, useRef, useEffect } from "react";
-import Tippy from "../../base-components/Tippy";
+import React, { useState, useEffect, createRef } from 'react';
 import Button from "../../base-components/Button";
 import Pagination from "../../base-components/Pagination";
-import { FormInput, FormSelect } from "../../base-components/Form";
+import { FormCheck, FormInput, FormSelect } from "../../base-components/Form";
 import Lucide from "../../base-components/Lucide";
 import { Dialog, Menu } from "../../base-components/Headless";
 import Table from "../../base-components/Table";
-import * as ApiService from "../../services/simcards";
-import { formatDate } from "../../utils/helper";
+import dayjs from "dayjs";
+import "jspdf-autotable";
+import * as simcardService from "../../services/simcardService";
+
+
+interface SimCard {
+  id: string;
+  name: string;
+  providerName: string;
+  collectionPoint: string;
+  userId: string;
+  issueStatus: string;
+  createdAt: string;
+}
 
 function Main() {
+  const [simCardsData, setSimCardsData] = useState<SimCard[]>([]);
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
-  const [superlargeModalSizePreview, setSuperlargeModalSizePreview] =
-    useState(false);
-  const deleteButtonRef = useRef(null);
+  const deleteButtonRef = createRef();
+  let [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const initialFocusRef = React.useRef<HTMLElement | null>(null);
 
-  const [events, setEvents] = useState([]);
+
   const [pagination, setPagination] = useState({ current_page: 1, total: 1, total_pages: 1, per_page: 1 });
   const [page, setPage] = useState(1);
   const [next_page, setNextPage] = useState(1);
   const [previous_page, setPreviousPage] = useState(1);
   useEffect(() => {
-    getEvents();
+    getBookings();
   }, []);
 
-  const getEvents = async () => {
-    let res = await ApiService.getBookings({ page: 1 });
-    setEvents(res.events);
+  const getBookings = async () => {
+    let res = await simcardService.getBookings({ page: 1 });
+    setSimCardsData(res.bookings);
     setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
     setPreviousPage((page > 1) ? page - 1 : 1);
     setPagination({ current_page: res.current_page, total: res.total, total_pages: res.total_pages, per_page: res.per_page });
+  };
+
+  const [selectedSimCard, setSelectedSimCard] = useState<SimCard | null>(null);
+
+  const handleViewDetails = (simCard: SimCard) => {
+    setSelectedSimCard(simCard);
   };
 
   return (
@@ -42,7 +61,7 @@ function Main() {
             event.preventDefault();
             setSuperlargeModalSizePreview(true);
           }}>
-            New Booking
+            New Event
           </Button>
           <Menu>
             <Menu.Button as={Button} className="px-2 !box">
@@ -86,112 +105,58 @@ function Main() {
           <Table className="border-spacing-y-[10px] border-separate -mt-2">
             <Table.Thead>
               <Table.Tr>
-                <Table.Th className="border-b-0 ">
-                  EVENT
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  <FormCheck.Input type="checkbox" />
                 </Table.Th>
-                <Table.Th className="border-b-0 ">
-                  VENUE
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Name
                 </Table.Th>
-                <Table.Th className="border-b-0 ">
-                  DESCRIPTION
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Simcard Provider
                 </Table.Th>
-                <Table.Th className="border-b-0 ">
-                  SPEAKERS
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Collection Point
                 </Table.Th>
-                <Table.Th className="border-b-0 ">
-                  ATTENDEES
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Issue Status
                 </Table.Th>
-                <Table.Th className="border-b-0 ">
-                  ACTIONS
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Travel Date
+                </Table.Th>
+                <Table.Th className="text-center border-b-0 whitespace-nowrap">
+                  Actions
                 </Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {events.map((event, key) => (
-                <Table.Tr key={key} className="intro-x">
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <a href="" className="font-medium ">
-                      {event.name}
-                    </a>
-                    <div className="text-slate-500 text-xs  mt-0.5">
-                      {formatDate(event.startTime, "DD MMM YYYY") + " - " + formatDate(event.endTime, "DD MMM YYYY")}
-                    </div>
+              {simCardsData.map((simCard) => (
+                <Table.Tr key={simCard.id} className="intro-y">
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    <FormCheck.Input type="checkbox" value={simCard.id} />
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 !py-4 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {simCard.userId.firstName + " " + simCard.userId.lastName}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {simCard.providerId}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {simCard.collectionPoint}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div className="text-slate-500 text-xs  mt-0.5">
-                      {event.venue}
+                      {simCard.issueStatus}
                     </div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="text-slate-500 text-xs  mt-0.5">
-                      {event.description}
-                    </div>
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="flex">
-                      {event.speakers.map((speaker, index) => (
-                        index == 0 ?
-                          <div key={index} className="w-10 h-10 image-fit zoom-in">
-                            <Tippy
-                              as="img"
-                              alt=""
-                              className="rounded-full shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
-                              src={speaker.profileImage}
-                              content={speaker.firstName + " " + speaker.lastName}
-                            />
-                          </div> :
-                          <div key={index} className="w-10 h-10 -ml-5 image-fit zoom-in">
-                            <Tippy
-                              as="img"
-                              alt=""
-                              className="rounded-full shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
-                              src={speaker.profileImage}
-                              content={speaker.firstName + " " + speaker.lastName}
-                            />
-                          </div>
-                      ))}
-                    </div>
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="flex">
-                      {event.attendees.map((attendees, index) => (
-                        index == 0 ?
-                          <div key={index} className="w-10 h-10 image-fit zoom-in">
-                            <Tippy
-                              as="img"
-                              alt=""
-                              className="rounded-full shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
-                              src={attendees.profileImage}
-                              content={attendees.firstName + " " + attendees.lastName}
-                            />
-                          </div> :
-                          <div key={index} className="w-10 h-10 -ml-5 image-fit zoom-in">
-                            <Tippy
-                              as="img"
-                              alt=""
-                              className="rounded-full shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
-                              src={attendees.profileImage}
-                              content={attendees.firstName + " " + attendees.lastName}
-                            />
-                          </div>
-                      ))}
-                    </div>
+                    {dayjs(simCard.createdAt).format('DD-MM-YYYY')}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
                     <div className="flex items-center justify-center">
-                      <a className="flex items-center mr-3" href="">
-                        <Lucide icon="CheckSquare" className="w-4 h-4 mr-1" />
-                        Edit
-                      </a>
-                      <a
-                        className="flex items-center text-danger"
-                        href="#"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setDeleteConfirmationModal(true);
-                        }}
-                      >
-                        <Lucide icon="Trash2" className="w-4 h-4 mr-1" /> Delete
+                      <a className="flex items-center mr-3" href=""
+                        onClick={() => handleViewDetails(simCard)}>
+                        <Lucide icon="View" className="w-4 h-4 mr-1" />
+                        View
                       </a>
                     </div>
                   </Table.Td>
@@ -204,13 +169,13 @@ function Main() {
         {/* BEGIN: Pagination */}
         <div className="flex flex-wrap items-center col-span-12 intro-y sm:flex-row sm:flex-nowrap">
           <Pagination className="w-full sm:w-auto sm:mr-auto">
-            <Pagination.Link onClick={() => (setPage(previous_page), getEvents())} >
+            <Pagination.Link onClick={() => (setPage(previous_page), getBookings())} >
               <Lucide icon="ChevronLeft" className="w-4 h-4" />
             </Pagination.Link>
             {_.times(pagination.total_pages).map((page, key) => (
-              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getEvents())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getEvents())} key={key}>{page + 1}</Pagination.Link>
+              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getBookings())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getEvents())} key={key}>{page + 1}</Pagination.Link>
             ))}
-            <Pagination.Link onClick={() => (setPage(next_page), getEvents())} >
+            <Pagination.Link onClick={() => (setPage(next_page), getBookings())} >
               <Lucide icon="ChevronRight" className="w-4 h-4" />
             </Pagination.Link>
           </Pagination>
@@ -223,13 +188,38 @@ function Main() {
         </div>
         {/* END: Pagination */}
       </div>
+      {/* BEGIN: View Details Dialog */}
+      <Dialog
+        open={!!selectedSimCard}
+        onClose={() => setSelectedSimCard(null)}
+        initialFocus={initialFocusRef}
+      >
+        <Dialog.Panel>
+          <div className="p-5">
+            <h2 className="text-lg font-medium">User Details</h2>
+            {selectedSimCard && (
+              <div>
+                <p>Name: {selectedSimCard.name}</p>
+                <p>Provider: {selectedSimCard.providerName}</p>
+                <p>Collection Point: {selectedSimCard.collectionPoint}</p>
+                <p>Issue Status: {selectedSimCard.issueStatus}</p>
+                <p>Date Requested: {dayjs(selectedSimCard.createdAt).format("DD-MM-YYYY")}</p>
+                {/* You can display more user details here as needed */}
+              </div>
+            )}
+          </div>
+        </Dialog.Panel>
+      </Dialog>
+      {/* END: View Details Dialog */}
+
       {/* BEGIN: Delete Confirmation Modal */}
       <Dialog
         open={deleteConfirmationModal}
         onClose={() => {
           setDeleteConfirmationModal(false);
         }}
-        initialFocus={deleteButtonRef}
+      // initialFocus={deleteButtonRef}
+      // initialFocus={initialFocusRef}
       >
         <Dialog.Panel>
           <div className="p-5 text-center">
@@ -258,7 +248,7 @@ function Main() {
               variant="danger"
               type="button"
               className="w-24"
-              ref={deleteButtonRef}
+            // ref={deleteButtonRef}
             >
               Delete
             </Button>

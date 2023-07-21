@@ -29,6 +29,8 @@ function Main() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  const initialFocusRef = React.useRef<HTMLElement | null>(null);
+
   const [nameFilter, setNameFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
@@ -309,7 +311,7 @@ function Main() {
         <Dialog
         open={!!selectedTransaction}
         onClose={() => setSelectedTransaction(null)}
-        initialFocus={null}
+        initialFocus={initialFocusRef}
       >
         <Dialog.Panel>
           <div className="p-5">
@@ -336,7 +338,7 @@ function Main() {
         onClose={() => {
           setDeleteConfirmationModal(false);
         }}
-        initialFocus={deleteButtonRef}
+        // initialFocus={deleteButtonRef}
       >
         <Dialog.Panel>
           <div className="p-5 text-center">
@@ -365,7 +367,7 @@ function Main() {
               variant="danger"
               type="button"
               className="w-24"
-              ref={deleteButtonRef}
+              // ref={deleteButtonRef}
             >
               Delete
             </Button>

@@ -1,222 +1,200 @@
 import _ from "lodash";
-import React, { useState, useEffect, useRef, createRef } from 'react';
-import axios from "axios";
+import { useState, useRef, useEffect } from "react";
+import Tippy from "../../base-components/Tippy";
 import Button from "../../base-components/Button";
-import Pagination from "../../components/Pagination";
-import { FormCheck, FormInput, FormSelect } from "../../base-components/Form";
+import Pagination from "../../base-components/Pagination";
+import { FormInput, FormSelect } from "../../base-components/Form";
 import Lucide from "../../base-components/Lucide";
 import { Dialog, Menu } from "../../base-components/Headless";
 import Table from "../../base-components/Table";
-import dayjs from "dayjs";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
-import { jsPDF } from "jspdf";
-import "jspdf-autotable";
-
-
-interface SimCard {
-    id: string;
-  name: string;
-  providerName: string;
-  collectionPoint: string;
-  userId: string;
-  issueStatus: string;
-  createdAt: string;
-}
+import * as ApiService from "../../services/simcards";
+import { formatDate } from "../../utils/helper";
 
 function Main() {
-    const [simCardsData, setSimCardsData] = useState<SimCard[]>([]);
-    const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
-    const deleteButtonRef = createRef();
-    let [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+  const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
+  const [superlargeModalSizePreview, setSuperlargeModalSizePreview] =
+    useState(false);
+  const deleteButtonRef = useRef(null);
 
-    const initialFocusRef = React.useRef<HTMLElement | null>(null);
-  
-    useEffect(() => {
-      axios.get("http://localhost:8083/simcards").then(
-        (response) => {
-          setSimCardsData(response.data);
-          console.log(response.data);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-    }, []);
+  const [events, setEvents] = useState([]);
+  const [pagination, setPagination] = useState({ current_page: 1, total: 1, total_pages: 1, per_page: 1 });
+  const [page, setPage] = useState(1);
+  const [next_page, setNextPage] = useState(1);
+  const [previous_page, setPreviousPage] = useState(1);
+  useEffect(() => {
+    getEvents();
+  }, []);
 
-    const handleExportExcel = () => {
-        axios.get("http://localhost:8083/simcards").then((response) => {
-          const data = response.data;
-    
-          const worksheet = XLSX.utils.json_to_sheet(data);
-          const workbook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    
-          const fileName = "simcards-list.xlsx";
-    
-          const excelBuffer = XLSX.write(workbook, { type: "array" });
-          const excelBlob = new Blob([excelBuffer], {
-            type:
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          });
-          saveAs(excelBlob, fileName);
-        });
-      };
-
-      const exportToPDF = () => {
-        // const doc = new jsPDF();
-        const doc = new jsPDF() as any;
-        doc.autoTable({
-          head: [["Name", "Simcard Provider", "Collection Point", "Issue Status", "Travel Date"]],
-          body: simCardsData.map((simCard) => [
-            simCard.name,
-            simCard.providerName,
-            simCard.collectionPoint,
-            simCard.issueStatus,
-            dayjs(simCard.createdAt).format("DD-MM-YYYY"),
-          ]),
-        });
-        doc.save("simcard-bookings.pdf");
-      };
-
-    const totalPages = Math.ceil(simCardsData.length / itemsPerPage);
-  
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = simCardsData.slice(indexOfFirstItem, indexOfLastItem);
-  
-    const handlePageChange = (page: number) => {
-      setCurrentPage(page);
-    };
-
-    const [selectedSimCard, setSelectedSimCard] = useState<SimCard | null>(null);
-
-    const handleViewDetails = (simCard: SimCard) => {
-      setSelectedSimCard(simCard);
-    };
+  const getEvents = async () => {
+    let res = await ApiService.getBookings({ page: 1 });
+    setEvents(res.events);
+    setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
+    setPreviousPage((page > 1) ? page - 1 : 1);
+    setPagination({ current_page: res.current_page, total: res.total, total_pages: res.total_pages, per_page: res.per_page });
+  };
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Booked Simcard List</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Simcard Bookings</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
-        <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
-          <div className="flex w-full sm:w-auto">
-            <div className="relative w-48 text-slate-500">
+        <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">
+          <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
+            event.preventDefault();
+            setSuperlargeModalSizePreview(true);
+          }}>
+            New Booking
+          </Button>
+          <Menu>
+            <Menu.Button as={Button} className="px-2 !box">
+              <span className="flex items-center justify-center w-5 h-5">
+                <Lucide icon="Plus" className="w-4 h-4" />
+              </span>
+            </Menu.Button>
+            <Menu.Items className="w-40">
+              <Menu.Item>
+                <Lucide icon="Printer" className="w-4 h-4 mr-2" /> Print
+              </Menu.Item>
+              <Menu.Item>
+                <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
+                Excel
+              </Menu.Item>
+              <Menu.Item>
+                <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
+                PDF
+              </Menu.Item>
+            </Menu.Items>
+          </Menu>
+          <div className="hidden mx-auto md:block text-slate-500">
+            Showing {pagination.current_page + " to " + pagination.total_pages + " of " + pagination.total} entries
+          </div>
+          <div className="w-full mt-3 sm:w-auto sm:mt-0 sm:ml-auto md:ml-0">
+            <div className="relative w-56 text-slate-500">
               <FormInput
                 type="text"
-                className="w-48 pr-10 !box"
-                placeholder="Search by name..."
+                className="w-56 pr-10 !box"
+                placeholder="Search..."
               />
               <Lucide
                 icon="Search"
                 className="absolute inset-y-0 right-0 w-4 h-4 my-auto mr-3"
               />
             </div>
-            <FormSelect className="ml-2 !box">
-              <option>Status</option>
-              <option>Pending</option>
-              <option>Collected</option>
-            </FormSelect>
-          </div>
-          <div className="hidden mx-auto xl:block text-slate-500">
-          {`Showing ${indexOfFirstItem + 1} to ${
-          indexOfLastItem > simCardsData.length
-            ? simCardsData.length
-            : indexOfLastItem
-        } of ${simCardsData.length} entries`}
-          </div>
-          <div className="flex items-center w-full mt-3 xl:w-auto xl:mt-0">
-            {/* Export to Excel Button */}
-            <Button variant="primary" className="mr-2 shadow-md" onClick={handleExportExcel}>
-                <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to Excel
-            </Button>
-            {/* Export to PDF Button */}
-            <Button variant="primary" className="mr-2 shadow-md" onClick={exportToPDF}>
-                <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to PDF
-            </Button>
-            <Menu>
-              <Menu.Button as={Button} className="px-2 !box">
-                <span className="flex items-center justify-center w-5 h-5">
-                  <Lucide icon="Plus" className="w-4 h-4" />
-                </span>
-              </Menu.Button>
-              <Menu.Items className="w-40">
-                <Menu.Item>
-                  <Lucide icon="Printer" className="w-4 h-4 mr-2" /> Print
-                </Menu.Item>
-                <Menu.Item>
-                  <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
-                  Excel
-                </Menu.Item>
-                <Menu.Item>
-                  <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
-                  PDF
-                </Menu.Item>
-              </Menu.Items>
-            </Menu>
           </div>
         </div>
         {/* BEGIN: Data List */}
-        <div className="col-span-12 overflow-auto intro-y 2xl:overflow-visible">
+        <div className="col-span-12 overflow-auto intro-y lg:overflow-visible">
           <Table className="border-spacing-y-[10px] border-separate -mt-2">
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                <FormCheck.Input type="checkbox" />
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Name
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Simcard Provider
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Collection Point
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Issue Status
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                Date Requested
-              </Table.Th>
-              <Table.Th className="text-center border-b-0 whitespace-nowrap">
-                Actions
-              </Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {currentItems.map((simCard) => (
-                <Table.Tr key={simCard.id} className="intro-y">
-                <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <FormCheck.Input type="checkbox" value={simCard.id} />
-                </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 !py-4 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {simCard.name}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {simCard.providerName}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {simCard.collectionPoint}
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th className="border-b-0 ">
+                  EVENT
+                </Table.Th>
+                <Table.Th className="border-b-0 ">
+                  VENUE
+                </Table.Th>
+                <Table.Th className="border-b-0 ">
+                  DESCRIPTION
+                </Table.Th>
+                <Table.Th className="border-b-0 ">
+                  SPEAKERS
+                </Table.Th>
+                <Table.Th className="border-b-0 ">
+                  ATTENDEES
+                </Table.Th>
+                <Table.Th className="border-b-0 ">
+                  ACTIONS
+                </Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {events.map((event, key) => (
+                <Table.Tr key={key} className="intro-x">
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    <a href="" className="font-medium ">
+                      {event.name}
+                    </a>
+                    <div className="text-slate-500 text-xs  mt-0.5">
+                      {formatDate(event.startTime, "DD MMM YYYY") + " - " + formatDate(event.endTime, "DD MMM YYYY")}
+                    </div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {simCard.issueStatus}
+                    <div className="text-slate-500 text-xs  mt-0.5">
+                      {event.venue}
+                    </div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    { dayjs(simCard.createdAt).format('DD-MM-YYYY')}  
+                    <div className="text-slate-500 text-xs  mt-0.5">
+                      {event.description}
+                    </div>
                   </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 text-right bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                  <div className="pr-16">
-                    <Button
-                      variant="primary"
-                      onClick={() => handleViewDetails(simCard)}
-                    >
-                      <Lucide icon="CheckSquare" className="w-4 h-4 mr-1" />
-                      View Details
-                    </Button>
-                  </div>
-                </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    <div className="flex">
+                      {event.speakers.map((speaker, index) => (
+                        index == 0 ?
+                          <div key={index} className="w-10 h-10 image-fit zoom-in">
+                            <Tippy
+                              as="img"
+                              alt=""
+                              className="rounded-full shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
+                              src={speaker.profileImage}
+                              content={speaker.firstName + " " + speaker.lastName}
+                            />
+                          </div> :
+                          <div key={index} className="w-10 h-10 -ml-5 image-fit zoom-in">
+                            <Tippy
+                              as="img"
+                              alt=""
+                              className="rounded-full shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
+                              src={speaker.profileImage}
+                              content={speaker.firstName + " " + speaker.lastName}
+                            />
+                          </div>
+                      ))}
+                    </div>
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    <div className="flex">
+                      {event.attendees.map((attendees, index) => (
+                        index == 0 ?
+                          <div key={index} className="w-10 h-10 image-fit zoom-in">
+                            <Tippy
+                              as="img"
+                              alt=""
+                              className="rounded-full shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
+                              src={attendees.profileImage}
+                              content={attendees.firstName + " " + attendees.lastName}
+                            />
+                          </div> :
+                          <div key={index} className="w-10 h-10 -ml-5 image-fit zoom-in">
+                            <Tippy
+                              as="img"
+                              alt=""
+                              className="rounded-full shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
+                              src={attendees.profileImage}
+                              content={attendees.firstName + " " + attendees.lastName}
+                            />
+                          </div>
+                      ))}
+                    </div>
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
+                    <div className="flex items-center justify-center">
+                      <a className="flex items-center mr-3" href="">
+                        <Lucide icon="CheckSquare" className="w-4 h-4 mr-1" />
+                        Edit
+                      </a>
+                      <a
+                        className="flex items-center text-danger"
+                        href="#"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          setDeleteConfirmationModal(true);
+                        }}
+                      >
+                        <Lucide icon="Trash2" className="w-4 h-4 mr-1" /> Delete
+                      </a>
+                    </div>
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -224,47 +202,34 @@ function Main() {
         </div>
         {/* END: Data List */}
         {/* BEGIN: Pagination */}
-        <div className="col-span-12 mt-5">
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        onChange={handlePageChange}
-      />
-    </div>
+        <div className="flex flex-wrap items-center col-span-12 intro-y sm:flex-row sm:flex-nowrap">
+          <Pagination className="w-full sm:w-auto sm:mr-auto">
+            <Pagination.Link onClick={() => (setPage(previous_page), getEvents())} >
+              <Lucide icon="ChevronLeft" className="w-4 h-4" />
+            </Pagination.Link>
+            {_.times(pagination.total_pages).map((page, key) => (
+              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getEvents())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getEvents())} key={key}>{page + 1}</Pagination.Link>
+            ))}
+            <Pagination.Link onClick={() => (setPage(next_page), getEvents())} >
+              <Lucide icon="ChevronRight" className="w-4 h-4" />
+            </Pagination.Link>
+          </Pagination>
+          <FormSelect className="w-20 mt-3 !box sm:mt-0">
+            <option>10</option>
+            <option>25</option>
+            <option>35</option>
+            <option>50</option>
+          </FormSelect>
+        </div>
         {/* END: Pagination */}
       </div>
-        {/* BEGIN: View Details Dialog */}
-        <Dialog
-        open={!!selectedSimCard}
-        onClose={() => setSelectedSimCard(null)}
-        initialFocus={initialFocusRef}
-      >
-        <Dialog.Panel>
-          <div className="p-5">
-            <h2 className="text-lg font-medium">User Details</h2>
-            {selectedSimCard && (
-              <div>
-                <p>Name: {selectedSimCard.name}</p>
-                <p>Provider: {selectedSimCard.providerName}</p>
-                <p>Collection Point: {selectedSimCard.collectionPoint}</p>
-                <p>Issue Status: {selectedSimCard.issueStatus}</p>
-                <p>Date Requested: {dayjs(selectedSimCard.createdAt).format("DD-MM-YYYY")}</p>
-                {/* You can display more user details here as needed */}
-              </div>
-            )}
-          </div>
-        </Dialog.Panel>
-      </Dialog>
-      {/* END: View Details Dialog */}
-
       {/* BEGIN: Delete Confirmation Modal */}
       <Dialog
         open={deleteConfirmationModal}
         onClose={() => {
           setDeleteConfirmationModal(false);
         }}
-        // initialFocus={deleteButtonRef}
-        // initialFocus={initialFocusRef}
+        initialFocus={deleteButtonRef}
       >
         <Dialog.Panel>
           <div className="p-5 text-center">
@@ -293,7 +258,7 @@ function Main() {
               variant="danger"
               type="button"
               className="w-24"
-              // ref={deleteButtonRef}
+              ref={deleteButtonRef}
             >
               Delete
             </Button>
@@ -301,6 +266,14 @@ function Main() {
         </Dialog.Panel>
       </Dialog>
       {/* END: Delete Confirmation Modal */}
+      <Dialog staticBackdrop size="lg" open={superlargeModalSizePreview} onClose={() => {
+        setSuperlargeModalSizePreview(false);
+      }}
+      >
+        <Dialog.Panel className="p-10 text-center">
+          This is totally awesome superlarge modal!
+        </Dialog.Panel>
+      </Dialog>
     </>
   );
 }

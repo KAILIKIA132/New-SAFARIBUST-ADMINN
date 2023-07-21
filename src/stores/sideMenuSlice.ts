@@ -40,6 +40,11 @@ const initialState: SideMenuState = {
           pathname: "/vendors",
           title: "Vendors",
         },
+        {
+          icon: "Activity",
+          pathname: "/exhibitors",
+          title: "Exhibitors",
+        },
       ],
     },
 
@@ -99,7 +104,7 @@ const initialState: SideMenuState = {
         },
         {
           icon: "Activity",
-          pathname: "/system-users",
+          pathname: "/users",
           title: "System Users",
         },
         {

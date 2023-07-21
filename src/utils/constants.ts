@@ -10,4 +10,4 @@ export const CHANGE_PASSWORD = `${BASE_URL}change-password`;
 export const CONFERENCES = `${BASE_URL}events-service/conference`;
 export const THEMES = `${BASE_URL}events-service/theme`;
 export const EVENTS = `${BASE_URL}events-service/event`;
-export const USERS = `${BASE_URL}events-service/users`;
+export const USERS = `${BASE_URL}auth-service/auth/users`;

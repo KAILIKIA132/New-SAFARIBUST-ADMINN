@@ -27,7 +27,7 @@ function Router() {
   const routes = [
     {
       path: "/",
-      element: 
+      element:
         <AuthGuard>
           <Layout />
         </AuthGuard>,
@@ -73,6 +73,10 @@ function Router() {
           element: <Vendors />,
         },
         {
+          path: "exhibitors",
+          element: <Vendors />,
+        },
+        {
           path: "conferences",
           element: <Conferences />,
         },
@@ -89,7 +93,7 @@ function Router() {
           element: <SellerDetail />,
         },
         {
-          path: "users-layout-1",
+          path: "users",
           element: <Users />,
         },
         {

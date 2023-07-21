@@ -1,27 +1,30 @@
-import { useState, Fragment } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Lucide from "../../base-components/Lucide";
 import logoUrl from "../../assets/images/logo.png";
 import Breadcrumb from "../../base-components/Breadcrumb";
-import { FormInput } from "../../base-components/Form";
 import { Menu, Popover } from "../../base-components/Headless";
+import TomSelect from "../../base-components/TomSelect";
 import fakerData from "../../utils/faker";
 import _ from "lodash";
 import clsx from "clsx";
-import { Transition } from "@headlessui/react";
 import { useAuth } from '../../contexts/Auth';
+import * as ApiService from "../../services/auth";
 
 function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
   const auth = useAuth();
   const signOut = () => {
     auth.signOut();
   };
-  const [searchDropdown, setSearchDropdown] = useState(false);
-  const showSearchDropdown = () => {
-    setSearchDropdown(true);
-  };
-  const hideSearchDropdown = () => {
-    setSearchDropdown(false);
+  const [conference, selectConference] = useState("64b2f66f6aecc56ae2999c0d");
+  const [conferences, setConferences] = useState([]);
+  useEffect(() => {
+    getConferences();
+  }, []);
+
+  const getConferences = async () => {
+    let res = await ApiService.getConferences();
+    setConferences(res.conferences);
   };
 
   return (
@@ -70,37 +73,12 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
           {/* BEGIN: Search */}
           <div className="relative mr-3 intro-x sm:mr-6">
             <div className="relative hidden sm:block">
-              <FormInput
-                type="text"
-                className="border-transparent w-56 shadow-none rounded-full bg-slate-200 pr-8 transition-[width] duration-300 ease-in-out focus:border-transparent focus:w-72 dark:bg-darkmode-400"
-                placeholder="Search..."
-                onFocus={showSearchDropdown}
-                onBlur={hideSearchDropdown}
-              />
-              <Lucide
-                icon="Search"
-                className="absolute inset-y-0 right-0 w-5 h-5 my-auto mr-3 text-slate-600 dark:text-slate-500"
-              />
+              <TomSelect value={conference} onChange={selectConference} options={{
+                placeholder: "Select conference",
+              }} className="border-transparent w-56 shadow-none rounded-full bg-slate-200 pr-8 transition-[width] duration-300 ease-in-out focus:border-transparent focus:w-72 dark:bg-darkmode-400">
+                {conferences.map((conference, key) => <option key={key} value={conference._id} >{conference.name}</option>)}
+              </TomSelect>
             </div>
-            <a className="relative text-white/70 sm:hidden" href="">
-              <Lucide icon="Search" className="w-5 h-5 dark:text-slate-500" />
-            </a>
-            <Transition
-              as={Fragment}
-              show={searchDropdown}
-              enter="transition-all ease-linear duration-150"
-              enterFrom="mt-5 invisible opacity-0 translate-y-1"
-              enterTo="mt-[3px] visible opacity-100 translate-y-0"
-              leave="transition-all ease-linear duration-150"
-              leaveFrom="mt-[3px] visible opacity-100 translate-y-0"
-              leaveTo="mt-5 invisible opacity-0 translate-y-1"
-            >
-              <div className="absolute right-0 z-10 mt-[3px]">
-                <div className="w-[450px] p-5 box">
-
-                </div>
-              </div>
-            </Transition>
           </div>
           {/* END: Search */}
           {/* BEGIN: Notifications */}

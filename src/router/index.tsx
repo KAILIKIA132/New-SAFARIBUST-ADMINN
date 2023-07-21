@@ -1,12 +1,17 @@
 import { useRoutes } from "react-router-dom";
 import Layout from "../layouts";
 import Dashboard from "../pages/Dashboard";
+import Attendees from "../pages/Attendees";
+import Speakers from "../pages/Speakers";
+import Vendors from "../pages/Vendors";
+import Conferences from "../pages/Conferences";
+import Themes from "../pages/Themes";
+import Events from "../pages/Events";
 import SimcardBooking from "../pages/SimcardBooking";
 import Categories from "../pages/Categories";
 import ProductList from "../pages/ProductList";
 import TransactionList from "../pages/TransactionList";
 import TransactionDetail from "../pages/TransactionDetail";
-import SellerList from "../pages/SellerList";
 import SellerDetail from "../pages/SellerDetail";
 import Users from "../pages/Users";
 import Profile from "../pages/Profile";
@@ -51,8 +56,28 @@ function Router() {
           element: <TransactionDetail />,
         },
         {
-          path: "seller-list",
-          element: <SellerList />,
+          path: "attendees",
+          element: <Attendees />,
+        },
+        {
+          path: "speakers",
+          element: <Speakers />,
+        },
+        {
+          path: "vendors",
+          element: <Vendors />,
+        },
+        {
+          path: "conferences",
+          element: <Conferences />,
+        },
+        {
+          path: "themes",
+          element: <Themes />,
+        },
+        {
+          path: "events",
+          element: <Events />,
         },
         {
           path: "seller-detail",

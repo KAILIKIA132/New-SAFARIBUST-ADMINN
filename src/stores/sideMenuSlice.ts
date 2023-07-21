@@ -27,17 +27,17 @@ const initialState: SideMenuState = {
       subMenu: [
         {
           icon: "Activity",
-          pathname: "/seller-list",
+          pathname: "/attendees",
           title: "Attendees",
         },
         {
           icon: "Activity",
-          pathname: "/users-layout-1",
+          pathname: "/speakers",
           title: "Speakers",
         },
         {
           icon: "Activity",
-          pathname: "/seller-list",
+          pathname: "/vendors",
           title: "Vendors",
         },
       ],
@@ -49,17 +49,17 @@ const initialState: SideMenuState = {
       subMenu: [
         {
           icon: "Activity",
-          pathname: "/categories",
+          pathname: "/conferences",
           title: "Conferences",
         },
         {
           icon: "Activity",
-          pathname: "/product-list",
+          pathname: "/themes",
           title: "Themes",
         },
         {
           icon: "Activity",
-          pathname: "/categories",
+          pathname: "/events",
           title: "Events",
         }
       ],
@@ -84,7 +84,7 @@ const initialState: SideMenuState = {
     // 
     {
       icon: "PhoneCall",
-      pathname: "/simcards", 
+      pathname: "/simcards",
       title: "Simcard Booking"
     },
     "divider",

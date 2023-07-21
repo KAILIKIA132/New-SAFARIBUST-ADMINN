@@ -77,3 +77,30 @@ export function handler(err: any) {
 
     return new Error(error.message);
 }
+
+export async function getConferences() {
+    try {
+        let res = await axios.get(c.CONFERENCES);
+        return res.data;
+    } catch (e) {
+        throw handler(e);
+    }
+}
+
+export async function getThemes(data: { page: number; }) {
+    try {
+        let res = await axios.get(c.THEMES + "?page=" + data.page);
+        return res.data;
+    } catch (e) {
+        throw handler(e);
+    }
+}
+
+export async function getEvents(data: { page: any; }) {
+    try {
+        let res = await axios.get(c.EVENTS + "?page=" + data.page);
+        return res.data;
+    } catch (e) {
+        throw handler(e);
+    }
+}

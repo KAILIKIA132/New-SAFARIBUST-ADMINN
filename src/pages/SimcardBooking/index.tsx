@@ -1,12 +1,5 @@
 import _ from "lodash";
-import clsx from "clsx";
-import {
-  FormEvent,
-  useState,
-  useEffect,
-  createRef,
-  useRef, // Add this import
-} from "react";
+import React, { useState, useEffect, useRef, createRef } from 'react';
 import axios from "axios";
 import Button from "../../base-components/Button";
 import Pagination from "../../components/Pagination";
@@ -16,20 +9,9 @@ import { Dialog, Menu } from "../../base-components/Headless";
 import Table from "../../base-components/Table";
 import dayjs from "dayjs";
 import * as XLSX from "xlsx";
-import { renderToStaticMarkup } from "react-dom/server";
-import {
-  PDFDownloadLink,
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-} from "@react-pdf/renderer";
-import { PDFViewer } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
-// import * from 'jspdf';
 
 
 interface SimCard {
@@ -42,26 +24,14 @@ interface SimCard {
   createdAt: string;
 }
 
-const styles = StyleSheet.create({
-    page: {
-      flexDirection: "column",
-      backgroundColor: "#ffffff",
-      padding: 20,
-    },
-    section: {
-      marginBottom: 10,
-    },
-    text: {
-      fontSize: 12,
-    },
-  });
-
 function Main() {
     const [simCardsData, setSimCardsData] = useState<SimCard[]>([]);
     const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
     const deleteButtonRef = createRef();
     let [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
+
+    const initialFocusRef = React.useRef<HTMLElement | null>(null);
   
     useEffect(() => {
       axios.get("http://localhost:8083/simcards").then(
@@ -196,7 +166,7 @@ function Main() {
                 <FormCheck.Input type="checkbox" />
               </Table.Th>
               <Table.Th className="border-b-0 whitespace-nowrap">
-                Attendee
+                Name
               </Table.Th>
               <Table.Th className="border-b-0 whitespace-nowrap">
                 Simcard Provider
@@ -219,7 +189,7 @@ function Main() {
             {currentItems.map((simCard) => (
                 <Table.Tr key={simCard.id} className="intro-y">
                 <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <FormCheck.Input type="checkbox" value={simCard._id} />
+                    <FormCheck.Input type="checkbox" value={simCard.id} />
                 </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 !py-4 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {simCard.name}
@@ -267,7 +237,7 @@ function Main() {
         <Dialog
         open={!!selectedSimCard}
         onClose={() => setSelectedSimCard(null)}
-        initialFocus={null}
+        initialFocus={initialFocusRef}
       >
         <Dialog.Panel>
           <div className="p-5">
@@ -293,7 +263,8 @@ function Main() {
         onClose={() => {
           setDeleteConfirmationModal(false);
         }}
-        initialFocus={deleteButtonRef}
+        // initialFocus={deleteButtonRef}
+        // initialFocus={initialFocusRef}
       >
         <Dialog.Panel>
           <div className="p-5 text-center">
@@ -322,7 +293,7 @@ function Main() {
               variant="danger"
               type="button"
               className="w-24"
-              ref={deleteButtonRef}
+              // ref={deleteButtonRef}
             >
               Delete
             </Button>

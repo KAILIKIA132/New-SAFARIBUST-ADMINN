@@ -1,7 +1,7 @@
 import _ from "lodash";
 import clsx from "clsx";
 import {
-  FormEvent,
+  React,
   useState,
   useEffect,
   createRef,
@@ -14,22 +14,10 @@ import { FormCheck, FormInput, FormSelect } from "../../base-components/Form";
 import Lucide from "../../base-components/Lucide";
 import { Dialog, Menu } from "../../base-components/Headless";
 import Table from "../../base-components/Table";
-import dayjs from "dayjs";
-import * as XLSX from "xlsx";
-import { renderToStaticMarkup } from "react-dom/server";
-import {
-  PDFDownloadLink,
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-} from "@react-pdf/renderer";
-import { PDFViewer } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
-// import * from 'jspdf';
 
 
 interface Wallet {
@@ -39,26 +27,14 @@ interface Wallet {
   
 }
 
-const styles = StyleSheet.create({
-    page: {
-      flexDirection: "column",
-      backgroundColor: "#ffffff",
-      padding: 20,
-    },
-    section: {
-      marginBottom: 10,
-    },
-    text: {
-      fontSize: 12,
-    },
-  });
-
 function Main() {
     const [walletsData, setWalletsData] = useState<Wallet[]>([]);
     const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
     const deleteButtonRef = createRef();
     let [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
+
+    const initialFocusRef = React.useRef<HTMLElement | null>(null);
   
     useEffect(() => {
       axios.get("http://localhost:8082/wallets").then(
@@ -240,7 +216,7 @@ function Main() {
         <Dialog
         open={!!selectedWallet}
         onClose={() => setSelectedWallet(null)}
-        initialFocus={null}
+        // initialFocus={null}
       >
         <Dialog.Panel>
           <div className="p-5">
@@ -264,7 +240,7 @@ function Main() {
         onClose={() => {
           setDeleteConfirmationModal(false);
         }}
-        initialFocus={deleteButtonRef}
+        // initialFocus={deleteButtonRef}
       >
         <Dialog.Panel>
           <div className="p-5 text-center">
@@ -293,7 +269,7 @@ function Main() {
               variant="danger"
               type="button"
               className="w-24"
-              ref={deleteButtonRef}
+              // ref={deleteButtonRef}
             >
               Delete
             </Button>

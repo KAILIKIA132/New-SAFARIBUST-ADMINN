@@ -35,23 +35,10 @@ const onlyNumber = (string: string) => {
   }
 };
 
-const formatCurrency = (number: number) => {
-  if (number) {
-    const formattedNumber = number.toString().replace(/\D/g, "");
-    const rest = formattedNumber.length % 3;
-    let currency = formattedNumber.substr(0, rest);
-    const thousand = formattedNumber.substr(rest).match(/\d{3}/g);
-    let separator;
-
-    if (thousand) {
-      separator = rest ? "." : "";
-      currency += separator + thousand.join(".");
-    }
-
-    return currency;
-  } else {
-    return "";
-  }
+const formatCurrency = (amount: number) => {
+  return Number(amount).toLocaleString(undefined, {
+    minimumFractionDigits: 0,
+  });
 };
 
 const timeAgo = (time: string) => {
@@ -140,7 +127,7 @@ const stringToHTML = (arg: string) => {
 const slideUp = (
   el: HTMLElement,
   duration = 300,
-  callback = (el: HTMLElement) => {}
+  callback = (el: HTMLElement) => { }
 ) => {
   el.style.transitionProperty = "height, margin, padding";
   el.style.transitionDuration = duration + "ms";
@@ -169,7 +156,7 @@ const slideUp = (
 const slideDown = (
   el: HTMLElement,
   duration = 300,
-  callback = (el: HTMLElement) => {}
+  callback = (el: HTMLElement) => { }
 ) => {
   el.style.removeProperty("display");
   let display = window.getComputedStyle(el).display;

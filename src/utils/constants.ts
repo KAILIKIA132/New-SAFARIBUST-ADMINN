@@ -1,7 +1,7 @@
 
 //API URL
-export const BASE_URL = 'https://www.staging-acs-mobile.bayesconsultants.com/api/';
-// export const BASE_URL = 'http://localhost:8000/';
+// export const BASE_URL = 'https://www.staging-acs-mobile.bayesconsultants.com/api/';
+export const BASE_URL = 'http://localhost:8000/';
 
 //API Endpoints
 export const LOGIN = `${BASE_URL}auth-service/auth/login`;
@@ -12,6 +12,7 @@ export const ROLES = `${BASE_URL}auth-service/auth/roles`;
 export const CONFERENCES = `${BASE_URL}events-service/conference`;
 export const THEMES = `${BASE_URL}events-service/theme`;
 export const EVENTS = `${BASE_URL}events-service/event`;
+export const DASHBOARD = `${BASE_URL}events-service/event/dashboard`;
 export const USERS = `${BASE_URL}auth-service/auth/users`;
 
 //Simcards Endpoints

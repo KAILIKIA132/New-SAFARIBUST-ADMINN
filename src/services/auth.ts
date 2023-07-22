@@ -70,7 +70,7 @@ export async function signup(data: FieldValues) {
 
 export async function forgotPassword(email: string) {
     try {
-        let res = await axios.get(c.FORGOT_PASSWORD + email);
+        let res = await axios.post(c.FORGOT_PASSWORD + email);
         return res.data;
     } catch (e) {
         throw handler(e);
@@ -86,14 +86,13 @@ export async function changePassword(data: any) {
     }
 }
 
-export function handler(err: any) {
-    let error = err;
-
-    if (err.response && err.response.data.hasOwnProperty("message"))
-        error = err.response.data;
-    else if (!err.hasOwnProperty("message")) error = err.toJSON();
-
-    return new Error(error.message);
+export async function getDashboard() {
+    try {
+        let res = await axios.get(c.DASHBOARD);
+        return res.data;
+    } catch (e) {
+        throw handler(e);
+    }
 }
 
 export async function getConferences() {
@@ -134,9 +133,19 @@ export async function getUsers(data: { page: number; }) {
 
 export async function deleteUser(userId: any) {
     try {
-        let res = await axios.delete(c.USERS + "/"+userId);
+        let res = await axios.delete(c.USERS + "/" + userId);
         return res.data;
     } catch (e) {
         throw handler(e);
     }
+}
+
+export function handler(err: any) {
+    let error = err;
+
+    if (err.response && err.response.data.hasOwnProperty("message"))
+        error = err.response.data;
+    else if (!err.hasOwnProperty("message")) error = err.toJSON();
+
+    return new Error(error.message);
 }

@@ -13,7 +13,7 @@ function Main(props: MainProps) {
   const init: Init = async (initializeMap) => {
     const mapInstance = await initializeMap({
       config: {
-        center: [-6.2425342, 106.8626478],
+        center: [-1.286389, 36.817223],
         zoom: 9,
       },
     });

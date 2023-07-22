@@ -23,12 +23,7 @@ interface SimCard {
 
 function Main() {
   const [simCardsData, setSimCardsData] = useState<SimCard[]>([]);
-  const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
-  const deleteButtonRef = createRef();
-  let [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
   const initialFocusRef = React.useRef<HTMLElement | null>(null);
-
 
   const [pagination, setPagination] = useState({ current_page: 1, total: 1, total_pages: 1, per_page: 1 });
   const [page, setPage] = useState(1);
@@ -57,12 +52,6 @@ function Main() {
       <h2 className="mt-10 text-lg font-medium intro-y">Booked Simcard List</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">
-          <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
-            event.preventDefault();
-            setSuperlargeModalSizePreview(true);
-          }}>
-            New Event
-          </Button>
           <Menu>
             <Menu.Button as={Button} className="px-2 !box">
               <span className="flex items-center justify-center w-5 h-5">
@@ -129,7 +118,7 @@ function Main() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {simCardsData.map((simCard) => (
+              {simCardsData.map((simCard: any) => (
                 <Table.Tr key={simCard.id} className="intro-y">
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <FormCheck.Input type="checkbox" value={simCard.id} />
@@ -171,7 +160,7 @@ function Main() {
               <Lucide icon="ChevronLeft" className="w-4 h-4" />
             </Pagination.Link>
             {_.times(pagination.total_pages).map((page, key) => (
-              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getBookings())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getEvents())} key={key}>{page + 1}</Pagination.Link>
+              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getBookings())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getBookings())} key={key}>{page + 1}</Pagination.Link>
             ))}
             <Pagination.Link onClick={() => (setPage(next_page), getBookings())} >
               <Lucide icon="ChevronRight" className="w-4 h-4" />
@@ -209,51 +198,6 @@ function Main() {
         </Dialog.Panel>
       </Dialog>
       {/* END: View Details Dialog */}
-
-      {/* BEGIN: Delete Confirmation Modal */}
-      <Dialog
-        open={deleteConfirmationModal}
-        onClose={() => {
-          setDeleteConfirmationModal(false);
-        }}
-      // initialFocus={deleteButtonRef}
-      // initialFocus={initialFocusRef}
-      >
-        <Dialog.Panel>
-          <div className="p-5 text-center">
-            <Lucide
-              icon="XCircle"
-              className="w-16 h-16 mx-auto mt-3 text-danger"
-            />
-            <div className="mt-5 text-3xl">Are you sure?</div>
-            <div className="mt-2 text-slate-500">
-              Do you really want to delete these records? <br />
-              This process cannot be undone.
-            </div>
-          </div>
-          <div className="px-5 pb-8 text-center">
-            <Button
-              variant="outline-secondary"
-              type="button"
-              onClick={() => {
-                setDeleteConfirmationModal(false);
-              }}
-              className="w-24 mr-1"
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="danger"
-              type="button"
-              className="w-24"
-            // ref={deleteButtonRef}
-            >
-              Delete
-            </Button>
-          </div>
-        </Dialog.Panel>
-      </Dialog>
-      {/* END: Delete Confirmation Modal */}
     </>
   );
 }

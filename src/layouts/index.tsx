@@ -12,7 +12,7 @@ import DarkModeSwitcher from "../components/DarkModeSwitcher";
 import MainColorSwitcher from "../components/MainColorSwitcher";
 import SideMenuTooltip from "../components/SideMenuTooltip";
 
-function Main() {
+function Layout() {
   const location = useLocation();
   const [formattedMenu, setFormattedMenu] = useState<
     Array<FormattedMenu | "divider">
@@ -259,4 +259,4 @@ function Divider<C extends React.ElementType>(
   );
 }
 
-export default Main;
+export default Layout;

@@ -204,7 +204,7 @@ function Main() {
                           <div className="w-10 h-10 image-fit zoom-in">
                             <Tippy
                               as="img"
-                              alt="Midone - HTML Admin Template"
+                              alt=""
                               className="border-2 border-white rounded-lg shadow-md"
                               src={faker.images[0]}
                               content={`Uploaded at ${faker.dates[0]}`}

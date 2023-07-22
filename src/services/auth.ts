@@ -50,6 +50,24 @@ export async function login(data: FieldValues) {
     }
 }
 
+export async function getRoles() {
+    try {
+        let res = await axios.get(c.ROLES);
+        return res.data;
+    } catch (e) {
+        throw handler(e);
+    }
+}
+
+export async function signup(data: FieldValues) {
+    try {
+        let res = await axios.post(c.REGISTER, data);
+        return res.data;
+    } catch (e) {
+        throw handler(e);
+    }
+}
+
 export async function forgotPassword(email: string) {
     try {
         let res = await axios.get(c.FORGOT_PASSWORD + email);
@@ -108,6 +126,15 @@ export async function getEvents(data: { page: any; }) {
 export async function getUsers(data: { page: number; }) {
     try {
         let res = await axios.get(c.USERS + "?page=" + data.page);
+        return res.data;
+    } catch (e) {
+        throw handler(e);
+    }
+}
+
+export async function deleteUser(userId: any) {
+    try {
+        let res = await axios.delete(c.USERS + "/"+userId);
         return res.data;
     } catch (e) {
         throw handler(e);

@@ -107,7 +107,7 @@ function Main() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {events.map((event, key) => (
+              {events.map((event: any, key) => (
                 <Table.Tr key={key} className="intro-x">
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <a href="" className="font-medium ">
@@ -129,7 +129,7 @@ function Main() {
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div className="flex">
-                      {event.speakers.map((speaker, index) => (
+                      {event.speakers.map((speaker: any, index: any) => (
                         index == 0 ?
                           <div key={index} className="w-10 h-10 image-fit zoom-in">
                             <Tippy
@@ -154,7 +154,7 @@ function Main() {
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div className="flex">
-                      {event.attendees.map((attendees, index) => (
+                      {event.attendees.map((attendees: any, index: any) => (
                         index == 0 ?
                           <div key={index} className="w-10 h-10 image-fit zoom-in">
                             <Tippy

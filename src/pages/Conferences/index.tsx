@@ -81,7 +81,7 @@ function Main() {
         <div className="col-span-12 overflow-auto intro-y lg:overflow-visible">
           <Table className="border-spacing-y-[10px] border-separate -mt-2">
             <Table.Tbody>
-              {conferences.map((conference, key) => (
+              {conferences.map((conference: any, key) => (
                 <Table.Tr key={key} className="intro-x">
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div className="flex">

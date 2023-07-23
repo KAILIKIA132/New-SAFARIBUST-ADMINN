@@ -1,19 +1,17 @@
 import _ from "lodash";
 import clsx from "clsx";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import fakerData from "../../utils/faker";
 import Button from "../../base-components/Button";
-import Pagination from "../../base-components/Pagination";
-import { FormInput, FormSelect } from "../../base-components/Form";
+import { FormInput } from "../../base-components/Form";
 import TinySlider, {
   TinySliderElement,
 } from "../../base-components/TinySlider";
 import Lucide from "../../base-components/Lucide";
 import Tippy from "../../base-components/Tippy";
-import ReportDonutChart from "../../components/ReportDonutChart";
 import LeafletMap from "../../components/LeafletMap";
-import { Tab } from "../../base-components/Headless";
-import Table from "../../base-components/Table";
+import * as ApiService from "../../services/auth";
+import { formatCurrency, formatDate, timeAgo } from "../../utils/helper";
 
 function Main() {
   const importantNotesRef = useRef<TinySliderElement>();
@@ -24,6 +22,21 @@ function Main() {
     importantNotesRef.current?.tns.goTo("next");
   };
 
+  const [feeds, setFeeds] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+  const [events, setEvents] = useState([]);
+  useEffect(() => {
+    getDashboard();
+  }, []);
+
+  const getDashboard = async () => {
+    let res = await ApiService.getDashboard();
+    setFeeds(res.feeds);
+    setEvents(res.events);
+    setQuestions(res.questions);
+    setTransactions(res.transactions);
+  };
   return (
     <>
       <div className="grid grid-cols-12 gap-6">
@@ -55,93 +68,26 @@ function Main() {
                 </div>
                 <div className="mt-5 intro-x">
                   <div className="box zoom-in">
-                    <TinySlider
-                      getRef={(el) => {
-                        importantNotesRef.current = el;
-                      }}
-                    >
-                      <div className="p-5">
-                        <div className="text-base font-medium truncate">
-                          Lorem Ipsum is simply dummy text
-                        </div>
-                        <div className="mt-1 text-slate-400">20 Hours ago</div>
-                        <div className="mt-1 text-justify text-slate-500">
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry. Lorem Ipsum has been the
-                          industry's standard dummy text ever since the 1500s.
-                        </div>
-                        <div className="flex mt-5 font-medium">
-                          <Button
-                            variant="secondary"
-                            type="button"
-                            className="px-2 py-1"
-                          >
-                            View Notes
-                          </Button>
-                          <Button
-                            variant="outline-secondary"
-                            type="button"
-                            className="px-2 py-1 ml-auto"
-                          >
-                            Dismiss
-                          </Button>
-                        </div>
-                      </div>
-                      <div className="p-5">
-                        <div className="text-base font-medium truncate">
-                          Lorem Ipsum is simply dummy text
-                        </div>
-                        <div className="mt-1 text-slate-400">20 Hours ago</div>
-                        <div className="mt-1 text-justify text-slate-500">
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry. Lorem Ipsum has been the
-                          industry's standard dummy text ever since the 1500s.
-                        </div>
-                        <div className="flex mt-5 font-medium">
-                          <Button
-                            variant="secondary"
-                            type="button"
-                            className="px-2 py-1"
-                          >
-                            View Notes
-                          </Button>
-                          <Button
-                            variant="outline-secondary"
-                            type="button"
-                            className="px-2 py-1 ml-auto"
-                          >
-                            Dismiss
-                          </Button>
-                        </div>
-                      </div>
-                      <div className="p-5">
-                        <div className="text-base font-medium truncate">
-                          Lorem Ipsum is simply dummy text
-                        </div>
-                        <div className="mt-1 text-slate-400">20 Hours ago</div>
-                        <div className="mt-1 text-justify text-slate-500">
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry. Lorem Ipsum has been the
-                          industry's standard dummy text ever since the 1500s.
-                        </div>
-                        <div className="flex mt-5 font-medium">
-                          <Button
-                            variant="secondary"
-                            type="button"
-                            className="px-2 py-1"
-                          >
-                            View Notes
-                          </Button>
-                          <Button
-                            variant="outline-secondary"
-                            type="button"
-                            className="px-2 py-1 ml-auto"
-                          >
-                            Dismiss
-                          </Button>
-                        </div>
-                      </div>
-                    </TinySlider>
+                    {
+                      feeds.length > 0 &&
+                      <TinySlider
+                        getRef={(el) => {
+                          importantNotesRef.current = el;
+                        }}
+                      >
+                        {feeds.map((feed: any, key) => (
+                          <div className="p-5" key={key}>
+                            <div className="text-base font-medium truncate">
+                              {feed.feed}
+                            </div>
+                            <div className="mt-1 text-slate-400">{timeAgo(feed.createdAt)}</div>
+                            <div className="mt-1 text-justify text-slate-500">
+                              {feed.description}
+                            </div>
+                          </div>
+                        ))}
+                      </TinySlider>
+                    }
                   </div>
                 </div>
               </div>
@@ -157,144 +103,31 @@ function Main() {
                   </a>
                 </div>
                 <div className="mt-5 relative before:block before:absolute before:w-px before:h-[85%] before:bg-slate-200 before:dark:bg-darkmode-400 before:ml-5 before:mt-5">
-                  <div className="relative flex items-center mb-3 intro-x">
-                    <div className="before:block before:absolute before:w-20 before:h-px before:bg-slate-200 before:dark:bg-darkmode-400 before:mt-5 before:ml-5">
-                      <div className="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
-                        <img
-                          alt=""
-                          src={fakerData[9].photos[0]}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex-1 px-5 py-3 ml-4 box zoom-in">
-                      <div className="flex items-center">
-                        <div className="font-medium">
-                          {fakerData[9].users[0].name}
-                        </div>
-                        <div className="ml-auto text-xs text-slate-500">
-                          07:00 PM
+                  {questions.map((question: any, key) => (
+                    <div key={key} className="relative flex items-center mb-3 intro-x">
+                      <div className="before:block before:absolute before:w-20 before:h-px before:bg-slate-200 before:dark:bg-darkmode-400 before:mt-5 before:ml-5">
+                        <div className="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
+                          <img
+                            alt=""
+                            src={question.userId.profileImage}
+                          />
                         </div>
                       </div>
-                      <div className="mt-1 text-slate-500">
-                        Has joined the team
-                      </div>
-                    </div>
-                  </div>
-                  <div className="relative flex items-center mb-3 intro-x">
-                    <div className="before:block before:absolute before:w-20 before:h-px before:bg-slate-200 before:dark:bg-darkmode-400 before:mt-5 before:ml-5">
-                      <div className="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
-                        <img
-                          alt=""
-                          src={fakerData[8].photos[0]}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex-1 px-5 py-3 ml-4 box zoom-in">
-                      <div className="flex items-center">
-                        <div className="font-medium">
-                          {fakerData[8].users[0].name}
+                      <div className="flex-1 px-5 py-3 ml-4 box zoom-in">
+                        <div className="flex items-center">
+                          <div className="font-medium">
+                            {question.eventId?.name}
+                          </div>
+                          <div className="ml-auto text-xs text-slate-500">
+                            {timeAgo(question.createdAt)}
+                          </div>
                         </div>
-                        <div className="ml-auto text-xs text-slate-500">
-                          07:00 PM
-                        </div>
-                      </div>
-                      <div className="text-slate-500">
-                        <div className="mt-1">Added 3 new photos</div>
-                        <div className="flex mt-2">
-                          <Tippy
-                            as="div"
-                            className="w-8 h-8 mr-1 image-fit zoom-in"
-                            content={fakerData[0].products[0].name}
-                          >
-                            <img
-                              alt=""
-                              className="border border-white rounded-md"
-                              src={fakerData[8].images[0]}
-                            />
-                          </Tippy>
-                          <Tippy
-                            as="div"
-                            className="w-8 h-8 mr-1 image-fit zoom-in"
-                            content={fakerData[1].products[0].name}
-                          >
-                            <img
-                              alt=""
-                              className="border border-white rounded-md"
-                              src={fakerData[8].images[1]}
-                            />
-                          </Tippy>
-                          <Tippy
-                            as="div"
-                            className="w-8 h-8 mr-1 image-fit zoom-in"
-                            content={fakerData[2].products[0].name}
-                          >
-                            <img
-                              alt=""
-                              className="border border-white rounded-md"
-                              src={fakerData[8].images[2]}
-                            />
-                          </Tippy>
+                        <div className="mt-1 text-slate-500">
+                          {question.question}
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="my-4 text-xs text-center intro-x text-slate-500">
-                    12 November
-                  </div>
-                  <div className="relative flex items-center mb-3 intro-x">
-                    <div className="before:block before:absolute before:w-20 before:h-px before:bg-slate-200 before:dark:bg-darkmode-400 before:mt-5 before:ml-5">
-                      <div className="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
-                        <img
-                          alt=""
-                          src={fakerData[7].photos[0]}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex-1 px-5 py-3 ml-4 box zoom-in">
-                      <div className="flex items-center">
-                        <div className="font-medium">
-                          {fakerData[7].users[0].name}
-                        </div>
-                        <div className="ml-auto text-xs text-slate-500">
-                          07:00 PM
-                        </div>
-                      </div>
-                      <div className="mt-1 text-slate-500">
-                        Has changed{" "}
-                        <a className="text-primary" href="">
-                          {fakerData[7].products[0].name}
-                        </a>{" "}
-                        price and description
-                      </div>
-                    </div>
-                  </div>
-                  <div className="relative flex items-center mb-3 intro-x">
-                    <div className="before:block before:absolute before:w-20 before:h-px before:bg-slate-200 before:dark:bg-darkmode-400 before:mt-5 before:ml-5">
-                      <div className="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
-                        <img
-                          alt=""
-                          src={fakerData[6].photos[0]}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex-1 px-5 py-3 ml-4 box zoom-in">
-                      <div className="flex items-center">
-                        <div className="font-medium">
-                          {fakerData[6].users[0].name}
-                        </div>
-                        <div className="ml-auto text-xs text-slate-500">
-                          07:00 PM
-                        </div>
-                      </div>
-                      <div className="mt-1 text-slate-500">
-                        Has changed{" "}
-                        <a className="text-primary" href="">
-                          {fakerData[6].products[0].name}
-                        </a>{" "}
-                        description
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
               {/* END: Recent Activities */}
@@ -302,34 +135,31 @@ function Main() {
               <div className="col-span-12 mt-3 md:col-span-6 xl:col-span-4 2xl:col-span-12">
                 <div className="flex items-center h-10 intro-x">
                   <h2 className="mr-5 text-lg font-medium truncate">
-                  Recent Transactions
+                    Recent Transactions
                   </h2>
                 </div>
                 <div className="mt-5">
-                  {_.take(fakerData, 5).map((faker, fakerKey) => (
-                    <div key={fakerKey} className="intro-x">
+                  {transactions.map((transaction: any, key) => (
+                    <div key={key} className="intro-x">
                       <div className="flex items-center px-5 py-3 mb-3 box zoom-in">
                         <div className="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
                           <img
                             alt=""
-                            src={faker.photos[0]}
+                            src={transaction.userId.profileImage}
                           />
                         </div>
                         <div className="ml-4 mr-auto">
                           <div className="font-medium">
-                            {faker.users[0].name}
+                            {transaction.userId.firstName + " " + transaction.userId.lastName}
                           </div>
                           <div className="text-slate-500 text-xs mt-0.5">
-                            {faker.dates[0]}
+                            {formatDate(transaction.createdAt, "DD MMMM YYYY")}
                           </div>
                         </div>
                         <div
-                          className={clsx({
-                            "text-success": faker.trueFalse[0],
-                            "text-danger": !faker.trueFalse[0],
-                          })}
+                          className={transaction.type == "Credit" ? "text-success" : "text-danger"}
                         >
-                          {faker.trueFalse[0] ? "+" : "-"}${faker.totals[0]}
+                          KES {formatCurrency(transaction.amount)}
                         </div>
                       </div>
                     </div>
@@ -482,76 +312,75 @@ function Main() {
               {/* END: Schedules */}
             </div>
           </div>
-        <div className="col-span-12 2xl:col-span-9">
-          <div className="grid grid-cols-12 gap-6">
-            
-            {/* BEGIN: Official Store */}
-            <div className="col-span-12 mt-6 xl:col-span-8">
-              <div className="items-center block h-10 intro-y sm:flex">
-                <h2 className="mr-5 text-lg font-medium truncate">
-                  Vendor Stores
-                </h2>
-                <div className="relative mt-3 sm:ml-auto sm:mt-0 text-slate-500">
-                  <Lucide
-                    icon="MapPin"
-                    className="absolute inset-y-0 left-0 z-10 w-4 h-4 my-auto ml-3"
-                  />
-                  <FormInput
-                    type="text"
-                    className="pl-10 sm:w-56 !box"
-                    placeholder="Filter by vendor name"
-                  />
+          <div className="col-span-12 2xl:col-span-9">
+            <div className="grid grid-cols-12 gap-6">
+
+              {/* BEGIN: Official Store */}
+              <div className="col-span-12 mt-6 xl:col-span-8">
+                <div className="items-center block h-10 intro-y sm:flex">
+                  <h2 className="mr-5 text-lg font-medium truncate">
+                    Vendor Stores
+                  </h2>
+                  <div className="relative mt-3 sm:ml-auto sm:mt-0 text-slate-500">
+                    <Lucide
+                      icon="MapPin"
+                      className="absolute inset-y-0 left-0 z-10 w-4 h-4 my-auto ml-3"
+                    />
+                    <FormInput
+                      type="text"
+                      className="pl-10 sm:w-56 !box"
+                      placeholder="Filter by store number"
+                    />
+                  </div>
+                </div>
+                <div className="p-5 mt-12 intro-y box sm:mt-5">
+                  <div>
+                    AWS Official vendor stores, click the marker to see location details.
+                  </div>
+                  <LeafletMap className="h-[310px] mt-5 rounded-md bg-slate-200" />
                 </div>
               </div>
-              <div className="p-5 mt-12 intro-y box sm:mt-5">
-                <div>
-                  250 Official stores in 21 countries, click the marker to see
-                  location details.
+              {/* END: Official Store */}
+              {/* BEGIN: Weekly Best Sellers */}
+              <div className="col-span-12 mt-6 lg:col-span-8 xl:col-span-4">
+                <div className="flex items-center h-10 intro-y">
+                  <h2 className="mr-5 text-lg font-medium truncate">
+                    Daily Best Vendors
+                  </h2>
                 </div>
-                <LeafletMap className="h-[310px] mt-5 rounded-md bg-slate-200" />
-              </div>
-            </div>
-            {/* END: Official Store */}
-            {/* BEGIN: Weekly Best Sellers */}
-            <div className="col-span-12 mt-6 lg:col-span-8 xl:col-span-4">
-              <div className="flex items-center h-10 intro-y">
-                <h2 className="mr-5 text-lg font-medium truncate">
-                  Daily Best Vendors
-                </h2>
-              </div>
-              <div className="mt-5">
-                {_.take(fakerData, 4).map((faker, fakerKey) => (
-                  <div key={fakerKey} className="intro-y">
-                    <div className="flex items-center px-4 py-4 mb-3 box zoom-in">
-                      <div className="flex-none w-10 h-10 overflow-hidden rounded-md image-fit">
-                        <img
-                          alt=""
-                          src={faker.photos[0]}
-                        />
-                      </div>
-                      <div className="ml-4 mr-auto">
-                        <div className="font-medium">{faker.users[0].name}</div>
-                        <div className="text-slate-500 text-xs mt-0.5">
-                          {faker.dates[0]}
+                <div className="mt-5">
+                  {_.take(fakerData, 4).map((faker, fakerKey) => (
+                    <div key={fakerKey} className="intro-y">
+                      <div className="flex items-center px-4 py-4 mb-3 box zoom-in">
+                        <div className="flex-none w-10 h-10 overflow-hidden rounded-md image-fit">
+                          <img
+                            alt=""
+                            src={faker.photos[0]}
+                          />
+                        </div>
+                        <div className="ml-4 mr-auto">
+                          <div className="font-medium">{faker.users[0].name}</div>
+                          <div className="text-slate-500 text-xs mt-0.5">
+                            {faker.dates[0]}
+                          </div>
+                        </div>
+                        <div className="px-2 py-1 text-xs font-medium text-white rounded-full cursor-pointer bg-success">
+                          137 Sales
                         </div>
                       </div>
-                      <div className="px-2 py-1 text-xs font-medium text-white rounded-full cursor-pointer bg-success">
-                        137 Sales
-                      </div>
                     </div>
-                  </div>
-                ))}
-                <a
-                  href=""
-                  className="block w-full py-4 text-center border border-dotted rounded-md intro-y border-slate-400 dark:border-darkmode-300 text-slate-500"
-                >
-                  View More
-                </a>
+                  ))}
+                  <a
+                    href=""
+                    className="block w-full py-4 text-center border border-dotted rounded-md intro-y border-slate-400 dark:border-darkmode-300 text-slate-500"
+                  >
+                    View More
+                  </a>
+                </div>
               </div>
+              {/* END: Weekly Best Sellers */}
             </div>
-            {/* END: Weekly Best Sellers */}
           </div>
-        </div>
         </div>
       </div>
     </>

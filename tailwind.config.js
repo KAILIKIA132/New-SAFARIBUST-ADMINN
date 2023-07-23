@@ -110,15 +110,18 @@ module.exports = {
       addBase({
         // Default colors
         ":root": {
-          "--color-primary": toRGB(colors.cyan["900"]),
+          "--color-primary": toRGB(colors.emerald["900"]),
           "--color-secondary": toRGB(colors.slate["200"]),
-          "--color-success": toRGB(colors.teal["600"]),
+          "--color-success": toRGB(colors.emerald["600"]),
           "--color-info": toRGB(colors.cyan["500"]),
-          "--color-warning": toRGB(colors.amber["500"]),
-          "--color-pending": toRGB(colors.amber["600"]),
-          "--color-danger": toRGB(colors.red["700"]),
+          "--color-warning": toRGB(colors.yellow["400"]),
+          "--color-pending": toRGB(colors.amber["500"]),
+          "--color-danger": toRGB(colors.rose["600"]),
           "--color-light": toRGB(colors.slate["100"]),
           "--color-dark": toRGB(colors.slate["800"]),
+          "&.dark": {
+            "--color-primary": toRGB(colors.cyan["800"]),
+          },
         },
         // Default dark-mode colors
         ".dark": {
@@ -166,18 +169,15 @@ module.exports = {
         },
         // Theme 3 colors
         ".theme-3": {
-          "--color-primary": toRGB(colors.emerald["900"]),
+          "--color-primary": toRGB(colors.cyan["900"]),
           "--color-secondary": toRGB(colors.slate["200"]),
-          "--color-success": toRGB(colors.emerald["600"]),
+          "--color-success": toRGB(colors.teal["600"]),
           "--color-info": toRGB(colors.cyan["500"]),
-          "--color-warning": toRGB(colors.yellow["400"]),
-          "--color-pending": toRGB(colors.amber["500"]),
-          "--color-danger": toRGB(colors.rose["600"]),
+          "--color-warning": toRGB(colors.amber["500"]),
+          "--color-pending": toRGB(colors.amber["600"]),
+          "--color-danger": toRGB(colors.red["700"]),
           "--color-light": toRGB(colors.slate["100"]),
           "--color-dark": toRGB(colors.slate["800"]),
-          "&.dark": {
-            "--color-primary": toRGB(colors.cyan["800"]),
-          },
         },
         // Theme 4 colors
         ".theme-4": {

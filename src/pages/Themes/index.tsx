@@ -98,7 +98,7 @@ function Main() {
             </Table.Tr>
           </Table.Thead>
             <Table.Tbody>
-              {themes.map((theme, key) => (
+              {themes.map((theme: any, key) => (
                 <Table.Tr key={key} className="intro-x">
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <a href="" className="font-medium whitespace-nowrap">

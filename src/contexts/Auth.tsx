@@ -4,15 +4,17 @@ import { AuthData, authService } from '../services/authService';
 type AuthContextData = {
   authData?: AuthData;
   loading: boolean;
-  signIn(data): Promise<void>;
+  signIn(data: any): Promise<void>;
   signOut(): void;
 };
 
 //Create the Auth Context with the data type specified
 //and a empty object
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
-
-const AuthProvider: React.FC = ({ children }) => {
+type ContainerProps = {
+  children: React.ReactNode; //👈 children prop typr
+};
+const AuthProvider = (props: ContainerProps) => { //👈 prop definition
   const [authData, setAuthData] = useState<AuthData>();
 
   //the AuthContext start with loading equals true
@@ -41,7 +43,7 @@ const AuthProvider: React.FC = ({ children }) => {
     }
   }
 
-  const signIn = async (data) => {
+  const signIn = async (data: any) => {
     //call the service passing credential (email and password).
     //In a real App this data will be provided by the user from some InputText components.
     const _authData = await authService.signIn(data);
@@ -70,7 +72,7 @@ const AuthProvider: React.FC = ({ children }) => {
     //This component will be used to encapsulate the whole App,
     //so all components will have access to the Context
     <AuthContext.Provider value={{ authData, loading, signIn, signOut }}>
-      {children}
+      {props.children}
     </AuthContext.Provider>
   );
 };

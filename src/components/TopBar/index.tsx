@@ -76,7 +76,7 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
               <TomSelect value={conference} onChange={selectConference} options={{
                 placeholder: "Select conference",
               }} className="border-transparent w-56 shadow-none rounded-full bg-slate-200 pr-8 transition-[width] duration-300 ease-in-out focus:border-transparent focus:w-72 dark:bg-darkmode-400">
-                {conferences.map((conference, key) => <option key={key} value={conference._id} >{conference.name}</option>)}
+                {conferences.map((conference: any, key) => <option key={key} value={conference._id} >{conference.name}</option>)}
               </TomSelect>
             </div>
           </div>

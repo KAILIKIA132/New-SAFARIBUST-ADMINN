@@ -25,12 +25,7 @@ function Main() {
   const [superlargeModalSizePreview, setSuperlargeModalSizePreview] =
     useState(false);
   const [simCardsData, setSimCardsData] = useState<SimCard[]>([]);
-  const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
-  const deleteButtonRef = createRef();
-  let [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
   const initialFocusRef = React.useRef<HTMLElement | null>(null);
-
 
   const [pagination, setPagination] = useState({ current_page: 1, total: 1, total_pages: 1, per_page: 1 });
   const [page, setPage] = useState(1);
@@ -131,7 +126,7 @@ function Main() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {simCardsData.map((simCard) => (
+              {simCardsData.map((simCard: any) => (
                 <Table.Tr key={simCard.id} className="intro-y">
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <FormCheck.Input type="checkbox" value={simCard.id} />

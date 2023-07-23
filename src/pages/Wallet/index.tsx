@@ -1,20 +1,8 @@
 import _ from "lodash";
-<<<<<<< HEAD
 import React, { useState, useEffect, createRef } from 'react';
 import Button from "../../base-components/Button";
 import Pagination from "../../base-components/Pagination";
 import { FormCheck, FormInput, FormSelect } from "../../base-components/Form";
-=======
-import React, {
-  useState,
-  useEffect,
-  createRef,
-} from "react";
-import axios from "axios";
-import Button from "../../base-components/Button";
-import Pagination from "../../components/Pagination";
-import { FormCheck, FormInput } from "../../base-components/Form";
->>>>>>> 3a153fe39e5536dac31b600227552464920802e8
 import Lucide from "../../base-components/Lucide";
 import { Dialog, Menu } from "../../base-components/Headless";
 import Table from "../../base-components/Table";
@@ -24,28 +12,20 @@ import * as paymentService from "../../services/paymentService";
 
 
 interface Wallet {
-<<<<<<< HEAD
   _id: string;
-=======
-  id: string;
->>>>>>> 3a153fe39e5536dac31b600227552464920802e8
   name: string;
   balance: string;
 
 }
 
 function Main() {
-<<<<<<< HEAD
   const [superlargeModalSizePreview, setSuperlargeModalSizePreview] =
     useState(false);
-=======
->>>>>>> 3a153fe39e5536dac31b600227552464920802e8
   const [walletsData, setWalletsData] = useState<Wallet[]>([]);
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
   const deleteButtonRef = createRef();
   let [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-<<<<<<< HEAD
   const initialFocusRef = React.useRef<HTMLElement | null>(null);
 
 
@@ -66,71 +46,6 @@ function Main() {
   };
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
-=======
-
-  const initialFocusRef = React.useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    axios.get("http://localhost:8082/wallets").then(
-      (response) => {
-        setWalletsData(response.data);
-        console.log(response.data);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-  }, []);
-
-  const handleExportExcel = () => {
-    axios.get("http://localhost:8082/wallets").then((response) => {
-      const data = response.data;
-
-      const worksheet = XLSX.utils.json_to_sheet(data);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-
-      const fileName = "wallets.xlsx";
-
-      const excelBuffer = XLSX.write(workbook, { type: "array" });
-      const excelBlob = new Blob([excelBuffer], {
-        type:
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      saveAs(excelBlob, fileName);
-    });
-  };
-
-  const exportToPDF = () => {
-    // const doc = new jsPDF();
-    const doc = new jsPDF() as any;
-    doc.autoTable({
-      head: [["Wallet ID", "Name", "Balance"]],
-      body: walletsData.map((wallet) => [
-        wallet.id,
-        wallet.name,
-        wallet.balance,
-      ]),
-    });
-    doc.save("wallets.pdf");
-  };
-
-  const totalPages = Math.ceil(walletsData.length / itemsPerPage);
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = walletsData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
-
-  const handleViewDetails = (wallet: Wallet) => {
-    setSelectedWallet(wallet);
-  };
->>>>>>> 3a153fe39e5536dac31b600227552464920802e8
 
   return (
     <>

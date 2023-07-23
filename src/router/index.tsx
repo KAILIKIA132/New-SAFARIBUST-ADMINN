@@ -5,6 +5,7 @@ import Dashboard from "../pages/Dashboard";
 import Attendees from "../pages/Attendees";
 import Speakers from "../pages/Speakers";
 import Vendors from "../pages/Vendors";
+import Exhibitors from "../pages/Exhibitors";
 import Conferences from "../pages/Conferences";
 import Themes from "../pages/Themes";
 import Events from "../pages/Events";
@@ -76,7 +77,7 @@ function Router() {
         },
         {
           path: "exhibitors",
-          element: <Vendors />,
+          element: <Exhibitors />,
         },
         {
           path: "conferences",

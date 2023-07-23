@@ -11,22 +11,17 @@ import "jspdf-autotable";
 import * as paymentService from "../../services/paymentService";
 
 
-interface Transaction {
+interface WalletTransaction {
   _id: string;
-  userId:string;
-  amount:number;
-  type:string;
-  referenceCode:string;
-  status:string;
-  vendorId:string;
-  balance:string;
+  name: string;
+  balance: string;
   
 }
 
 function Main() {
   const [superlargeModalSizePreview, setSuperlargeModalSizePreview] =
     useState(false);
-  const [transactionsData, setTransactionsData] = useState<Transaction[]>([]);
+  const [walletTransactionsData, setWalletTransactionsData] = useState<WalletTransaction[]>([]);
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
   const deleteButtonRef = createRef();
   let [currentPage, setCurrentPage] = useState(1);
@@ -39,49 +34,26 @@ function Main() {
   const [next_page, setNextPage] = useState(1);
   const [previous_page, setPreviousPage] = useState(1);
   useEffect(() => {
-    getTransactions();
+    getWalletTransactions();
   }, []);
 
-  const getTransactions = async () => {
-    let res = await paymentService.getTransactions({ page: 1 });
-    setTransactionsData(res.transactions);
+  const getWalletTransactions = async () => {
+    let res = await paymentService.getWalletTransactions({ page: 1 });
+    setWalletTransactionsData(res.walletTransactions);
     setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
     setPreviousPage((page > 1) ? page - 1 : 1);
     setPagination({ current_page: res.current_page, total: res.total, total_pages: res.total_pages, per_page: res.per_page });
   };
 
-  const [selectedWallet, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [selectedWallet, setSelectedWalletTransactions] = useState<WalletTransaction | null>(null);
 
-  const renderAmountColumn = (transaction: Transaction) => {
-    if (transaction.type === "Credit") {
-      return (
-        <>
-          <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-red-600">
-            {transaction.amount}
-          </Table.Td>
-          <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-            {'---'}
-          </Table.Td>
-        </>
-      );
-    } else if (transaction.type === "Debit") {
-      return (
-        <>
-          <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-          {'---'}
-          </Table.Td>
-          <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-green-600">
-            {transaction.amount}
-          </Table.Td>
-        </>
-      );
-    }
-    return null; // If transaction type is neither "credit" nor "debit", return null
+  const handleViewDetails = (walletTransactions: WalletTransaction) => {
+    setSelectedWalletTransactions(walletTransactions);
   };
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Transactions</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Wallet Transactions</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">
           <Menu>
@@ -123,60 +95,52 @@ function Main() {
         </div>
         {/* BEGIN: Data List */}
         <div className="col-span-12 overflow-auto intro-y lg:overflow-visible">
-        <Table className="border-spacing-y-[10px] border-separate -mt-2">
-          <Table.Thead>
+          <Table className="border-spacing-y-[10px] border-separate -mt-2">
+            <Table.Thead>
               <Table.Tr>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                 Reference
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  Description
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  Credit
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  Debit
+                  Name
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   Balance
                 </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  Status
-                </Table.Th>
                 <Table.Th className="text-center border-b-0 whitespace-nowrap">
-                  Date
+                  Actions
                 </Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-            {transactionsData.map((transaction) => (
-              <Table.Tr key={transaction._id} className="intro-y">
-                <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                  <FormCheck.Input type="checkbox" value={transaction._id} />
+              {walletTransactionsData.map((walletTransactions) => (
+                <Table.Tr key={walletTransactions._id} className="intro-y">
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    <FormCheck.Input type="checkbox" value={walletTransactions._id} />
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 !py-4 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {walletTransactions.referenceCode}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {walletTransactions.amount}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  {walletTransactions.type === "Credit"
+                    ? walletTransactions.userBalance 
+                    : walletTransactions.vendorBalance 
+                  }
                 </Table.Td>
                 <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {transaction.referenceCode}
+                  {dayjs(walletTransactions.createdAt).format('DD-MM-YYYY')}
                   </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {transaction.description}
-                  </Table.Td>
-                  {/* Credit Column */}
-                  {renderAmountColumn(transaction)}
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {transaction.balance}
-                  </Table.Td>
-                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                  {transaction.vendorId.firstName + " " + transaction.vendorId.lastName}
-                  </Table.Td> */}
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                  {transaction.status}
-                </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                  {dayjs(transaction.createdAt).format('DD-MM-YYYY')}
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
+                    <div className="flex items-center justify-center">
+                      <a className="flex items-center mr-3" href=""
+                        onClick={() => handleViewDetails(walletTransactions)}>
+                        <Lucide icon="View" className="w-4 h-4 mr-1" />
+                        View
+                      </a>
+                    </div>
                   </Table.Td>
                 </Table.Tr>
               ))}
@@ -187,38 +151,38 @@ function Main() {
         {/* BEGIN: Pagination */}
         <div className="flex flex-wrap items-center col-span-12 intro-y sm:flex-row sm:flex-nowrap">
           <Pagination className="w-full sm:w-auto sm:mr-auto">
-            <Pagination.Link onClick={() => (setPage(previous_page), getTransactions())} >
+            <Pagination.Link onClick={() => (setPage(previous_page), getWalletTransactions())} >
               <Lucide icon="ChevronLeft" className="w-4 h-4" />
             </Pagination.Link>
             {_.times(pagination.total_pages).map((page, key) => (
-              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getTransactions())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getTransactions())} key={key}>{page + 1}</Pagination.Link>
+              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getWalletTransactions())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getWalletTransactions())} key={key}>{page + 1}</Pagination.Link>
             ))}
-            <Pagination.Link onClick={() => (setPage(next_page), getTransactions())} >
+            <Pagination.Link onClick={() => (setPage(next_page), getWalletTransactions())} >
               <Lucide icon="ChevronRight" className="w-4 h-4" />
             </Pagination.Link>
           </Pagination>
-          <FormSelect className="w-20 mt-3 !box sm:mt-0">
-            <option>10</option>
-            <option>25</option>
-            <option>35</option>
-            <option>50</option>
-          </FormSelect>
         </div>
         {/* END: Pagination */}
       </div>
       {/* BEGIN: View Details Dialog */}
-      <Dialog
+      {/* <Dialog
         open={!!selectedWallet}
-        onClose={() => setSelectedTransaction(null)}
+        onClose={() => setSelectedWalletTransactions(null)}
         initialFocus={initialFocusRef}
       >
         <Dialog.Panel>
           <div className="p-5">
-            <h2 className="text-lg font-medium">Transaction Details</h2>
-            
+            <h2 className="text-lg font-medium">User Details</h2>
+            {selectedWallet && (
+              <div>
+                <p>Name: {selectedWallet.userId.firstName + " " + selectedWallet.userId.lastName}</p>
+                <p>Balance: {selectedWallet.balance}</p>
+                
+              </div>
+            )}
           </div>
         </Dialog.Panel>
-      </Dialog>
+      </Dialog> */}
       {/* END: View Details Dialog */}
 
       {/* BEGIN: Delete Confirmation Modal */}

@@ -63,7 +63,7 @@ function Main() {
             event.preventDefault();
             setSuperlargeModalSizePreview(true);
           }}>
-            New Event
+            Update Booking
           </Button>
           <Menu>
             <Menu.Button as={Button} className="px-2 !box">
@@ -140,7 +140,7 @@ function Main() {
                     {simCard.userId.firstName + " " + simCard.userId.lastName}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {simCard.providerId.name}
+                    {simCard.provider}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md text-center bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {simCard.collectionPoint}
@@ -151,14 +151,23 @@ function Main() {
                     </div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {dayjs(simCard.createdAt).format('DD-MM-YYYY')}
+                    {dayjs(simCard.travelDate).format('DD-MM-YYYY')}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
                     <div className="flex items-center justify-center">
-                      <a className="flex items-center mr-3" href=""
-                        onClick={() => handleViewDetails(simCard)}>
-                        <Lucide icon="View" className="w-4 h-4 mr-1" />
-                        View
+                      <a className="flex items-center mr-3" href="">
+                        <Lucide icon="CheckSquare" className="w-4 h-4 mr-1" />
+                        Edit
+                      </a>
+                      <a
+                        className="flex items-center text-danger"
+                        href="#"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          setDeleteConfirmationModal(true);
+                        }}
+                      >
+                        <Lucide icon="Trash2" className="w-4 h-4 mr-1" /> Delete
                       </a>
                     </div>
                   </Table.Td>

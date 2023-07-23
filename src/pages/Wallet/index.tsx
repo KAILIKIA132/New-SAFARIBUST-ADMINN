@@ -47,21 +47,12 @@ function Main() {
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
 
-  const handleViewDetails = (wallet: Wallet) => {
-    setSelectedWallet(wallet);
-  };
-
   return (
     <>
       <h2 className="mt-10 text-lg font-medium intro-y">Wallets</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">
-          <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
-            event.preventDefault();
-            setSuperlargeModalSizePreview(true);
-          }}>
-            New Event
-          </Button>
+         
           <Menu>
             <Menu.Button as={Button} className="px-2 !box">
               <span className="flex items-center justify-center w-5 h-5">
@@ -108,19 +99,16 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                  Name
+                  Wallet
                 </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
+                <Table.Th className="border-b-0 whitespace-nowrap flex items-center justify-center">
                   Balance
-                </Table.Th>
-                <Table.Th className="text-center border-b-0 whitespace-nowrap">
-                  Actions
                 </Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
               {walletsData.map((wallet) => (
-                <Table.Tr key={wallet.id} className="intro-y">
+                <Table.Tr key={wallet._id} className="intro-y">
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <FormCheck.Input type="checkbox" value={wallet._id} />
                   </Table.Td>
@@ -128,16 +116,7 @@ function Main() {
                     {wallet.userId.firstName + " " + wallet.userId.lastName}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {wallet.balance}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
-                    <div className="flex items-center justify-center">
-                      <a className="flex items-center mr-3" href=""
-                        onClick={() => handleViewDetails(wallet)}>
-                        <Lucide icon="View" className="w-4 h-4 mr-1" />
-                        View
-                      </a>
-                    </div>
+                    <span className="flex items-center justify-center">{wallet.balance}</span>
                   </Table.Td>
                 </Table.Tr>
               ))}
@@ -148,7 +127,7 @@ function Main() {
         {/* BEGIN: Pagination */}
         <div className="flex flex-wrap items-center col-span-12 intro-y sm:flex-row sm:flex-nowrap">
           <Pagination className="w-full sm:w-auto sm:mr-auto">
-            <Pagination.Link onClick={() => (setPage(previous_page), getBookings())} >
+            <Pagination.Link onClick={() => (setPage(previous_page), getWallets())} >
               <Lucide icon="ChevronLeft" className="w-4 h-4" />
             </Pagination.Link>
             {_.times(pagination.total_pages).map((page, key) => (
@@ -158,12 +137,6 @@ function Main() {
               <Lucide icon="ChevronRight" className="w-4 h-4" />
             </Pagination.Link>
           </Pagination>
-          <FormSelect className="w-20 mt-3 !box sm:mt-0">
-            <option>10</option>
-            <option>25</option>
-            <option>35</option>
-            <option>50</option>
-          </FormSelect>
         </div>
         {/* END: Pagination */}
       </div>

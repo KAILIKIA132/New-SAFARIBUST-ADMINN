@@ -9,51 +9,69 @@ import Table from "../../base-components/Table";
 import dayjs from "dayjs";
 import "jspdf-autotable";
 import * as paymentService from "../../services/paymentService";
+import { useParams } from 'react-router-dom';
+import ReactDOM from "react-dom";
 
-
-interface WalletTransaction {
-  _id: string;
-  name: string;
-  balance: string;
+  function Transactions() {
+    const { walletId } = useParams();
+    const [transactions, setTransactions] = useState([]);
+    const [loadingTransactions, setLoadingTransactions] = useState(false);
+    const [pagination, setPagination] = useState({ current_page: 1, total: 1, total_pages: 1, per_page: 1 });
+    const [page, setPage] = useState(1);
+    const [next_page, setNextPage] = useState(1);
+    const [previous_page, setPreviousPage] = useState(1);
+    const [selectedTransaction, setSelectedTransaction] = useState(null);
+    const [loading, isLoading] = useState(false);
   
-}
+    useEffect(() => {
+      getTransactionsByWalletId(walletId);
+    }, [walletId]);
+ 
+    const getTransactionsByWalletId = async (id: string) => {
+      isLoading(true);
+      try {
+        let res = await paymentService.getTransactionsByWalletId({ id , page: 1});
+        setTransactions(res.wallets);
+        isLoading(false);
+        setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
+        setPreviousPage((page > 1) ? page - 1 : 1);
+        setPagination({ current_page: res.current_page, total: res.total, total_pages: res.total_pages, per_page: res.per_page });
+      } catch (error) {
+        isLoading(false);
+        console.log("Error fetching transactions for wallet:");
+      }
+    };
 
-function Main() {
-  const [superlargeModalSizePreview, setSuperlargeModalSizePreview] =
-    useState(false);
-  const [walletTransactionsData, setWalletTransactionsData] = useState<WalletTransaction[]>([]);
-  const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
-  const deleteButtonRef = createRef();
-  let [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const initialFocusRef = React.useRef<HTMLElement | null>(null);
-
-
-  const [pagination, setPagination] = useState({ current_page: 1, total: 1, total_pages: 1, per_page: 1 });
-  const [page, setPage] = useState(1);
-  const [next_page, setNextPage] = useState(1);
-  const [previous_page, setPreviousPage] = useState(1);
-  useEffect(() => {
-    getWalletTransactions();
-  }, []);
-
-  const getWalletTransactions = async () => {
-    let res = await paymentService.getWalletTransactions({ page: 1 });
-    setWalletTransactionsData(res.walletTransactions);
-    setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
-    setPreviousPage((page > 1) ? page - 1 : 1);
-    setPagination({ current_page: res.current_page, total: res.total, total_pages: res.total_pages, per_page: res.per_page });
-  };
-
-  const [selectedWallet, setSelectedWalletTransactions] = useState<WalletTransaction | null>(null);
-
-  const handleViewDetails = (walletTransactions: WalletTransaction) => {
-    setSelectedWalletTransactions(walletTransactions);
+  const renderAmountColumn = (transaction: any) => {
+    if (transaction.type === "Credit") {
+      return (
+        <>
+          <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-red-600">
+            {transaction.amount}
+          </Table.Td>
+          <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+            {'---'}
+          </Table.Td>
+        </>
+      );
+    } else if (transaction.vendorId != null &&  transaction.type === "Debit" || transaction.vendorId === null && transaction.type === "Debit") {
+      return (
+        <>
+          <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+          {'---'}
+          </Table.Td>
+          <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-green-600">
+            {transaction.amount}
+          </Table.Td>
+        </>
+      );
+    }
+    return null; // If transaction type is neither "credit" nor "debit", return null
   };
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Wallet Transactions</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Transactions</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">
           <Menu>
@@ -95,52 +113,60 @@ function Main() {
         </div>
         {/* BEGIN: Data List */}
         <div className="col-span-12 overflow-auto intro-y lg:overflow-visible">
-          <Table className="border-spacing-y-[10px] border-separate -mt-2">
-            <Table.Thead>
+        <Table className="border-spacing-y-[10px] border-separate -mt-2">
+          <Table.Thead>
               <Table.Tr>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                  Name
+                 Reference
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Description
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Credit
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Debit
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   Balance
                 </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  Status
+                </Table.Th>
                 <Table.Th className="text-center border-b-0 whitespace-nowrap">
-                  Actions
+                  Date
                 </Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {walletTransactionsData.map((walletTransactions) => (
-                <Table.Tr key={walletTransactions._id} className="intro-y">
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <FormCheck.Input type="checkbox" value={walletTransactions._id} />
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 !py-4 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {walletTransactions.referenceCode}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {walletTransactions.amount}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                  {walletTransactions.type === "Credit"
-                    ? walletTransactions.userBalance 
-                    : walletTransactions.vendorBalance 
-                  }
+            {transactions.map((transaction, key) => (
+              <Table.Tr key={key} className="intro-x">
+                <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  <FormCheck.Input type="checkbox" value={transaction._id} />
                 </Table.Td>
                 <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                  {dayjs(walletTransactions.createdAt).format('DD-MM-YYYY')}
+                    {transaction.referenceCode}
                   </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
-                    <div className="flex items-center justify-center">
-                      <a className="flex items-center mr-3" href=""
-                        onClick={() => handleViewDetails(walletTransactions)}>
-                        <Lucide icon="View" className="w-4 h-4 mr-1" />
-                        View
-                      </a>
-                    </div>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {transaction.description}
+                  </Table.Td>
+                  {/* Credit Column */}
+                  {renderAmountColumn(transaction)}
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {transaction.balance}
+                  </Table.Td>
+                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  {transaction.vendorId.firstName + " " + transaction.vendorId.lastName}
+                  </Table.Td> */}
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  {transaction.status}
+                </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  {dayjs(transaction.createdAt).format('DD-MM-YYYY')}
                   </Table.Td>
                 </Table.Tr>
               ))}
@@ -164,81 +190,8 @@ function Main() {
         </div>
         {/* END: Pagination */}
       </div>
-      {/* BEGIN: View Details Dialog */}
-      {/* <Dialog
-        open={!!selectedWallet}
-        onClose={() => setSelectedWalletTransactions(null)}
-        initialFocus={initialFocusRef}
-      >
-        <Dialog.Panel>
-          <div className="p-5">
-            <h2 className="text-lg font-medium">User Details</h2>
-            {selectedWallet && (
-              <div>
-                <p>Name: {selectedWallet.userId.firstName + " " + selectedWallet.userId.lastName}</p>
-                <p>Balance: {selectedWallet.balance}</p>
-                
-              </div>
-            )}
-          </div>
-        </Dialog.Panel>
-      </Dialog> */}
-      {/* END: View Details Dialog */}
-
-      {/* BEGIN: Delete Confirmation Modal */}
-      <Dialog
-        open={deleteConfirmationModal}
-        onClose={() => {
-          setDeleteConfirmationModal(false);
-        }}
-      // initialFocus={deleteButtonRef}
-      // initialFocus={initialFocusRef}
-      >
-        <Dialog.Panel>
-          <div className="p-5 text-center">
-            <Lucide
-              icon="XCircle"
-              className="w-16 h-16 mx-auto mt-3 text-danger"
-            />
-            <div className="mt-5 text-3xl">Are you sure?</div>
-            <div className="mt-2 text-slate-500">
-              Do you really want to delete these records? <br />
-              This process cannot be undone.
-            </div>
-          </div>
-          <div className="px-5 pb-8 text-center">
-            <Button
-              variant="outline-secondary"
-              type="button"
-              onClick={() => {
-                setDeleteConfirmationModal(false);
-              }}
-              className="w-24 mr-1"
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="danger"
-              type="button"
-              className="w-24"
-            // ref={deleteButtonRef}
-            >
-              Delete
-            </Button>
-          </div>
-        </Dialog.Panel>
-      </Dialog>
-      {/* END: Delete Confirmation Modal */}
-      <Dialog staticBackdrop size="lg" open={superlargeModalSizePreview} onClose={() => {
-        setSuperlargeModalSizePreview(false);
-      }}
-      >
-        <Dialog.Panel className="p-10 text-center">
-          This is totally awesome superlarge modal!
-        </Dialog.Panel>
-      </Dialog>
     </>
   );
 }
 
-export default Main;
+export default Transactions;

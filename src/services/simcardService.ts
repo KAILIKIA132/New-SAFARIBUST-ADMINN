@@ -39,6 +39,24 @@ export async function getBookings(data: any) {
   }
 }
 
+export async function deleteBooking(userId: any) {
+  try {
+      let res = await axios.delete(c.SIMCARDS + "/" + userId);
+      return res.data;
+  } catch (e) {
+      throw handler(e);
+  }
+}
+
+export async function updateBooking(bookingId: string, updatedData: any) {
+  try {
+    const res = await axios.put(c.SIMCARDS + "/" + bookingId, updatedData);
+    return res.data;
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
 export function handler(err: any) {
   let error = err;
 

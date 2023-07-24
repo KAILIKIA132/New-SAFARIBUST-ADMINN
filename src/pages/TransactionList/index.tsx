@@ -52,11 +52,11 @@ function Main() {
 
   const [selectedWallet, setSelectedTransaction] = useState<Transaction | null>(null);
 
-  const renderAmountColumn = (transaction: Transaction) => {
+  const renderAmountColumn = (transaction: any) => {
     if (transaction.type === "Credit") {
       return (
         <>
-          <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-red-600">
+          <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-green-600">
             {transaction.amount}
           </Table.Td>
           <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
@@ -64,13 +64,13 @@ function Main() {
           </Table.Td>
         </>
       );
-    } else if (transaction.type === "Debit") {
+    } else if (transaction.vendorId != null &&  transaction.type === "Debit" || transaction.vendorId === null &&  transaction.type === "Debit") {
       return (
         <>
           <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
           {'---'}
           </Table.Td>
-          <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-green-600">
+          <Table.Td className="first:rounded-l-md last:rounded-r-md w-40 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] text-red-600">
             {transaction.amount}
           </Table.Td>
         </>
@@ -153,8 +153,8 @@ function Main() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-            {transactionsData.map((transaction) => (
-              <Table.Tr key={transaction._id} className="intro-y">
+            {transactionsData.map((transaction: any, key) => (
+              <Table.Tr key={key} className="intro-x">
                 <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                   <FormCheck.Input type="checkbox" value={transaction._id} />
                 </Table.Td>

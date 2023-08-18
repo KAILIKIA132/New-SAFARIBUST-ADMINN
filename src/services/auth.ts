@@ -1,35 +1,30 @@
-
 import axios from 'axios';
 import * as c from '../utils/constants';
 import { FieldValues } from 'react-hook-form';
 
 const getData = async () => {
-    try {
-        const user = await localStorage.getItem('user')
-        if (user !== null) {
-            // value previously stored
-            let token = JSON.parse(user);
-            axios.defaults.headers.common["Authorization"] = `Bearer ${token.token}`;
-            axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
-        }
-    } catch (e) {
-        // error reading value
-        console.log(e);
-    }
-}
+  try {
+    // For demo purposes, fake user data without actual authentication
+    const fakeUser = { token: "fake-token" };
+    axios.defaults.headers.common["Authorization"] = `Bearer ${fakeUser.token}`;
+    axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
+  } catch (e) {
+    console.log(e);
+  }
+};
 getData();
 
 axios.interceptors.response.use(
-    response => {
-        return response
-    },
-    function (error) {
-        if (error?.response?.status === 401) {
-            return Promise.reject(error)
-        }
-        return Promise.reject(error)
+  response => {
+    return response;
+  },
+  function (error) {
+    if (error?.response?.status === 401) {
+      return Promise.reject(error);
     }
-)
+    return Promise.reject(error);
+  }
+);
 
 export async function login(data: FieldValues) {
     try {
@@ -87,6 +82,7 @@ export async function changePassword(data: any) {
 }
 
 export async function getDashboard() {
+    
     try {
         let res = await axios.get(c.DASHBOARD);
         return res.data;

@@ -307,6 +307,7 @@ function Main() {
                   {...register("lastName", { required: true })}
                   defaultValue={editedSimCard.userId.lastName} // Example, replace with actual data
                 />
+                <FormLabel>Provider</FormLabel>
                 <FormSelect
                   {...register("provider", { required: true })}
                   defaultValue={editedSimCard.provider}

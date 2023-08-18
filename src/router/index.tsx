@@ -25,6 +25,23 @@ import UpdateProfile from "../pages/UpdateProfile";
 import ChangePassword from "../pages/ChangePassword";
 import AuthGuard from "../utils/route-guard/AuthGuard";
 import GuestGuard from "../utils/route-guard/GuestGuard";
+import Vehicle from "../pages/vehicle";
+import Documents from "../pages/documents";
+import SecurityFeature from "../pages/security";
+import Financiers from "../pages/financiers";
+import Accounts from "../pages/accounts";
+import Quotes from "../pages/quotes";
+import NewPolicy from "../pages/newPolicy";
+import Extension from "../pages/policyExtension";
+
+
+
+
+
+
+
+
+
 
 function Router() {
   const routes = [
@@ -67,6 +84,39 @@ function Router() {
           path: "attendees",
           element: <Attendees />,
         },
+        {
+          path: "Vehicle",
+          element: <Vehicle />,
+        },
+        {
+          path: "documents",
+          element: <Documents />,
+        },
+        {
+          path: "securityFeature",
+          element: <SecurityFeature />,
+        },
+        {
+          path: "financiers",
+          element: <Financiers />,
+        },
+        {
+          path: "accounts",
+          element: <Accounts />,
+        },
+        {
+          path: "quotes",
+          element: <Quotes />,
+        },
+        {
+          path: "policy",
+          element: <NewPolicy />,
+        },
+        {
+          path: "extension",
+          element: <Extension />,
+        },
+        
         {
           path: "speakers",
           element: <Speakers />,

@@ -39,15 +39,6 @@ export async function getWallets(data: any) {
   }
 }
 
-// export async function getWalletTransactions(data: any) {
-//   try {
-//     let res = await axios.get(c.WALLETS_TRANSACTIONS);
-//     return res.data;
-//   } catch (e) {
-//     throw handler(e);
-//   }
-// }
-
 export async function getTransactions(data: any) {
     try {
       let res = await axios.get(c.TRANSACTIONS);
@@ -59,7 +50,7 @@ export async function getTransactions(data: any) {
 
   export async function deleteWallet(id: any) {
     try {
-        let res = await axios.delete(c.WALLETS+ "/" + id); //getTransactionsByWalletId
+        let res = await axios.delete(c.WALLETS+ "/" + id); 
         return res.data;
     } catch (e) {
         throw handler(e);

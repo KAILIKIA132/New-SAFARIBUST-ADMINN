@@ -110,6 +110,7 @@ module.exports = {
       addBase({
         // Default colors
         ":root": {
+          
           "--color-primary": toRGB(colors.emerald["900"]),
           "--color-secondary": toRGB(colors.slate["200"]),
           "--color-success": toRGB(colors.emerald["600"]),

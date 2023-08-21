@@ -30,6 +30,11 @@ const initialState: SideMenuState = {
       pathname: "/accounts",
       title: "Accounts",
     },
+    {
+      icon: "Users",
+      pathname: "/accountDetails",
+      title: "Account Details",
+    },
     
     
     {
@@ -39,30 +44,78 @@ const initialState: SideMenuState = {
           {
             icon: "Activity",
             pathname: "/policy",
-            title: "New Policy",
+            title: "Active Policy",
           },
         
           {
             icon: "Activity",
             pathname: "/extension",
-            title: "Policy Extensions",
+            title: "Inactive Policy",
           },
-          // {
-          //   icon: "Activity",
-          //   pathname: "/financiers",
-          //   title: "Financiers",
-          // },
+        
           
           
           
         ]},
+        {
+          icon: "Users",
+          title: "Claims",
+          subMenu: [
+            {
+              icon: "Activity",
+              pathname: "/active",
+              title: "Active Claims",
+            },
+          
+            {
+              icon: "Activity",
+              pathname: "/pendingClaim",
+              title: "Paid Claims",
+            },
+            {
+              icon: "Activity",
+              pathname: "/rejectedClaim",
+              title: "Rejected Claims",
+            },
+            
+            
+            
+          ]},
+  
 
+       
 
         {
-          icon: "Activity",
-          pathname: "/quotes",
+          icon: "Users",
           title: "Quotes",
-        },
+          subMenu: [
+            {
+              icon: "Activity",
+              pathname: "/quotes",
+              title: "Private Comprehensive Cover",
+            },
+            {
+              icon: "Activity",
+              pathname: "/pendingClaim",
+              title: "Autocorrect Cover",
+            },
+            {
+              icon: "Activity",
+              pathname: "/rejectedClaim",
+              title: "Third Party Cover",
+            },
+            {
+              icon: "Activity",
+              pathname: "/rejectedClaim",
+              title: "Third Party Fire and Theft",
+            },
+            
+            
+            
+          ]},
+
+
+
     // {
     //   icon: "Users",
     //   title: "Users",
@@ -119,12 +172,23 @@ const initialState: SideMenuState = {
         {
           icon: "Activity",
           pathname: "/Vehicle",
-          title: "Vehicle",
+          title: "Vehicle Make",
         },
         {
           icon: "Activity",
+          pathname: "/model",
+          title: "Vehicle Model",
+        },
+        {
+          icon: "Activity",
+          pathname: "/valuers",
+          title: "Valuers",
+        },
+        
+        {
+          icon: "Activity",
           pathname: "/documents",
-          title: "Documents",
+          title: "Documents Types",
         },
         {
           icon: "Activity",

@@ -31,6 +31,7 @@ function Main() {
   ]);
 
   const [dialog, setDialog] = useState(false);
+  const [confirmMake, setConfirmMake] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteButtonRef = useRef(null);
   const [users, setUsers] = useState([]);
@@ -146,15 +147,15 @@ function Main() {
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Document types</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Vehicle Models</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
-          <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
+          {/* <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
             event.preventDefault();
             setDialog(true);
           }}>
-            Add New Document
-          </Button>
+            New Vehicle
+          </Button> */}
           <Menu>
             <Menu.Button as={Button} className="px-2 !box">
               <span className="flex items-center justify-center w-5 h-5">
@@ -205,9 +206,9 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Documents
+                Models
                 </Table.Th>
-                
+               
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -216,16 +217,8 @@ function Main() {
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <FormCheck.Input type="checkbox" />
                   </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md !py-3.5 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="flex items-center">
-                      
-                      <div className="ml-4">
-                        <a href="" className="font-medium whitespace-nowrap">
-                          {user.firstname + " " + user.lastname}
-                        </a>
-                        
-                      </div>
-                    </div>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.Business_type}
                   </Table.Td>
                  
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
@@ -249,6 +242,12 @@ function Main() {
                           </span>
                         </Menu.Button>
                         <Menu.Items className="w-40">
+                        <Menu.Item onClick={() => {
+                            setUserId(user.id),
+                            setConfirmMake(true);
+                          }}>
+                            <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Add Model
+                          </Menu.Item>
                           <Menu.Item>
                             <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Edit
                           </Menu.Item>
@@ -316,7 +315,7 @@ function Main() {
           <form className="validate-form" onSubmit={onSubmit}>
             <Dialog.Title>
               <h2 className="mr-auto text-base font-medium">
-                New Document Type
+                New Vehicle
               </h2>
               <a onClick={(event: React.MouseEvent) => {
                 event.preventDefault();
@@ -331,41 +330,40 @@ function Main() {
             <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
               <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
-                  Document
+                  Make
                 </FormLabel>
                 <FormInput
-                  {...register("feature")}
+                  {...register("make")}
                   type="text"
-                  name="feature"
-                  className={errors.feature ? "border-danger" : ''}
-                  placeholder="e.g KRA pin"
+                  name="make"
+                  className={errors.firstName ? "border-danger" : ''}
+                  placeholder="Toyota"
                 />
-                {errors.feature && (
+                {errors.make && (
                   <div className="mt-2 text-danger">
-                    {typeof errors.feature.message === "string" &&
-                      errors.feature.message}
+                    {typeof errors.make.message === "string" &&
+                      errors.make.message}
                   </div>
                 )}
               </div>
-              {/* <div className="col-span-12 sm:col-span-6">
+              <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
-                  Feature
+                  Model
                 </FormLabel>
                 <FormInput
-                  {...register("feature")}
+                  {...register("model")}
                   type="text"
-                  name="feature"
-                  className={errors.feature ? "border-danger" : ''}
-                  placeholder="e.g Tracking system"
+                  name="model"
+                  className={errors.model ? "border-danger" : ''}
+                  placeholder="Prado v8"
                 />
-                {errors.feature && (
+                {errors.model && (
                   <div className="mt-2 text-danger">
-                    {typeof errors.feature.message === "string" &&
-                      errors.feature.message}
+                    {typeof errors.model.message === "string" &&
+                      errors.model.message}
                   </div>
                 )}
-              </div> */}
-             
+              </div>
              
             </Dialog.Description>
             <Dialog.Footer>
@@ -390,6 +388,95 @@ function Main() {
           </form>
         </Dialog.Panel>
       </Dialog>
+
+
+
+
+      <Dialog staticBackdrop size="lg" open={confirmMake} onClose={() => {
+        setConfirmMake(false);
+      }}
+      >
+        <Dialog.Panel>
+          <form className="validate-form" onSubmit={onSubmit}>
+          {users.map((user: any, key) => (
+
+                <Dialog.Title key={key}>
+              <h2 className="mr-auto text-base font-medium">
+                 
+                 New {user.Business_type} Vehicle
+                 {/* {setUserId(user.id)} */}
+                
+              </h2>
+              <a onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                setConfirmMake(false);
+              }}
+                className="absolute top-0 right-0 mt-3 mr-3"
+                href="#"
+              >
+                <Lucide icon="X" className="w-8 h-8 text-slate-400" />
+              </a>
+            </Dialog.Title>
+          ))}
+          
+            <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
+             
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                  Model
+                </FormLabel>
+                <FormInput
+                  {...register("model")}
+                  type="text"
+                  name="model"
+                  className={errors.lastName ? "border-danger" : ''}
+                  placeholder="Prado v8"
+                />
+                {errors.model && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.model.message === "string" &&
+                      errors.model.message}
+                  </div>
+                )}
+              </div>
+             
+            </Dialog.Description>
+            <Dialog.Footer>
+              <Button type="button" variant="outline-secondary" onClick={() => {
+                setConfirmMake(false);
+              }}
+                className="w-20 mr-1"
+              >
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit" className="w-20">
+                Save
+                {
+                  loading && <LoadingIcon
+                    icon="spinning-circles"
+                    color="white"
+                    className="w-4 h-4 ml-2"
+                  />
+                }
+              </Button>
+            </Dialog.Footer>
+          </form>
+        </Dialog.Panel>
+          
+      </Dialog>
+
+          
+
+
+
+
+
+
+
+
+
+
+
       {/* BEGIN: Delete Confirmation Modal */}
       <Dialog
         open={confirmDelete}

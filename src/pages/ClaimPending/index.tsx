@@ -146,14 +146,14 @@ function Main() {
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Document types</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Active Pending</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
           <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
             event.preventDefault();
             setDialog(true);
           }}>
-            Add New Document
+            New Speaker
           </Button>
           <Menu>
             <Menu.Button as={Button} className="px-2 !box">
@@ -205,9 +205,51 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Documents
+                First Name
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                Middle Name
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  PHONE
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  EMAIL
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                NATIONALITY
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  GENDER
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  MARITAL STATUS
+                </Table.Th>
+
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  NATIONAL ID NUMBER
                 </Table.Th>
                 
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  KRA PIN
+                </Table.Th>
+               
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  ALLIEN ID NUMBER
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  EXPIRY DATE
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                D.O.B
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  TAX REGISTRATION NUMBER
+                </Table.Th>
+
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  ACTIONS
+                </Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -218,16 +260,37 @@ function Main() {
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md !py-3.5 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div className="flex items-center">
-                      
+                      <div className="w-9 h-9 image-fit zoom-in">
+                        <Tippy
+                          as="img"
+                          alt=""
+                          className="border-white rounded-lg shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
+                          src={user.profileImage}
+                          content={user.firstName + " " + user.lastname}
+                        />
+                      </div>
                       <div className="ml-4">
                         <a href="" className="font-medium whitespace-nowrap">
                           {user.firstname + " " + user.lastname}
                         </a>
-                        
+                        {/* <div className="text-slate-500 text-xs whitespace-nowrap mt-0.5">
+                          {user.role.role}
+                        </div> */}
                       </div>
                     </div>
                   </Table.Td>
-                 
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.Business_type}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.phone}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.Business_type}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.firstname}
+                  </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div
                       className={clsx([
@@ -316,7 +379,7 @@ function Main() {
           <form className="validate-form" onSubmit={onSubmit}>
             <Dialog.Title>
               <h2 className="mr-auto text-base font-medium">
-                New Document Type
+                New Speaker
               </h2>
               <a onClick={(event: React.MouseEvent) => {
                 event.preventDefault();
@@ -331,42 +394,158 @@ function Main() {
             <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
               <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
-                  Document
+                  First Name
                 </FormLabel>
                 <FormInput
-                  {...register("feature")}
+                  {...register("firstName")}
                   type="text"
-                  name="feature"
-                  className={errors.feature ? "border-danger" : ''}
-                  placeholder="e.g KRA pin"
+                  name="firstName"
+                  className={errors.firstName ? "border-danger" : ''}
+                  placeholder="John"
                 />
-                {errors.feature && (
+                {errors.firstName && (
                   <div className="mt-2 text-danger">
-                    {typeof errors.feature.message === "string" &&
-                      errors.feature.message}
+                    {typeof errors.firstName.message === "string" &&
+                      errors.firstName.message}
                   </div>
                 )}
               </div>
-              {/* <div className="col-span-12 sm:col-span-6">
+              <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
-                  Feature
+                  Last Name
                 </FormLabel>
                 <FormInput
-                  {...register("feature")}
+                  {...register("lastName")}
                   type="text"
-                  name="feature"
-                  className={errors.feature ? "border-danger" : ''}
-                  placeholder="e.g Tracking system"
+                  name="lastName"
+                  className={errors.lastName ? "border-danger" : ''}
+                  placeholder="Doe"
                 />
-                {errors.feature && (
+                {errors.lastName && (
                   <div className="mt-2 text-danger">
-                    {typeof errors.feature.message === "string" &&
-                      errors.feature.message}
+                    {typeof errors.lastName.message === "string" &&
+                      errors.lastName.message}
                   </div>
                 )}
-              </div> */}
-             
-             
+              </div>
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-6">
+                  Conference
+                </FormLabel>
+                <FormSelect {...register("tenant")} name="tenant">
+                  {conferences.map((conference: any, key) => <option key={key} value={conference._id} >{conference.name}</option>)}
+                </FormSelect>
+                {errors.role && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.role.message === "string" &&
+                      errors.role.message}
+                  </div>
+                )}
+              </div>
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-6">
+                  Role
+                </FormLabel>
+                <FormSelect {...register("role")} name="role">
+                  {roles.map((role: any, key) => <option key={key} value={role._id} >{role.role}</option>)}
+                </FormSelect>
+                {errors.role && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.role.message === "string" &&
+                      errors.role.message}
+                  </div>
+                )}
+              </div>
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-6">
+                  Country
+                </FormLabel>
+                <FormSelect {...register("country")} name="country" value={"Kenya"}>
+                  {countries.map((country, key) => <option key={key} value={country.name} >{country.name}</option>)}
+                </FormSelect>
+              </div>
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                  Phone Number
+                </FormLabel>
+                <FormInput
+                  {...register("phoneNumber")}
+                  type="text"
+                  name="phoneNumber"
+                  placeholder="+254 712 345 6789"
+                />
+              </div>
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                  Email
+                </FormLabel>
+                <FormInput
+                  {...register("email")}
+                  type="email"
+                  name="email"
+                  className={errors.email ? "border-danger" : ''}
+                  placeholder="info@example.com"
+                />
+                {errors.email && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.email.message === "string" &&
+                      errors.email.message}
+                  </div>
+                )}
+              </div>
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                  Linkedin
+                </FormLabel>
+                <FormInput
+                  {...register("linkedin")}
+                  type="text"
+                  name="linkedin"
+                  placeholder="https://www.linkedin.com/"
+                />
+              </div>
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                  Twitter
+                </FormLabel>
+                <FormInput
+                  {...register("twitter")}
+                  type="text"
+                  name="twitter"
+                  placeholder="https://twitter.com/"
+                />
+              </div>
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                  Facebook
+                </FormLabel>
+                <FormInput
+                  {...register("facebook")}
+                  type="text"
+                  name="linkedin"
+                  placeholder="https://www.facebook.com/"
+                />
+              </div>
+
+              <div className="col-span-12 sm:col-span-12">
+                <Dropzone getRef={(el) => { }}
+                  options={{
+                    url: "https://africaclimatesummit.org/",
+                    thumbnailWidth: 150,
+                    maxFilesize: 0.5,
+                    maxFiles: 1,
+                    headers: { "My-Awesome-Header": "header value" },
+                  }}
+                  className="dropzone"
+                >
+                  <div className="text-lg font-medium">
+                    Upload profile photo.
+                  </div>
+                  <div className="text-gray-600">
+                    Optional
+                  </div>
+                </Dropzone>
+              </div>
             </Dialog.Description>
             <Dialog.Footer>
               <Button type="button" variant="outline-secondary" onClick={() => {

@@ -15,6 +15,13 @@ import * as yup from "yup";
 import Notification, { NotificationElement } from "../../base-components/Notification";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import Dropzone from "../../base-components/Dropzone";
+import AccountDetails from "../accountDetails";
+import fakerData from "../../utils/faker";
+import {
+  FormTextarea,
+} from "../../base-components/Form";
+import TomSelect from "../../base-components/TomSelect";
+
 
 function Main() {
   const [countries] = useState([
@@ -44,6 +51,8 @@ function Main() {
   const [loading, isLoading] = useState(false);
   const [success, setSuccess] = useState(true);
   const [message, setMessage] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
 
   // Success notification
   const notify = useRef<NotificationElement>();
@@ -66,6 +75,9 @@ function Main() {
     mode: "onChange",
     resolver: yupResolver(schema),
   });
+
+
+  const [select, setSelect] = useState("1");
 
   useEffect(() => {
     getUsers();
@@ -254,7 +266,18 @@ function Main() {
             </Table.Thead>
             <Table.Tbody>
               {users.map((user: any, key) => (
-                <Table.Tr key={key} className="intro-x">
+              <Table.Tr
+              key={key}
+              className="intro-x"
+              onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                setSelectedUserId(user.id);
+                setDialog(true);
+              }}
+            >
+
+
+                  
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <FormCheck.Input type="checkbox" />
                   </Table.Td>
@@ -338,6 +361,18 @@ function Main() {
               ))}
             </Table.Tbody>
           </Table>
+
+
+
+          
+ 
+
+
+
+
+
+
+
           {
             loading &&
             <div className="flex flex-col items-center">
@@ -376,178 +411,415 @@ function Main() {
       }}
       >
         <Dialog.Panel>
-          <form className="validate-form" onSubmit={onSubmit}>
-            <Dialog.Title>
-              <h2 className="mr-auto text-base font-medium">
-                New Speaker
-              </h2>
-              <a onClick={(event: React.MouseEvent) => {
-                event.preventDefault();
-                setDialog(false);
-              }}
-                className="absolute top-0 right-0 mt-3 mr-3"
-                href="#"
-              >
-                <Lucide icon="X" className="w-8 h-8 text-slate-400" />
-              </a>
-            </Dialog.Title>
-            <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  First Name
-                </FormLabel>
-                <FormInput
-                  {...register("firstName")}
-                  type="text"
-                  name="firstName"
-                  className={errors.firstName ? "border-danger" : ''}
-                  placeholder="John"
-                />
-                {errors.firstName && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.firstName.message === "string" &&
-                      errors.firstName.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Last Name
-                </FormLabel>
-                <FormInput
-                  {...register("lastName")}
-                  type="text"
-                  name="lastName"
-                  className={errors.lastName ? "border-danger" : ''}
-                  placeholder="Doe"
-                />
-                {errors.lastName && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.lastName.message === "string" &&
-                      errors.lastName.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-6">
-                  Conference
-                </FormLabel>
-                <FormSelect {...register("tenant")} name="tenant">
-                  {conferences.map((conference: any, key) => <option key={key} value={conference._id} >{conference.name}</option>)}
-                </FormSelect>
-                {errors.role && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.role.message === "string" &&
-                      errors.role.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-6">
-                  Role
-                </FormLabel>
-                <FormSelect {...register("role")} name="role">
-                  {roles.map((role: any, key) => <option key={key} value={role._id} >{role.role}</option>)}
-                </FormSelect>
-                {errors.role && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.role.message === "string" &&
-                      errors.role.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-6">
-                  Country
-                </FormLabel>
-                <FormSelect {...register("country")} name="country" value={"Kenya"}>
-                  {countries.map((country, key) => <option key={key} value={country.name} >{country.name}</option>)}
-                </FormSelect>
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Phone Number
-                </FormLabel>
-                <FormInput
-                  {...register("phoneNumber")}
-                  type="text"
-                  name="phoneNumber"
-                  placeholder="+254 712 345 6789"
-                />
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Email
-                </FormLabel>
-                <FormInput
-                  {...register("email")}
-                  type="email"
-                  name="email"
-                  className={errors.email ? "border-danger" : ''}
-                  placeholder="info@example.com"
-                />
-                {errors.email && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.email.message === "string" &&
-                      errors.email.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Linkedin
-                </FormLabel>
-                <FormInput
-                  {...register("linkedin")}
-                  type="text"
-                  name="linkedin"
-                  placeholder="https://www.linkedin.com/"
-                />
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Twitter
-                </FormLabel>
-                <FormInput
-                  {...register("twitter")}
-                  type="text"
-                  name="twitter"
-                  placeholder="https://twitter.com/"
-                />
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Facebook
-                </FormLabel>
-                <FormInput
-                  {...register("facebook")}
-                  type="text"
-                  name="linkedin"
-                  placeholder="https://www.facebook.com/"
-                />
-              </div>
 
-              <div className="col-span-12 sm:col-span-12">
-                <Dropzone getRef={(el) => { }}
-                  options={{
-                    url: "https://africaclimatesummit.org/",
-                    thumbnailWidth: 150,
-                    maxFilesize: 0.5,
-                    maxFiles: 1,
-                    headers: { "My-Awesome-Header": "header value" },
-                  }}
-                  className="dropzone"
-                >
-                  <div className="text-lg font-medium">
-                    Upload profile photo.
-                  </div>
-                  <div className="text-gray-600">
-                    Optional
-                  </div>
-                </Dropzone>
+
+
+
+
+        <>
+      <div className="flex items-center mt-8 intro-y">
+        <h2 className="mr-auto text-lg font-medium">Update Profile</h2>
+      </div>
+      <div className="grid grid-cols-12 gap-6">
+        {/* BEGIN: Profile Menu */}
+        <div className="flex flex-col-reverse col-span-12 lg:col-span-4 2xl:col-span-3 lg:block">
+          <div className="mt-5 intro-y box">
+            <div className="relative flex items-center p-5">
+              <div className="w-12 h-12 image-fit">
+                <img
+                  alt=""
+                  className="rounded-full"
+                  src={fakerData[0].photos[0]}
+                />
               </div>
-            </Dialog.Description>
-            <Dialog.Footer>
+              <div className="ml-4 mr-auto">
+                <div className="text-base font-medium">
+                  {fakerData[0].users[0].name}
+                </div>
+                <div className="text-slate-500">{fakerData[0].jobs[0]}</div>
+              </div>
+              <Menu>
+                <Menu.Button as="a" className="block w-5 h-5">
+                  <Lucide
+                    icon="MoreHorizontal"
+                    className="w-5 h-5 text-slate-500"
+                  />
+                </Menu.Button>
+                <Menu.Items className="w-56">
+                  <Menu.Header> Export Options</Menu.Header>
+                  <Menu.Divider />
+                  <Menu.Item>
+                    <Lucide icon="Activity" className="w-4 h-4 mr-2" />
+                    English
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Lucide icon="Box" className="w-4 h-4 mr-2" />
+                    Indonesia
+                    <div className="px-1 ml-auto text-xs text-white rounded-full bg-danger">
+                      10
+                    </div>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Lucide icon="Layout" className="w-4 h-4 mr-2" />
+                    English
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Lucide icon="Sidebar" className="w-4 h-4 mr-2" />
+                    Indonesia
+                  </Menu.Item>
+                  <Menu.Divider />
+                  <Menu.Footer>
+                    <Button
+                      variant="primary"
+                      type="button"
+                      className="px-2 py-1"
+                    >
+                      Settings
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      type="button"
+                      className="px-2 py-1 ml-auto"
+                    >
+                      View Profile
+                    </Button>
+                  </Menu.Footer>
+                </Menu.Items>
+              </Menu>
+            </div>
+            <div className="p-5 border-t border-slate-200/60 dark:border-darkmode-400">
+              <a className="flex items-center font-medium text-primary" href="">
+                <Lucide icon="Activity" className="w-4 h-4 mr-2" /> Personal
+                Information
+              </a>
+              <a className="flex items-center mt-5" href="">
+                <Lucide icon="Box" className="w-4 h-4 mr-2" /> Account Settings
+              </a>
+              <a className="flex items-center mt-5" href="">
+                <Lucide icon="Lock" className="w-4 h-4 mr-2" /> Change Password
+              </a>
+              <a className="flex items-center mt-5" href="">
+                <Lucide icon="Settings" className="w-4 h-4 mr-2" /> User
+                Settings
+              </a>
+            </div>
+            <div className="p-5 border-t border-slate-200/60 dark:border-darkmode-400">
+              <a className="flex items-center" href="">
+                <Lucide icon="Activity" className="w-4 h-4 mr-2" /> Email
+                Settings
+              </a>
+              <a className="flex items-center mt-5" href="">
+                <Lucide icon="Box" className="w-4 h-4 mr-2" /> Saved Credit
+                Cards
+              </a>
+              <a className="flex items-center mt-5" href="">
+                <Lucide icon="Lock" className="w-4 h-4 mr-2" /> Social Networks
+              </a>
+              <a className="flex items-center mt-5" href="">
+                <Lucide icon="Settings" className="w-4 h-4 mr-2" /> Tax
+                Information
+              </a>
+            </div>
+            <div className="flex p-5 border-t border-slate-200/60 dark:border-darkmode-400">
+              <Button variant="primary" type="button" className="px-2 py-1">
+                New Group
+              </Button>
+              <Button
+                variant="outline-secondary"
+                type="button"
+                className="px-2 py-1 ml-auto"
+              >
+                New Quick Link
+              </Button>
+            </div>
+          </div>
+        </div>
+        {/* END: Profile Menu */}
+        <div className="col-span-12 lg:col-span-8 2xl:col-span-9">
+          {/* BEGIN: Display Information */}
+          <div className="intro-y box lg:mt-5">
+            <div className="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+              <h2 className="mr-auto text-base font-medium">
+                Display Information
+              </h2>
+            </div>
+            <div className="p-5">
+              <div className="flex flex-col xl:flex-row">
+                <div className="flex-1 mt-6 xl:mt-0">
+                  <div className="grid grid-cols-12 gap-x-5">
+                    <div className="col-span-12 2xl:col-span-6">
+                      <div>
+                        <FormLabel htmlFor="update-profile-form-1">
+                          Display Name
+                        </FormLabel>
+                        <FormInput
+                          id="update-profile-form-1"
+                          type="text"
+                          placeholder="Input text"
+                          value={fakerData[0].users[0].name}
+                          onChange={() => {}}
+                          disabled
+                        />
+                      </div>
+                      <div className="mt-3">
+                        <FormLabel htmlFor="update-profile-form-2">
+                          Nearest MRT Station
+                        </FormLabel>
+                        <TomSelect
+                          id="update-profile-form-2"
+                          value={select}
+                          onChange={setSelect}
+                          className="w-full"
+                        >
+                          <option value="1">Admiralty</option>
+                          <option value="2">Aljunied</option>
+                          <option value="3">Ang Mo Kio</option>
+                          <option value="4">Bartley</option>
+                          <option value="5">Beauty World</option>
+                        </TomSelect>
+                      </div>
+                    </div>
+                    <div className="col-span-12 2xl:col-span-6">
+                      <div className="mt-3 2xl:mt-0">
+                        <FormLabel htmlFor="update-profile-form-3">
+                          Postal Code
+                        </FormLabel>
+                        <TomSelect
+                          id="update-profile-form-3"
+                          value={select}
+                          onChange={setSelect}
+                          className="w-full"
+                        >
+                          <option value="1">
+                            018906 - 1 STRAITS BOULEVARD SINGA...
+                          </option>
+                          <option value="2">
+                            018910 - 5A MARINA GARDENS DRIVE...
+                          </option>
+                          <option value="3">
+                            018915 - 100A CENTRAL BOULEVARD...
+                          </option>
+                          <option value="4">
+                            018925 - 21 PARK STREET MARINA...
+                          </option>
+                          <option value="5">
+                            018926 - 23 PARK STREET MARINA...
+                          </option>
+                        </TomSelect>
+                      </div>
+                      <div className="mt-3">
+                        <FormLabel htmlFor="update-profile-form-4">
+                          Phone Number
+                        </FormLabel>
+                        <FormInput
+                          id="update-profile-form-4"
+                          type="text"
+                          placeholder="Input text"
+                          value="65570828"
+                          onChange={() => {}}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-span-12">
+                      <div className="mt-3">
+                        <FormLabel htmlFor="update-profile-form-5">
+                          Address
+                        </FormLabel>
+                        <FormTextarea
+                          id="update-profile-form-5"
+                          placeholder="Adress"
+                          value="10 Anson Road, International Plaza, #10-11, 079903
+                            Singapore, Singapore"
+                          onChange={() => {}}
+                        ></FormTextarea>
+                      </div>
+                    </div>
+                  </div>
+                  <Button variant="primary" type="button" className="w-20 mt-3">
+                    Save
+                  </Button>
+                </div>
+                <div className="mx-auto w-52 xl:mr-0 xl:ml-6">
+                  <div className="p-5 border-2 border-dashed rounded-md shadow-sm border-slate-200/60 dark:border-darkmode-400">
+                    <div className="relative h-40 mx-auto cursor-pointer image-fit zoom-in">
+                      <img
+                        className="rounded-md"
+                        alt=""
+                        src={fakerData[0].photos[0]}
+                      />
+                      <Tippy
+                        as="div"
+                        content="Remove this profile photo?"
+                        className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 -mt-2 -mr-2 text-white rounded-full bg-danger"
+                      >
+                        <Lucide icon="X" className="w-4 h-4" />
+                      </Tippy>
+                    </div>
+                    <div className="relative mx-auto mt-5 cursor-pointer">
+                      <Button
+                        variant="primary"
+                        type="button"
+                        className="w-full"
+                      >
+                        Change Photo
+                      </Button>
+                      <FormInput
+                        type="file"
+                        className="absolute top-0 left-0 w-full h-full opacity-0"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* END: Display Information */}
+          {/* BEGIN: Personal Information */}
+          <div className="mt-5 intro-y box">
+            <div className="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+              <h2 className="mr-auto text-base font-medium">
+                Personal Information
+              </h2>
+            </div>
+            <div className="p-5">
+              <div className="grid grid-cols-12 gap-x-5">
+                <div className="col-span-12 xl:col-span-6">
+                  <div>
+                    <FormLabel htmlFor="update-profile-form-6">Email</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      value={fakerData[0].users[0].email}
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                  <div className="mt-3">
+                    <FormLabel htmlFor="update-profile-form-7">Name</FormLabel>
+                    <FormInput
+                      id="update-profile-form-7"
+                      type="text"
+                      placeholder="Input text"
+                      value={fakerData[0].users[0].name}
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                  <div className="mt-3">
+                    <FormLabel htmlFor="update-profile-form-8">
+                      ID Type
+                    </FormLabel>
+                    <FormSelect id="update-profile-form-8">
+                      <option>IC</option>
+                      <option>FIN</option>
+                      <option>Passport</option>
+                    </FormSelect>
+                  </div>
+                  <div className="mt-3">
+                    <FormLabel htmlFor="update-profile-form-9">
+                      ID Number
+                    </FormLabel>
+                    <FormInput
+                      id="update-profile-form-9"
+                      type="text"
+                      placeholder="Input text"
+                      value="357821204950001"
+                      onChange={() => {}}
+                    />
+                  </div>
+                </div>
+                <div className="col-span-12 xl:col-span-6">
+                  <div className="mt-3 xl:mt-0">
+                    <FormLabel htmlFor="update-profile-form-10">
+                      Phone Number
+                    </FormLabel>
+                    <FormInput
+                      id="update-profile-form-10"
+                      type="text"
+                      placeholder="Input text"
+                      value="65570828"
+                      onChange={() => {}}
+                    />
+                  </div>
+                  <div className="mt-3">
+                    <FormLabel htmlFor="update-profile-form-11">
+                      Address
+                    </FormLabel>
+                    <FormInput
+                      id="update-profile-form-11"
+                      type="text"
+                      placeholder="Input text"
+                      value="10 Anson Road, International Plaza, #10-11, 079903 Singapore, Singapore"
+                      onChange={() => {}}
+                    />
+                  </div>
+                  <div className="mt-3">
+                    <FormLabel htmlFor="update-profile-form-12">
+                      Bank Name
+                    </FormLabel>
+                    <TomSelect
+                      id="update-profile-form-12"
+                      value={select}
+                      onChange={setSelect}
+                      className="w-full"
+                    >
+                      <option value="1">SBI - STATE BANK OF INDIA</option>
+                      <option value="2">CITI BANK - CITI BANK</option>
+                    </TomSelect>
+                  </div>
+                  <div className="mt-3">
+                    <FormLabel htmlFor="update-profile-form-13">
+                      Bank Account
+                    </FormLabel>
+                    <FormInput
+                      id="update-profile-form-13"
+                      type="text"
+                      placeholder="Input text"
+                      value="DBS Current 011-903573-0"
+                      onChange={() => {}}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-end mt-4">
+                <Button
+                  variant="primary"
+                  type="button"
+                  className="w-20 mr-auto"
+                >
+                  Save
+                </Button>
+                <a href="" className="flex items-center text-danger">
+                  <Lucide icon="Trash2" className="w-4 h-4 mr-1" /> Delete
+                  Account
+                </a>
+              </div>
+            </div>
+          </div>
+          {/* END: Personal Information */}
+        </div>
+      </div>
+    </>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               <Button type="button" variant="outline-secondary" onClick={() => {
                 setDialog(false);
               }}
@@ -565,8 +837,8 @@ function Main() {
                   />
                 }
               </Button>
-            </Dialog.Footer>
-          </form>
+           
+         
         </Dialog.Panel>
       </Dialog>
       {/* BEGIN: Delete Confirmation Modal */}

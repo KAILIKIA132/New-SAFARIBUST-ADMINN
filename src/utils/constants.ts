@@ -3,9 +3,10 @@
 export const BASE_URLS = 'http://localhost:8000/';
 
 export const BASE_URL = 'https://palla.techsavanna.technology/palla-api/api/';
+export const Login_URL =  'https://palla.techsavanna.technology:7000/fineract-provider/api/v1/authentication?username="admin"&password="password"&tenantIdentifier=default';
 
 //API Endpoints
-export const LOGIN = `${BASE_URLS}auth-service/auth/login`;
+export const LOGIN = `${Login_URL}`;
 export const REGISTER = `${BASE_URLS}auth-service/auth/users/add`;
 export const FORGOT_PASSWORD = `${BASE_URLS}send-password/`;
 export const CHANGE_PASSWORD = `${BASE_URLS}change-password`;

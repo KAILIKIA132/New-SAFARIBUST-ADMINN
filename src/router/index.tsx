@@ -33,6 +33,19 @@ import Accounts from "../pages/accounts";
 import Quotes from "../pages/quotes";
 import NewPolicy from "../pages/newPolicy";
 import Extension from "../pages/policyExtension";
+import Model from "../pages/model";
+import Valuers from "../pages/valuers";
+import ClaimActive from "../pages/ClaimActive";
+import ClaimPending from "../pages/ClaimPending";
+import ClaimRejected from "../pages/ClaimRejected";
+import AccountDetails from "../pages/accountDetails";
+
+
+
+
+
+
+
 
 
 
@@ -101,6 +114,11 @@ function Router() {
           element: <Financiers />,
         },
         {
+          path: "valuers",
+          element: <Valuers />,
+        },
+        
+        {
           path: "accounts",
           element: <Accounts />,
         },
@@ -115,6 +133,26 @@ function Router() {
         {
           path: "extension",
           element: <Extension />,
+        },
+        {
+          path: "model",
+          element: <Model/>,
+        },
+        {
+          path: "active",
+          element: <ClaimActive/>,
+        },
+        {
+          path: "pendingClaim",
+          element: <ClaimPending/>,
+        },
+        {
+          path: "rejectedClaim",
+          element: <ClaimRejected/>,
+        },
+        {
+          path: "accountDetails",
+          element: <AccountDetails/>,
         },
         
         {

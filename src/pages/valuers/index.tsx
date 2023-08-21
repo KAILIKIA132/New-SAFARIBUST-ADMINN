@@ -146,14 +146,14 @@ function Main() {
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Document types</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Valuers</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
           <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
             event.preventDefault();
             setDialog(true);
           }}>
-            Add New Document
+            Add New Valuer
           </Button>
           <Menu>
             <Menu.Button as={Button} className="px-2 !box">
@@ -205,7 +205,7 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Documents
+                Valuers
                 </Table.Th>
                 
               </Table.Tr>
@@ -316,7 +316,7 @@ function Main() {
           <form className="validate-form" onSubmit={onSubmit}>
             <Dialog.Title>
               <h2 className="mr-auto text-base font-medium">
-                New Document Type
+                New Valuer
               </h2>
               <a onClick={(event: React.MouseEvent) => {
                 event.preventDefault();
@@ -331,14 +331,14 @@ function Main() {
             <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
               <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
-                  Document
+                  Valuer
                 </FormLabel>
                 <FormInput
                   {...register("feature")}
                   type="text"
                   name="feature"
                   className={errors.feature ? "border-danger" : ''}
-                  placeholder="e.g KRA pin"
+                  placeholder="e.g Stanbic Bank"
                 />
                 {errors.feature && (
                   <div className="mt-2 text-danger">

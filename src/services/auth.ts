@@ -86,6 +86,23 @@ export async function getRoles() {
     }
 }
 
+export async function createRole(data: FieldValues) {
+    try {
+      let res = await axios.post(c.ROLES, data);
+      return res.data;
+    } catch (e) {
+      throw handler(e);
+    }
+  }
+
+export async function deleteRole(id: any) {
+    try {
+      let res = await axios.delete(c.ROLES + "/" + id);
+      return res.data;
+    } catch (e) {
+      throw handler(e);
+    }
+  }
 export async function signup(data: FieldValues) {
     try {
         let res = await axios.post(c.REGISTER, data);

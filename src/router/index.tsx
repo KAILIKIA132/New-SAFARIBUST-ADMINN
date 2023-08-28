@@ -29,7 +29,7 @@ import Vehicle from "../pages/vehicle";
 import Documents from "../pages/documents";
 import SecurityFeature from "../pages/security";
 import Financiers from "../pages/financiers";
-import Accounts from "../pages/accounts";
+// import Accounts from "../pages/accounts";
 import Quotes from "../pages/quotes";
 import NewPolicy from "../pages/newPolicy";
 import Extension from "../pages/policyExtension";
@@ -127,10 +127,10 @@ function Router() {
           element: <Valuers />,
         },
         
-        {
-          path: "accounts",
-          element: <Accounts />,
-        },
+        // {
+        //   path: "accounts",
+        //   element: <Accounts />,
+        // },
         {
           path: "quotes",
           element: <Quotes />,

@@ -50,6 +50,26 @@ function Main() {
     setEvents(res.events);
     setQuestions(res.questions);
   };
+
+  const [totalUsers, setTotalUsers] = useState<number | null>(null);
+
+  useEffect(() => {
+    getTotalUsers();
+  }, []);
+
+  const getTotalUsers = async () => {
+    try {
+      const page = 1; // Specify the page number or use a dynamic value
+      const data = { page };
+      const response = await ApiService.getUsers(data);
+      if (response && response.users) {
+        setTotalUsers(response.users.length);
+      }
+    } catch (error) {
+      console.error("Error fetching total number of users:", error);
+    }
+  };
+
   return (
     <>
       {/* BEGIN: Important Notes */}
@@ -79,9 +99,11 @@ function Main() {
                   </div>
                 </div>
                 <div className="mt-6 text-3xl font-medium leading-8">
-                  {stats.attendees}
+                  {/* {stats.attendees} */}
+                  {/* {totalUsers} */}
+                  {totalUsers !== null ? totalUsers : "Loading..."}
                 </div>
-                <div className="mt-1 text-base text-slate-500">Registered Customers</div>
+                <div className="mt-1 text-base text-slate-500">Registered Customers </div>
               </div>
             </Link>
           </div>
@@ -222,7 +244,7 @@ function Main() {
         {/* BEGIN: simcard stats */}
         <div className="col-span-12 sm:col-span-4 md:col-span-4 lg:col-span-4">
           <div className="flex h-10 intro-y">
-            <h2 className="mr-5 text-lg font-medium truncate">SIM Card Booking</h2>
+            <h2 className="mr-5 text-lg font-medium truncate">Customer Statisctics</h2>
           </div>
           <div className="p-5 mt-4 intro-y box padding-top:23 flex justify-center">
             <ReportDonutChart height={290} width={300} />
@@ -235,7 +257,7 @@ function Main() {
         <div className="col-span-12 sm:col-span-4 md:col-span-4 lg:col-span-4">
           <div className="flex h-10 intro-y">
             <h2 className="text-lg font-medium truncate">
-              System Users
+              Policy Statistics
             </h2>
           </div>
           <div className="p-5 mt-4 intro-y box padding-top:23 flex justify-center">
@@ -245,7 +267,7 @@ function Main() {
         {/* END: system users */}
 
         <div className="col-span-12 sm:col-span-4 md:col-span-4 lg:col-span-4">
-          <div className="h-12 flex intro-x">
+          {/* <div className="h-12 flex intro-x">
             <h2 className="mr-auto text-lg font-medium truncate">
               Important Announcements
             </h2>
@@ -265,7 +287,7 @@ function Main() {
             >
               <Lucide icon="ChevronRight" className="w-4 h-4" />
             </Button>
-          </div>
+          </div> */}
           <div className="intro-x">
             <div className="mt-2 intro-x ">
               <div className=" box zoom-in">
@@ -302,11 +324,11 @@ function Main() {
 
         {/* BEGIN: Recent Activities */}
         <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6">
-          <div className="flex h-10 intro-x">
+          {/* <div className="flex h-10 intro-x">
             <h2 className="mr-5 text-lg font-medium truncate">
               Recent Questions
             </h2>
-          </div>
+          </div> */}
           <div className="mt-5 relative before:block before:absolute before:w-px before:h-[85%] before:bg-slate-200 before:dark:bg-darkmode-400 before:ml-5 before:mt-5">
             {questions.map((question: any, key) => (
               <div
@@ -343,13 +365,13 @@ function Main() {
         {/* END: Recent Activities */}
         {/* BEGIN: Events */}
         <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6">
-          <div className="flex h-10 intro-x">
+          {/* <div className="flex h-10 intro-x">
             <h2 className="mr-5 text-lg font-medium truncate">
               Upcoming Events
             </h2>
 
             <Link to="/events"> Show More</Link>
-          </div>
+          </div> */}
           <Table className="border-spacing-y-[10px] border-separate mt-1 relative before:block before:absolute before:w-px before:h-[85%] before:bg-slate-200 before:dark:bg-darkmode-400 before:ml-5 before:mt-5">
             <Table.Tbody>
               {events &&

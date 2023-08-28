@@ -21,7 +21,7 @@ const Login = () => {
   const notify = useRef<NotificationElement>();
   const schema = yup
     .object({
-      username: yup.string().required().email(),
+      email: yup.string().required().email(),
       password: yup.string().required().min(4)
     }).required();
 
@@ -33,7 +33,6 @@ const Login = () => {
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
-
   });
 
   const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
@@ -45,7 +44,7 @@ const Login = () => {
         const data = await getValues();
         let res = await ApiService.login(data);
         isLoading(false);
-        await auth.signIn(res);
+        await auth.signIn(res.user);
         setSuccess(true);
         setMessage("Authenticated successfully");
         notify.current?.showToast();
@@ -72,10 +71,10 @@ const Login = () => {
           <div className="mt-8 intro-x">
             <div className="input-form">
               <FormInput
-                {...register("username")}
+                {...register("email")}
                 id="validation-form-2"
                 type="email"
-                name="username"
+                name="email"
                 className={errors.email ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
                 placeholder="Email"
               />

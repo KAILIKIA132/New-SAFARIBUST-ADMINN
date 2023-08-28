@@ -19,7 +19,7 @@ function Profile() {
 
   const getUser = async () => {
     try {
-      let res = await ApiService.login(location.state.id);
+      let res = await ApiService.getUser(location.state.id);
       setUser(res);
     } catch (error) {
       console.log("Error fetching user");
@@ -39,7 +39,7 @@ function Profile() {
               <img
                 alt=""
                 className="rounded-full"
-                src={user.photo}
+                src={user.profileImage}
               />
               <div className="absolute bottom-0 right-0 flex items-center justify-center p-2 mb-1 mr-1 rounded-full bg-primary">
                 <Lucide icon="Camera" className="w-4 h-4 text-white" />
@@ -47,10 +47,10 @@ function Profile() {
             </div>
             <div className="ml-5">
               <div className="w-24 text-lg font-medium truncate sm:w-40 sm:whitespace-normal">
-                {user.firstname + " " + user.lastname}
+                {user.firstName + " " + user.lastName}
               </div>
-              <div className="text-slate-500">{user.phone}</div>
-              <div className="text-slate-500">{user.phone}</div>
+              <div className="text-slate-500">{user.position}</div>
+              <div className="text-slate-500">{user.organization}</div>
             </div>
           </div>
           <div className="flex-1 px-5 pt-5 mt-6 border-t border-l border-r lg:mt-0 border-slate-200/60 dark:border-darkmode-400 lg:border-t-0 lg:pt-0">
@@ -58,13 +58,13 @@ function Profile() {
               Contact Details
             </div>
             <div className="flex flex-col items-center justify-center mt-4 lg:items-start">
-              <a href={user.phone} target="_blank" className="flex items-center truncate sm:whitespace-normal">
+              <a href={user.linkedin} target="_blank" className="flex items-center truncate sm:whitespace-normal">
                 <Lucide icon="Linkedin" className="w-4 h-4 mr-2" /> Linkedin
               </a>
-              <a href={user.occupation} target="_blank" className="flex items-center mt-3 truncate sm:whitespace-normal">
+              <a href={user.twitter} target="_blank" className="flex items-center mt-3 truncate sm:whitespace-normal">
                 <Lucide icon="Twitter" className="w-4 h-4 mr-2" /> Twitter
               </a>
-              <a href={user.occupation} target="_blank" className="flex items-center mt-3 truncate sm:whitespace-normal">
+              <a href={user.facebook} target="_blank" className="flex items-center mt-3 truncate sm:whitespace-normal">
                 <Lucide icon="Facebook" className="w-4 h-4 mr-2" /> Facebook
               </a>
             </div>
@@ -91,7 +91,7 @@ function Profile() {
                   id="update-profile-form-9"
                   type="text"
                   placeholder=""
-                  value={user.phone}
+                  value={user.country}
                   disabled
                 />
               </div>
@@ -105,7 +105,7 @@ function Profile() {
                   id="update-profile-form-10"
                   type="text"
                   placeholder="Phone number"
-                  value={user.occupation}
+                  value={user.phoneNumber}
                   disabled
                 />
               </div>
@@ -117,7 +117,7 @@ function Profile() {
                   id="update-profile-form-11"
                   type="text"
                   placeholder="City"
-                  value={user.occupation}
+                  value={user.city}
                   disabled
                 />
               </div>
@@ -134,7 +134,7 @@ function Profile() {
               <div className="text-slate-500">Verified and approved</div>
             </div>
             <FormSwitch className="ml-auto">
-              <FormSwitch.Input type="checkbox" checked={user.occupation} />
+              <FormSwitch.Input type="checkbox" checked={user.verified} />
             </FormSwitch>
           </div>
           <div className="flex items-center mt-5">
@@ -145,7 +145,7 @@ function Profile() {
               <div className="text-slate-500">Provided KYC Documents</div>
             </div>
             <FormSwitch className="ml-auto">
-              <FormSwitch.Input type="checkbox" checked={user.occupation} />
+              <FormSwitch.Input type="checkbox" checked={user.iskyc} />
             </FormSwitch>
           </div>
           <div className="flex items-center mt-5">
@@ -156,14 +156,14 @@ function Profile() {
               <div className="text-slate-500">Initial password has been changed</div>
             </div>
             <FormSwitch className="ml-auto">
-              <FormSwitch.Input type="checkbox" checked={user.occupation} />
+              <FormSwitch.Input type="checkbox" checked={user.isPasswordChanged} />
             </FormSwitch>
           </div>
         </div>
         <div className="p-5">
           {user?.interests.map((interest: any, key: any) => (
             <span key={key} className="px-2 py-1 mr-1 text-xs border rounded border-primary text-primary dark:border-primary">
-              {interest.occupation}
+              {interest.name}
             </span>
           ))}
         </div>

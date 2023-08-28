@@ -14,13 +14,14 @@ function Profile() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    getUser();
+  
+    getUserData();
   }, []);
 
-  const getUser = async () => {
+  const getUserData = async () => {
     try {
-      let res = await ApiService.login(location.state.id);
-      setUser(res);
+      let res = await ApiService.getUserData();
+      setUser(res.user);
     } catch (error) {
       console.log("Error fetching user");
     }
@@ -53,22 +54,7 @@ function Profile() {
               <div className="text-slate-500">{user.phone}</div>
             </div>
           </div>
-          <div className="flex-1 px-5 pt-5 mt-6 border-t border-l border-r lg:mt-0 border-slate-200/60 dark:border-darkmode-400 lg:border-t-0 lg:pt-0">
-            <div className="font-medium text-center lg:text-left lg:mt-3">
-              Contact Details
-            </div>
-            <div className="flex flex-col items-center justify-center mt-4 lg:items-start">
-              <a href={user.phone} target="_blank" className="flex items-center truncate sm:whitespace-normal">
-                <Lucide icon="Linkedin" className="w-4 h-4 mr-2" /> Linkedin
-              </a>
-              <a href={user.occupation} target="_blank" className="flex items-center mt-3 truncate sm:whitespace-normal">
-                <Lucide icon="Twitter" className="w-4 h-4 mr-2" /> Twitter
-              </a>
-              <a href={user.occupation} target="_blank" className="flex items-center mt-3 truncate sm:whitespace-normal">
-                <Lucide icon="Facebook" className="w-4 h-4 mr-2" /> Facebook
-              </a>
-            </div>
-          </div>
+         
         </div>
         <div className="p-5">
           <div className="grid grid-cols-12 gap-x-5">
@@ -126,47 +112,16 @@ function Profile() {
           </div>
         </div>
         <div className="p-5">
-          <div className="flex items-center">
-            <div className="pl-4 border-l-2 border-primary dark:border-primary">
-              <a href="" className="font-medium">
-                Verified
-              </a>
-              <div className="text-slate-500">Verified and approved</div>
-            </div>
-            <FormSwitch className="ml-auto">
-              <FormSwitch.Input type="checkbox" checked={user.occupation} />
-            </FormSwitch>
-          </div>
+          
+         
           <div className="flex items-center mt-5">
-            <div className="pl-4 border-l-2 border-primary dark:border-primary">
-              <a href="" className="font-medium">
-                KYC Documents
-              </a>
-              <div className="text-slate-500">Provided KYC Documents</div>
-            </div>
-            <FormSwitch className="ml-auto">
-              <FormSwitch.Input type="checkbox" checked={user.occupation} />
-            </FormSwitch>
-          </div>
-          <div className="flex items-center mt-5">
-            <div className="pl-4 border-l-2 border-primary dark:border-primary">
-              <a href="" className="font-medium">
-                Changed Password
-              </a>
-              <div className="text-slate-500">Initial password has been changed</div>
-            </div>
+          
             <FormSwitch className="ml-auto">
               <FormSwitch.Input type="checkbox" checked={user.occupation} />
             </FormSwitch>
           </div>
         </div>
-        <div className="p-5">
-          {user?.interests.map((interest: any, key: any) => (
-            <span key={key} className="px-2 py-1 mr-1 text-xs border rounded border-primary text-primary dark:border-primary">
-              {interest.occupation}
-            </span>
-          ))}
-        </div>
+     
       </>
       }
     </div>

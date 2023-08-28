@@ -9,11 +9,11 @@ import Exhibitors from "../pages/Exhibitors";
 import Conferences from "../pages/Conferences";
 import Themes from "../pages/Themes";
 import Events from "../pages/Events";
-import SimcardBooking from "../pages/SimcardBooking";
+// import SimcardBooking from "../pages/SimcardBooking";
 import Categories from "../pages/Categories";
 import ProductList from "../pages/ProductList";
 import TransactionList from "../pages/TransactionList";
-import Wallets from "../pages/Wallet";
+// import Wallets from "../pages/Wallet";
 import TransactionDetail from "../pages/TransactionDetail";
 import SellerDetail from "../pages/SellerDetail";
 import Users from "../pages/Users";
@@ -21,7 +21,7 @@ import Profile from "../pages/Profile";
 import Login from "../pages/Login";
 import ForgotPassword from "../pages/ForgotPassword";
 import ErrorPage from "../pages/ErrorPage";
-import UpdateProfile from "../pages/UpdateProfile";
+import UpdateProfile from "../pages/UpdateProfile/original";
 import ChangePassword from "../pages/ChangePassword";
 import AuthGuard from "../utils/route-guard/AuthGuard";
 import GuestGuard from "../utils/route-guard/GuestGuard";
@@ -39,6 +39,15 @@ import ClaimActive from "../pages/ClaimActive";
 import ClaimPending from "../pages/ClaimPending";
 import ClaimRejected from "../pages/ClaimRejected";
 import AccountDetails from "../pages/accountDetails";
+import Autocorrect from "../pages/qautocorrect";
+import Thirdparty from "../pages/qthird_party";
+import Theft from "../pages/qtheft_party";
+import Contents from "../pages/contents";
+import CoversFAQs from "../pages/coverFAQs";
+
+
+
+
 
 
 
@@ -77,14 +86,14 @@ function Router() {
           path: "product-list",
           element: <ProductList />,
         },
-        {
-          path: "simcards",
-          element: <SimcardBooking />,
-        },
-        {
-          path: "wallets",
-          element: <Wallets />,
-        },
+        // {
+        //   path: "simcards",
+        //   element: <SimcardBooking />,
+        // },
+        // {
+        //   path: "wallets",
+        //   element: <Wallets />,
+        // },
         {
           path: "transaction-list",
           element: <TransactionList />,
@@ -154,6 +163,27 @@ function Router() {
           path: "accountDetails",
           element: <AccountDetails/>,
         },
+        {
+          path: "Autocorrect",
+          element: <Autocorrect/>,
+        },
+        {
+          path: "Thirdparty",
+          element: <Thirdparty/>,
+        },
+        {
+          path: "Theft",
+          element: <Theft/>,
+        },
+        {
+          path: "Contents",
+          element: <Contents/>,
+        },
+        {
+          path: "CoversFAQs",
+          element: <CoversFAQs/>,
+        },
+        
         
         {
           path: "speakers",

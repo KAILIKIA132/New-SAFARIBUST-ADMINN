@@ -35,7 +35,7 @@ function Main() {
   const deleteButtonRef = useRef(null);
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [userId, setUserId] = useState(null);
+  const [financierId, setFinancierId] = useState(null);
   const [conferences, setConferences] = useState([]);
   const [pagination, setPagination] = useState({ current_page: 1, total: 1, total_pages: 1, per_page: 1 });
   const [page, setPage] = useState(1);
@@ -49,11 +49,7 @@ function Main() {
   const notify = useRef<NotificationElement>();
   const schema = yup
     .object({
-      tenant: yup.string().required("Conference is required"),
-      role: yup.string().required("Role is required"),
-      firstName: yup.string().required("First name is required"),
-      lastName: yup.string().required("Last name is required"),
-      email: yup.string().required("Email is required").email("Email must be a valid")
+      name: yup.string().required("Financier name is required"),
     }).required();
 
   const {
@@ -68,16 +64,17 @@ function Main() {
   });
 
   useEffect(() => {
-    getUsers();
+    getFinancier();
     // getRoles();
     // getConferences();
   }, []);
 
-  const getUsers = async () => {
+  const getFinancier = async () => {
     isLoading(true);
     try {
-      let res = await ApiService.getUsers({ page: 1 });
-      setUsers(res);
+      let res = await ApiService.getFinancier({ page: 1 });
+      // setUsers(res);
+      setUsers(res.financiers);
       console.log(res);
       isLoading(false);
       setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
@@ -100,6 +97,34 @@ function Main() {
   //   setPagination({ current_page: res.current_page, total: res.total, total_pages: res.total_pages, per_page: res.per_page });
   // };
 
+  // const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const result = await trigger();
+  //   if (result && !loading) {
+  //     isLoading(true);
+  //     try {
+  //       const data = await getValues();
+  //       // data.tenant = "64b199727fe94a1ea97a64cd";
+  //       let res = await ApiService.addFinanciers(data);
+  //       getFinancier();
+  //       await reset();
+  //       isLoading(false);
+  //       setDialog(false);
+  //       setSuccess(true);
+  //       setMessage(res.message);
+  //       notify.current?.showToast();
+  //     } catch (error: any) {
+  //       isLoading(false);
+  //       setSuccess(false);
+  //       setMessage(error.message);
+  //       notify.current?.showToast();
+  //     }
+  //   }
+
+  // };
+
+
+
   const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await trigger();
@@ -107,9 +132,9 @@ function Main() {
       isLoading(true);
       try {
         const data = await getValues();
-        // data.tenant = "64b199727fe94a1ea97a64cd";
-        let res = await ApiService.signup(data);
-        getUsers();
+        console.log(data);
+        let res = await ApiService.addFinanciers(data);
+        getFinancier();
         await reset();
         isLoading(false);
         setDialog(false);
@@ -126,11 +151,18 @@ function Main() {
 
   };
 
+
+
+
+
+
+
+  
   const deleteRecord = async () => {
     isLoading(true);
     try {
-      let res = await ApiService.deleteUser(userId);
-      getUsers();
+      let res = await ApiService.deleteFinancier(financierId);
+      getFinancier();
       isLoading(false);
       setConfirmDelete(false);
       setSuccess(true);
@@ -221,7 +253,7 @@ function Main() {
                       
                       <div className="ml-4">
                         <a href="" className="font-medium whitespace-nowrap">
-                          {user.firstname + " " + user.lastname}
+                          {user.name + " " + user.name}
                         </a>
                         
                       </div>
@@ -253,7 +285,7 @@ function Main() {
                             <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Edit
                           </Menu.Item>
                           <Menu.Item onClick={() => {
-                            setUserId(user.id),
+                            setFinancierId(user.id),
                               setConfirmDelete(true);
                           }}>
                             <Lucide icon="Trash" className="w-4 h-4 mr-2" /> Delete
@@ -289,13 +321,13 @@ function Main() {
         {/* BEGIN: Pagination */}
         <div className="flex flex-wrap items-center col-span-12 intro-y sm:flex-row sm:flex-nowrap">
           <Pagination className="w-full sm:w-auto sm:mr-auto">
-            <Pagination.Link onClick={() => (setPage(previous_page), getUsers())} >
+            <Pagination.Link onClick={() => (setPage(previous_page), getFinancier())} >
               <Lucide icon="ChevronLeft" className="w-4 h-4" />
             </Pagination.Link>
             {_.times(pagination.total_pages).map((page, key) => (
-              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getUsers())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getUsers())} key={key}>{page + 1}</Pagination.Link>
+              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getFinancier())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getFinancier())} key={key}>{page + 1}</Pagination.Link>
             ))}
-            <Pagination.Link onClick={() => (setPage(next_page), getUsers())} >
+            <Pagination.Link onClick={() => (setPage(next_page), getFinancier())} >
               <Lucide icon="ChevronRight" className="w-4 h-4" />
             </Pagination.Link>
           </Pagination>
@@ -318,13 +350,10 @@ function Main() {
               <h2 className="mr-auto text-base font-medium">
                 New Finacier
               </h2>
-              <a onClick={(event: React.MouseEvent) => {
-                event.preventDefault();
-                setDialog(false);
-              }}
-                className="absolute top-0 right-0 mt-3 mr-3"
-                href="#"
-              >
+              <a onClick={(event: React.MouseEvent) => { event.preventDefault(); reset({ name: "" }); setDialog(false); }}
+              className="absolute top-0 right-0 mt-3 mr-3"
+              href="#"
+            >
                 <Lucide icon="X" className="w-8 h-8 text-slate-400" />
               </a>
             </Dialog.Title>
@@ -334,16 +363,16 @@ function Main() {
                   Financier
                 </FormLabel>
                 <FormInput
-                  {...register("feature")}
+                  {...register("name")}
                   type="text"
-                  name="feature"
-                  className={errors.feature ? "border-danger" : ''}
+                  name="name"
+                  className={errors.name ? "border-danger" : ''}
                   placeholder="e.g Stanbic Bank"
                 />
-                {errors.feature && (
+                {errors.name && (
                   <div className="mt-2 text-danger">
-                    {typeof errors.feature.message === "string" &&
-                      errors.feature.message}
+                    {typeof errors.name.message === "string" &&
+                      errors.name.message}
                   </div>
                 )}
               </div>
@@ -351,9 +380,10 @@ function Main() {
              
             </Dialog.Description>
             <Dialog.Footer>
-              <Button type="button" variant="outline-secondary" onClick={() => {
-                setDialog(false);
-              }}
+            
+
+<Button type="button" variant="outline-secondary" onClick={() => (
+  reset({ name: "" }), setDialog(false))}
                 className="w-20 mr-1"
               >
                 Cancel

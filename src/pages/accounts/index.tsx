@@ -21,6 +21,7 @@ import {
   FormTextarea,
 } from "../../base-components/Form";
 import TomSelect from "../../base-components/TomSelect";
+import { User } from './types';
 
 
 function Main() {
@@ -40,7 +41,7 @@ function Main() {
   const [dialog, setDialog] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteButtonRef = useRef(null);
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [userId, setUserId] = useState(null);
   const [conferences, setConferences] = useState([]);
@@ -51,7 +52,12 @@ function Main() {
   const [loading, isLoading] = useState(false);
   const [success, setSuccess] = useState(true);
   const [message, setMessage] = useState("");
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  // const [selectedUserId, setSelectedUserId] = useState(null);
+
+  
+  const [users, setUsers] = useState<User[]>([]); // Initialize with appropriate type
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+
 
 
   // Success notification
@@ -89,7 +95,7 @@ function Main() {
     isLoading(true);
     try {
       let res = await ApiService.getUsers({ page: 1 });
-      setUsers(res);
+      setUsers(res.users);
       console.log(res);
       isLoading(false);
       setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
@@ -158,15 +164,15 @@ function Main() {
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Speakers</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">CLIENTS</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
-          <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
+          {/* <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
             event.preventDefault();
             setDialog(true);
           }}>
             New Speaker
-          </Button>
+          </Button> */}
           <Menu>
             <Menu.Button as={Button} className="px-2 !box">
               <span className="flex items-center justify-center w-5 h-5">
@@ -219,8 +225,11 @@ function Main() {
                 <Table.Th className="border-b-0 whitespace-nowrap">
                 First Name
                 </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
+                {/* <Table.Th className="border-b-0 whitespace-nowrap">
                 Middle Name
+                </Table.Th> */}
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                Last Name
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   PHONE
@@ -232,36 +241,17 @@ function Main() {
                 NATIONALITY
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                  GENDER
+                  STATUS
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                  MARITAL STATUS
+                  ACTION
                 </Table.Th>
 
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  NATIONAL ID NUMBER
-                </Table.Th>
-                
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  KRA PIN
-                </Table.Th>
                
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  ALLIEN ID NUMBER
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  EXPIRY DATE
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                D.O.B
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  TAX REGISTRATION NUMBER
-                </Table.Th>
-
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  ACTIONS
-                </Table.Th>
+               
+              
+              
+               
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -273,11 +263,12 @@ function Main() {
                 event.preventDefault();
                 setSelectedUserId(user.id);
                 setDialog(true);
+
+
+  
               }}
             >
 
-
-                  
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <FormCheck.Input type="checkbox" />
                   </Table.Td>
@@ -293,26 +284,30 @@ function Main() {
                         />
                       </div>
                       <div className="ml-4">
-                        <a href="" className="font-medium whitespace-nowrap">
+                        {/* <a href="" className="font-medium whitespace-nowrap">
                           {user.firstname + " " + user.lastname}
-                        </a>
+                        </a> */}
                         {/* <div className="text-slate-500 text-xs whitespace-nowrap mt-0.5">
                           {user.role.role}
                         </div> */}
+                        {user.firstname}
                       </div>
                     </div>
                   </Table.Td>
+                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.middlename}
+                  </Table.Td> */}
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.Business_type}
+                    {user.lastname}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.phone}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.Business_type}
+                    {user.email}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.firstname}
+                    {user.nationality}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div
@@ -418,126 +413,213 @@ function Main() {
 
         <>
       <div className="flex items-center mt-8 intro-y">
-        <h2 className="mr-auto text-lg font-medium">Update Profile</h2>
+        <h2 className="mr-auto text-lg font-medium">Account details</h2>
       </div>
       <div className="grid grid-cols-12 gap-6">
-        {/* BEGIN: Profile Menu */}
-        <div className="flex flex-col-reverse col-span-12 lg:col-span-4 2xl:col-span-3 lg:block">
-          <div className="mt-5 intro-y box">
-            <div className="relative flex items-center p-5">
-              <div className="w-12 h-12 image-fit">
-                <img
-                  alt=""
-                  className="rounded-full"
-                  src={fakerData[0].photos[0]}
-                />
-              </div>
-              <div className="ml-4 mr-auto">
-                <div className="text-base font-medium">
-                  {fakerData[0].users[0].name}
-                </div>
-                <div className="text-slate-500">{fakerData[0].jobs[0]}</div>
-              </div>
-              <Menu>
-                <Menu.Button as="a" className="block w-5 h-5">
-                  <Lucide
-                    icon="MoreHorizontal"
-                    className="w-5 h-5 text-slate-500"
+       
+        <div className="col-span-12 lg:col-span-8 2xl:col-span-9">
+          
+          {/* BEGIN: Display Information */}
+
+{/* BEGIN: Personal Information */}
+<div className="mt-5 intro-y box">
+            <div className="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+              <h2 className="mr-auto text-base font-medium">
+                Personal Information
+              </h2>
+            </div>
+            <div className="p-5">
+              <div className="grid grid-cols-12 gap-x-5">
+                <div className="col-span-12 xl:col-span-6">
+                  <div>
+                  
+                    <FormLabel htmlFor="update-profile-form-6">first  name</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      value={selectedUserId ? users.find(user => user.id === selectedUserId)?.firstname || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                  <div>
+                  
+                  <FormLabel htmlFor="update-profile-form-6">middle name</FormLabel>
+                  <FormInput
+                    id="update-profile-form-6"
+                    type="text"
+                    placeholder="Input text"
+                    value={selectedUserId ? users.find(user => user.id === selectedUserId)?.middlename || "" : ""}
+         
+                    onChange={() => {}}
+                    disabled
+                  />   
+                   <FormLabel htmlFor="update-profile-form-6">last name</FormLabel>
+                  <FormInput
+                    id="update-profile-form-6"
+                    type="text"
+                    placeholder="Input text"
+                    value={selectedUserId ? users.find(user => user.id === selectedUserId)?.lastname || "" : ""}
+         
+                    onChange={() => {}}
+                    disabled
                   />
-                </Menu.Button>
-                <Menu.Items className="w-56">
-                  <Menu.Header> Export Options</Menu.Header>
-                  <Menu.Divider />
-                  <Menu.Item>
-                    <Lucide icon="Activity" className="w-4 h-4 mr-2" />
-                    English
-                  </Menu.Item>
-                  <Menu.Item>
-                    <Lucide icon="Box" className="w-4 h-4 mr-2" />
-                    Indonesia
-                    <div className="px-1 ml-auto text-xs text-white rounded-full bg-danger">
-                      10
-                    </div>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <Lucide icon="Layout" className="w-4 h-4 mr-2" />
-                    English
-                  </Menu.Item>
-                  <Menu.Item>
-                    <Lucide icon="Sidebar" className="w-4 h-4 mr-2" />
-                    Indonesia
-                  </Menu.Item>
-                  <Menu.Divider />
-                  <Menu.Footer>
-                    <Button
-                      variant="primary"
-                      type="button"
-                      className="px-2 py-1"
-                    >
-                      Settings
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      type="button"
-                      className="px-2 py-1 ml-auto"
-                    >
-                      View Profile
-                    </Button>
-                  </Menu.Footer>
-                </Menu.Items>
-              </Menu>
-            </div>
-            <div className="p-5 border-t border-slate-200/60 dark:border-darkmode-400">
-              <a className="flex items-center font-medium text-primary" href="">
-                <Lucide icon="Activity" className="w-4 h-4 mr-2" /> Personal
-                Information
-              </a>
-              <a className="flex items-center mt-5" href="">
-                <Lucide icon="Box" className="w-4 h-4 mr-2" /> Account Settings
-              </a>
-              <a className="flex items-center mt-5" href="">
-                <Lucide icon="Lock" className="w-4 h-4 mr-2" /> Change Password
-              </a>
-              <a className="flex items-center mt-5" href="">
-                <Lucide icon="Settings" className="w-4 h-4 mr-2" /> User
-                Settings
-              </a>
-            </div>
-            <div className="p-5 border-t border-slate-200/60 dark:border-darkmode-400">
-              <a className="flex items-center" href="">
-                <Lucide icon="Activity" className="w-4 h-4 mr-2" /> Email
-                Settings
-              </a>
-              <a className="flex items-center mt-5" href="">
-                <Lucide icon="Box" className="w-4 h-4 mr-2" /> Saved Credit
-                Cards
-              </a>
-              <a className="flex items-center mt-5" href="">
-                <Lucide icon="Lock" className="w-4 h-4 mr-2" /> Social Networks
-              </a>
-              <a className="flex items-center mt-5" href="">
-                <Lucide icon="Settings" className="w-4 h-4 mr-2" /> Tax
-                Information
-              </a>
-            </div>
-            <div className="flex p-5 border-t border-slate-200/60 dark:border-darkmode-400">
-              <Button variant="primary" type="button" className="px-2 py-1">
-                New Group
-              </Button>
-              <Button
-                variant="outline-secondary"
-                type="button"
-                className="px-2 py-1 ml-auto"
-              >
-                New Quick Link
-              </Button>
+                  
+                  <FormLabel htmlFor="update-profile-form-6">Document Type</FormLabel>
+                  <FormInput
+                    id="update-profile-form-6"
+                    type="text"
+                    placeholder="Input text"
+                    value={selectedUserId ? users.find(user => user.id === selectedUserId)?.document_type || "" : ""}
+         
+                    onChange={() => {}}
+                    disabled
+                  />
+                  <FormLabel htmlFor="update-profile-form-6">ID Number</FormLabel>
+                  <FormInput
+                    id="update-profile-form-6"
+                    type="text"
+                    placeholder="Input text"
+                    value={selectedUserId ? users.find(user => user.id === selectedUserId)?.document_number || "" : ""}
+         
+                    onChange={() => {}}
+                    disabled
+                  />
+                  <FormLabel htmlFor="update-profile-form-6">Nationality</FormLabel>
+                  <FormInput
+                    id="update-profile-form-6"
+                    type="text"
+                    placeholder="Input text"
+                    value={selectedUserId ? users.find(user => user.id === selectedUserId)?.nationality || "" : ""}
+         
+                    onChange={() => {}}
+                    disabled
+                  />
+                  
+
+
+                  <FormLabel htmlFor="update-profile-form-7">Gender</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      value={selectedUserId ? users.find(user => user.id === selectedUserId)?.gender || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                 
+
+
+
+                </div>
+                
+                 
+              
+                </div>
+                <div className="col-span-12 xl:col-span-6">
+                  <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">Phone Number</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      value={selectedUserId ? users.find(user => user.id === selectedUserId)?.phone || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+
+                  <div className="mt-3">
+                    <FormLabel htmlFor="update-profile-form-7">Email</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      value={selectedUserId ? users.find(user => user.id === selectedUserId)?.email || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                    
+                  </div>
+                 
+
+                  <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">Marital status</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      value={selectedUserId ? users.find(user => user.id === selectedUserId)?.maritalStatus || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                  <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">Occupation</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      value={selectedUserId ? users.find(user => user.id === selectedUserId)?.occupation || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                  <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">Source of income</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      value={selectedUserId ? users.find(user => user.id === selectedUserId)?.sourceOfIncome || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                  <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">County</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      value={selectedUserId ? users.find(user => user.id === selectedUserId)?.county || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                  <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">Town</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      value={selectedUserId ? users.find(user => user.id === selectedUserId)?.town || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                
+              </div>
+             
             </div>
           </div>
-        </div>
-        {/* END: Profile Menu */}
-        <div className="col-span-12 lg:col-span-8 2xl:col-span-9">
-          {/* BEGIN: Display Information */}
-          <div className="intro-y box lg:mt-5">
+          {/* END: Personal Information */}
+
+
+
+          {/* <div className="intro-y box lg:mt-5">
             <div className="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
               <h2 className="mr-auto text-base font-medium">
                 Display Information
@@ -548,19 +630,19 @@ function Main() {
                 <div className="flex-1 mt-6 xl:mt-0">
                   <div className="grid grid-cols-12 gap-x-5">
                     <div className="col-span-12 2xl:col-span-6">
-                      <div>
-                        <FormLabel htmlFor="update-profile-form-1">
-                          Display Name
-                        </FormLabel>
-                        <FormInput
-                          id="update-profile-form-1"
-                          type="text"
-                          placeholder="Input text"
-                          value={fakerData[0].users[0].name}
-                          onChange={() => {}}
-                          disabled
-                        />
-                      </div>
+                   
+                      <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">First Name</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      value={selectedUserId ? users.find(user => user.id === selectedUserId)?.town || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
                       <div className="mt-3">
                         <FormLabel htmlFor="update-profile-form-2">
                           Nearest MRT Station
@@ -672,132 +754,9 @@ function Main() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           {/* END: Display Information */}
-          {/* BEGIN: Personal Information */}
-          <div className="mt-5 intro-y box">
-            <div className="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
-              <h2 className="mr-auto text-base font-medium">
-                Personal Information
-              </h2>
-            </div>
-            <div className="p-5">
-              <div className="grid grid-cols-12 gap-x-5">
-                <div className="col-span-12 xl:col-span-6">
-                  <div>
-                    <FormLabel htmlFor="update-profile-form-6">Email</FormLabel>
-                    <FormInput
-                      id="update-profile-form-6"
-                      type="text"
-                      placeholder="Input text"
-                      value={fakerData[0].users[0].email}
-                      onChange={() => {}}
-                      disabled
-                    />
-                  </div>
-                  <div className="mt-3">
-                    <FormLabel htmlFor="update-profile-form-7">Name</FormLabel>
-                    <FormInput
-                      id="update-profile-form-7"
-                      type="text"
-                      placeholder="Input text"
-                      value={fakerData[0].users[0].name}
-                      onChange={() => {}}
-                      disabled
-                    />
-                  </div>
-                  <div className="mt-3">
-                    <FormLabel htmlFor="update-profile-form-8">
-                      ID Type
-                    </FormLabel>
-                    <FormSelect id="update-profile-form-8">
-                      <option>IC</option>
-                      <option>FIN</option>
-                      <option>Passport</option>
-                    </FormSelect>
-                  </div>
-                  <div className="mt-3">
-                    <FormLabel htmlFor="update-profile-form-9">
-                      ID Number
-                    </FormLabel>
-                    <FormInput
-                      id="update-profile-form-9"
-                      type="text"
-                      placeholder="Input text"
-                      value="357821204950001"
-                      onChange={() => {}}
-                    />
-                  </div>
-                </div>
-                <div className="col-span-12 xl:col-span-6">
-                  <div className="mt-3 xl:mt-0">
-                    <FormLabel htmlFor="update-profile-form-10">
-                      Phone Number
-                    </FormLabel>
-                    <FormInput
-                      id="update-profile-form-10"
-                      type="text"
-                      placeholder="Input text"
-                      value="65570828"
-                      onChange={() => {}}
-                    />
-                  </div>
-                  <div className="mt-3">
-                    <FormLabel htmlFor="update-profile-form-11">
-                      Address
-                    </FormLabel>
-                    <FormInput
-                      id="update-profile-form-11"
-                      type="text"
-                      placeholder="Input text"
-                      value="10 Anson Road, International Plaza, #10-11, 079903 Singapore, Singapore"
-                      onChange={() => {}}
-                    />
-                  </div>
-                  <div className="mt-3">
-                    <FormLabel htmlFor="update-profile-form-12">
-                      Bank Name
-                    </FormLabel>
-                    <TomSelect
-                      id="update-profile-form-12"
-                      value={select}
-                      onChange={setSelect}
-                      className="w-full"
-                    >
-                      <option value="1">SBI - STATE BANK OF INDIA</option>
-                      <option value="2">CITI BANK - CITI BANK</option>
-                    </TomSelect>
-                  </div>
-                  <div className="mt-3">
-                    <FormLabel htmlFor="update-profile-form-13">
-                      Bank Account
-                    </FormLabel>
-                    <FormInput
-                      id="update-profile-form-13"
-                      type="text"
-                      placeholder="Input text"
-                      value="DBS Current 011-903573-0"
-                      onChange={() => {}}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex justify-end mt-4">
-                <Button
-                  variant="primary"
-                  type="button"
-                  className="w-20 mr-auto"
-                >
-                  Save
-                </Button>
-                <a href="" className="flex items-center text-danger">
-                  <Lucide icon="Trash2" className="w-4 h-4 mr-1" /> Delete
-                  Account
-                </a>
-              </div>
-            </div>
-          </div>
-          {/* END: Personal Information */}
+          
         </div>
       </div>
     </>
@@ -827,7 +786,7 @@ function Main() {
               >
                 Cancel
               </Button>
-              <Button variant="primary" type="submit" className="w-20">
+              {/* <Button variant="primary" type="submit" className="w-20">
                 Save
                 {
                   loading && <LoadingIcon
@@ -837,7 +796,7 @@ function Main() {
                   />
                 }
               </Button>
-           
+            */}
          
         </Dialog.Panel>
       </Dialog>

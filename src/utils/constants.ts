@@ -1,25 +1,36 @@
 
 //API URL
-export const BASE_URLS = 'http://localhost:8000/';
+// export const BASE_URLS = 'http://localhost:8000/';
 
-export const BASE_URL = 'https://palla.techsavanna.technology/palla-api/api/';
-export const Login_URL =  'https://palla.techsavanna.technology:7000/fineract-provider/api/v1/authentication?username="admin"&password="password"&tenantIdentifier=default';
-
+// export const BASE_URL = 'https://palla.techsavanna.technology/palla-api/api/';
+// export const Login_URL =  'https://palla.techsavanna.technology:7000/fineract-provider/api/v1/authentication?username="admin"&password="password"&tenantIdentifier=default';
+ 
+export const BASE_URL='http://35.170.8.156:8080/api/'
 //API Endpoints
-export const LOGIN = `${Login_URL}`;
-export const REGISTER = `${BASE_URLS}auth-service/auth/users/add`;
-export const FORGOT_PASSWORD = `${BASE_URLS}send-password/`;
-export const CHANGE_PASSWORD = `${BASE_URLS}change-password`;
-export const ROLES = `${BASE_URLS}auth-service/auth/roles`;
-export const CONFERENCES = `${BASE_URLS}events-service/conference`;
-export const THEMES = `${BASE_URLS}events-service/theme`;
-export const EVENTS = `${BASE_URLS}events-service/event`;
-export const DASHBOARD = `${BASE_URLS}events-service/event/dashboard`;
-export const USERS = `${BASE_URL}completed`;
+export const LOGIN = `${BASE_URL}login`;
+export const REGISTER = `${BASE_URL}auth-service/auth/users/add`;
+export const FORGOT_PASSWORD = `${BASE_URL}send-password/`;
+export const CHANGE_PASSWORD = `${BASE_URL}change-password`;
+export const ROLES = `${BASE_URL}auth-service/auth/roles`;
+export const CONFERENCES = `${BASE_URL}events-service/conference`;
+export const THEMES = `${BASE_URL}events-service/theme`;
+export const EVENTS = `${BASE_URL}events-service/event`;
+export const DASHBOARD = `${BASE_URL}events-service/event/dashboard`;
+export const USERS = `${BASE_URL}users`;
+export const MAKES = `${BASE_URL}vehicle/makes`;
+export const VALUERS = `${BASE_URL}vehicle/valuers`;
+export const SECURITY_FEATURES = `${BASE_URL}vehicle/security_features`;
+export const FINANCIERS = `${BASE_URL}vehicle/financiers`;
+
+
+
+
+
+
 //Simcards Endpoints
-export const SIMCARDS = `${BASE_URLS}simcard-service/simcards`;
+export const SIMCARDS = `${BASE_URL}simcard-service/simcards`;
 
 
 //Payments Endpoints
-export const WALLETS = `${BASE_URLS}payments-service/wallets`;
-export const TRANSACTIONS = `${BASE_URLS}payments-service/transactions`; 
+export const WALLETS = `${BASE_URL}payments-service/wallets`;
+export const TRANSACTIONS = `${BASE_URL}payments-service/transactions`; 

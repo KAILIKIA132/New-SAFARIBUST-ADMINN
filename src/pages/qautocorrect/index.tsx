@@ -146,7 +146,7 @@ function Main() {
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Private Comprehensive Cover</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Autocorrect Cover</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
           <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {

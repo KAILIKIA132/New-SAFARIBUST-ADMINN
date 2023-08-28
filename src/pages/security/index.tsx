@@ -33,9 +33,9 @@ function Main() {
   const [dialog, setDialog] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteButtonRef = useRef(null);
-  const [users, setUsers] = useState([]);
+  const [security, setSecurity] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [userId, setUserId] = useState(null);
+  const [securityId, setSecurityId] = useState(null);
   const [conferences, setConferences] = useState([]);
   const [pagination, setPagination] = useState({ current_page: 1, total: 1, total_pages: 1, per_page: 1 });
   const [page, setPage] = useState(1);
@@ -49,11 +49,8 @@ function Main() {
   const notify = useRef<NotificationElement>();
   const schema = yup
     .object({
-      tenant: yup.string().required("Conference is required"),
-      role: yup.string().required("Role is required"),
-      firstName: yup.string().required("First name is required"),
-      lastName: yup.string().required("Last name is required"),
-      email: yup.string().required("Email is required").email("Email must be a valid")
+      name: yup.string().required("Security Feature is required"),
+
     }).required();
 
   const {
@@ -68,16 +65,16 @@ function Main() {
   });
 
   useEffect(() => {
-    getUsers();
+    getSecurity();
     // getRoles();
     // getConferences();
   }, []);
 
-  const getUsers = async () => {
+  const getSecurity = async () => {
     isLoading(true);
     try {
-      let res = await ApiService.getUsers({ page: 1 });
-      setUsers(res);
+      let res = await ApiService.getSecurity({ page: 1 });
+      setSecurity(res.securityFeatures);
       console.log(res);
       isLoading(false);
       setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
@@ -108,8 +105,8 @@ function Main() {
       try {
         const data = await getValues();
         // data.tenant = "64b199727fe94a1ea97a64cd";
-        let res = await ApiService.signup(data);
-        getUsers();
+        let res = await ApiService.addSecurity(data);
+        getSecurity();
         await reset();
         isLoading(false);
         setDialog(false);
@@ -129,8 +126,8 @@ function Main() {
   const deleteRecord = async () => {
     isLoading(true);
     try {
-      let res = await ApiService.deleteUser(userId);
-      getUsers();
+      let res = await ApiService.deleteSecurity(securityId);
+      getSecurity();
       isLoading(false);
       setConfirmDelete(false);
       setSuccess(true);
@@ -211,7 +208,7 @@ function Main() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {users.map((user: any, key) => (
+              {security.map((user: any, key) => (
                 <Table.Tr key={key} className="intro-x">
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <FormCheck.Input type="checkbox" />
@@ -221,7 +218,7 @@ function Main() {
                       
                       <div className="ml-4">
                         <a href="" className="font-medium whitespace-nowrap">
-                          {user.firstname + " " + user.lastname}
+                          {user.name}
                         </a>
                         
                       </div>
@@ -232,12 +229,12 @@ function Main() {
                     <div
                       className={clsx([
                         "flex items-center justify-center",
-                        { "text-success": user.approval_status },
-                        { "text-danger": !user.approval_status },
+                        { "text-success": user.name },
+                        { "text-danger": !user.name },
                       ])}
                     >
-                      <Lucide icon={user.approval_status ? "CheckSquare" : "XSquare"} className="w-4 h-4 mr-2" />
-                      {user.approval_status ? "Active" : "Inactive"}
+                      {/* <Lucide icon={user.approval_status ? "CheckSquare" : "XSquare"} className="w-4 h-4 mr-2" />
+                      {user.approval_status ? "Active" : "Inactive"} */}
                     </div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
@@ -253,7 +250,7 @@ function Main() {
                             <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Edit
                           </Menu.Item>
                           <Menu.Item onClick={() => {
-                            setUserId(user.id),
+                            setSecurityId(user.id),
                               setConfirmDelete(true);
                           }}>
                             <Lucide icon="Trash" className="w-4 h-4 mr-2" /> Delete
@@ -289,13 +286,13 @@ function Main() {
         {/* BEGIN: Pagination */}
         <div className="flex flex-wrap items-center col-span-12 intro-y sm:flex-row sm:flex-nowrap">
           <Pagination className="w-full sm:w-auto sm:mr-auto">
-            <Pagination.Link onClick={() => (setPage(previous_page), getUsers())} >
+            <Pagination.Link onClick={() => (setPage(previous_page), getSecurity())} >
               <Lucide icon="ChevronLeft" className="w-4 h-4" />
             </Pagination.Link>
             {_.times(pagination.total_pages).map((page, key) => (
-              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getUsers())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getUsers())} key={key}>{page + 1}</Pagination.Link>
+              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getSecurity())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getSecurity())} key={key}>{page + 1}</Pagination.Link>
             ))}
-            <Pagination.Link onClick={() => (setPage(next_page), getUsers())} >
+            <Pagination.Link onClick={() => (setPage(next_page), getSecurity())} >
               <Lucide icon="ChevronRight" className="w-4 h-4" />
             </Pagination.Link>
           </Pagination>
@@ -318,13 +315,11 @@ function Main() {
               <h2 className="mr-auto text-base font-medium">
                 New Security Feature
               </h2>
-              <a onClick={(event: React.MouseEvent) => {
-                event.preventDefault();
-                setDialog(false);
-              }}
-                className="absolute top-0 right-0 mt-3 mr-3"
-                href="#"
-              >
+              <a onClick={(event: React.MouseEvent) => { event.preventDefault(); 
+              reset({ name: "" }); setDialog(false); }}
+              className="absolute top-0 right-0 mt-3 mr-3"
+              href="#"
+            >
                 <Lucide icon="X" className="w-8 h-8 text-slate-400" />
               </a>
             </Dialog.Title>
@@ -334,16 +329,16 @@ function Main() {
                   Feature
                 </FormLabel>
                 <FormInput
-                  {...register("feature")}
+                  {...register("name")}
                   type="text"
-                  name="feature"
-                  className={errors.feature ? "border-danger" : ''}
+                  name="name"
+                  className={errors.name ? "border-danger" : ''}
                   placeholder="e.g Tracking system"
                 />
-                {errors.feature && (
+                {errors.name && (
                   <div className="mt-2 text-danger">
-                    {typeof errors.feature.message === "string" &&
-                      errors.feature.message}
+                    {typeof errors.name.message === "string" &&
+                      errors.name.message}
                   </div>
                 )}
               </div>
@@ -351,9 +346,8 @@ function Main() {
              
             </Dialog.Description>
             <Dialog.Footer>
-              <Button type="button" variant="outline-secondary" onClick={() => {
-                setDialog(false);
-              }}
+            <Button type="button" variant="outline-secondary" onClick={() => (
+              reset({ name: "" }), setDialog(false))}
                 className="w-20 mr-1"
               >
                 Cancel

@@ -25,20 +25,20 @@ const initialState: SideMenuState = {
     },
    
 
-    {
-      icon: "Users",
-      pathname: "/accounts",
-      title: "Accounts",
-    },
-    {
-      icon: "Users",
-      pathname: "/accountDetails",
-      title: "Account Details",
-    },
+    // {
+    //   icon: "Users",
+    //   pathname: "/accounts",
+    //   title: "Accounts",
+    // },
+    // {
+    //   icon: "Users",
+    //   pathname: "/accountDetails",
+    //   title: "Account Details",
+    // },
     
     
     {
-        icon: "Users",
+        icon: "FileCheck",
         title: "Policy",
         subMenu: [
           {
@@ -58,7 +58,7 @@ const initialState: SideMenuState = {
           
         ]},
         {
-          icon: "Users",
+          icon: "BaggageClaim",
           title: "Claims",
           subMenu: [
             {
@@ -86,7 +86,7 @@ const initialState: SideMenuState = {
        
 
         {
-          icon: "Users",
+          icon: "Umbrella",
           title: "Quotes",
           subMenu: [
             {
@@ -96,20 +96,21 @@ const initialState: SideMenuState = {
             },
             {
               icon: "Activity",
-              pathname: "/pendingClaim",
+              pathname: "/Autocorrect",
               title: "Autocorrect Cover",
             },
             {
               icon: "Activity",
-              pathname: "/rejectedClaim",
+              pathname: "/Thirdparty",
               title: "Third Party Cover",
             },
             {
               icon: "Activity",
-              pathname: "/rejectedClaim",
+              pathname: "/Theft",
               title: "Third Party Fire and Theft",
             },
-            
+
+
             
             
           ]},
@@ -165,8 +166,26 @@ const initialState: SideMenuState = {
     //     }
     //   ],
     // },
+
     {
-      icon: "Users",
+     
+      icon: "Info",
+      title: "Contents",
+      subMenu: [
+     {
+      icon: "Activity",
+      pathname: "/Contents",
+      title: "Product Offers",
+    },
+    {
+      icon: "Activity",
+      pathname: "/CoversFAQs",
+      title: "Covers FAQs",
+    },
+    
+  ]},
+    {
+      icon: "Car",
       title: "Vehicle",
       subMenu: [
         {
@@ -185,11 +204,11 @@ const initialState: SideMenuState = {
           title: "Valuers",
         },
         
-        {
-          icon: "Activity",
-          pathname: "/documents",
-          title: "Documents Types",
-        },
+        // {
+        //   icon: "Activity",
+        //   pathname: "/documents",
+        //   title: "Documents Types",
+        // },
         {
           icon: "Activity",
           pathname: "/securityFeature",

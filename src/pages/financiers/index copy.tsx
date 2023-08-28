@@ -35,7 +35,7 @@ function Main() {
   const deleteButtonRef = useRef(null);
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [userId, setUserId] = useState(null);
+  const [financierId, setFinancierId] = useState(null);
   const [conferences, setConferences] = useState([]);
   const [pagination, setPagination] = useState({ current_page: 1, total: 1, total_pages: 1, per_page: 1 });
   const [page, setPage] = useState(1);
@@ -68,16 +68,17 @@ function Main() {
   });
 
   useEffect(() => {
-    getUsers();
+    getFinancier();
     // getRoles();
     // getConferences();
   }, []);
 
-  const getUsers = async () => {
+  const getFinancier = async () => {
     isLoading(true);
     try {
-      let res = await ApiService.getUsers({ page: 1 });
-      setUsers(res.users);
+      let res = await ApiService.getFinancier({ page: 1 });
+      // setUsers(res);
+      setUsers(res.financiers);
       console.log(res);
       isLoading(false);
       setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
@@ -109,7 +110,7 @@ function Main() {
         const data = await getValues();
         // data.tenant = "64b199727fe94a1ea97a64cd";
         let res = await ApiService.signup(data);
-        getUsers();
+        getFinancier();
         await reset();
         isLoading(false);
         setDialog(false);
@@ -126,11 +127,12 @@ function Main() {
 
   };
 
+  
   const deleteRecord = async () => {
     isLoading(true);
     try {
-      let res = await ApiService.deleteUser(userId);
-      getUsers();
+      let res = await ApiService.deleteFinancier(financierId);
+      getFinancier();
       isLoading(false);
       setConfirmDelete(false);
       setSuccess(true);
@@ -146,14 +148,14 @@ function Main() {
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Private Comprehensive Cover</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Financiers</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
           <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
             event.preventDefault();
             setDialog(true);
           }}>
-            Add Quote Extensions
+            Add New Financier
           </Button>
           <Menu>
             <Menu.Button as={Button} className="px-2 !box">
@@ -205,36 +207,9 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Quote ID 
+                Financiers
                 </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Make
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Model
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Estimated Value
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Base Premium
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                PHCF
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Training Levy
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Stamp Duty
-                </Table.Th>
-                {/* <Table.Th className="border-b-0 whitespace-nowrap">
-                  STATUS
-                </Table.Th>
-
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  ACTIONS
-                </Table.Th> */}
+                
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -243,34 +218,19 @@ function Main() {
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <FormCheck.Input type="checkbox" />
                   </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md !py-3.5 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    <div className="flex items-center">
+                      
+                      <div className="ml-4">
+                        <a href="" className="font-medium whitespace-nowrap">
+                          {user.name + " " + user.name}
+                        </a>
+                        
+                      </div>
+                    </div>
+                  </Table.Td>
                  
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.middlename}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.middlename}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.middlename}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.lastname}
-                  </Table.Td>
-                
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.phone}
-                  </Table.Td>
-                
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.firstname}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.firstname}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.firstname}
-                  </Table.Td>
-                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div
                       className={clsx([
                         "flex items-center justify-center",
@@ -295,7 +255,7 @@ function Main() {
                             <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Edit
                           </Menu.Item>
                           <Menu.Item onClick={() => {
-                            setUserId(user.id),
+                            setFinancierId(user.id),
                               setConfirmDelete(true);
                           }}>
                             <Lucide icon="Trash" className="w-4 h-4 mr-2" /> Delete
@@ -312,7 +272,7 @@ function Main() {
                         </Menu.Items>
                       </Menu>
                     </div>
-                  </Table.Td> */}
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -331,13 +291,13 @@ function Main() {
         {/* BEGIN: Pagination */}
         <div className="flex flex-wrap items-center col-span-12 intro-y sm:flex-row sm:flex-nowrap">
           <Pagination className="w-full sm:w-auto sm:mr-auto">
-            <Pagination.Link onClick={() => (setPage(previous_page), getUsers())} >
+            <Pagination.Link onClick={() => (setPage(previous_page), getFinancier())} >
               <Lucide icon="ChevronLeft" className="w-4 h-4" />
             </Pagination.Link>
             {_.times(pagination.total_pages).map((page, key) => (
-              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getUsers())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getUsers())} key={key}>{page + 1}</Pagination.Link>
+              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getFinancier())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getFinancier())} key={key}>{page + 1}</Pagination.Link>
             ))}
-            <Pagination.Link onClick={() => (setPage(next_page), getUsers())} >
+            <Pagination.Link onClick={() => (setPage(next_page), getFinancier())} >
               <Lucide icon="ChevronRight" className="w-4 h-4" />
             </Pagination.Link>
           </Pagination>
@@ -358,7 +318,7 @@ function Main() {
           <form className="validate-form" onSubmit={onSubmit}>
             <Dialog.Title>
               <h2 className="mr-auto text-base font-medium">
-                Validity Extension
+                New Finacier
               </h2>
               <a onClick={(event: React.MouseEvent) => {
                 event.preventDefault();
@@ -373,23 +333,24 @@ function Main() {
             <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
               <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
-                  Number of Days
+                  Financier
                 </FormLabel>
                 <FormInput
-                  {...register("days")}
+                  {...register("feature")}
                   type="text"
-                  name="days"
-                  className={errors.firstName ? "border-danger" : ''}
-                  placeholder="e.g 10"
+                  name="feature"
+                  className={errors.feature ? "border-danger" : ''}
+                  placeholder="e.g Stanbic Bank"
                 />
-                {errors.firstName && (
+                {errors.feature && (
                   <div className="mt-2 text-danger">
-                    {typeof errors.firstName.message === "string" &&
-                      errors.firstName.message}
+                    {typeof errors.feature.message === "string" &&
+                      errors.feature.message}
                   </div>
                 )}
               </div>
-            
+              
+             
             </Dialog.Description>
             <Dialog.Footer>
               <Button type="button" variant="outline-secondary" onClick={() => {

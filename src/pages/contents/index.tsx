@@ -146,14 +146,14 @@ function Main() {
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Private Comprehensive Cover</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Product Offers</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
           <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
             event.preventDefault();
             setDialog(true);
           }}>
-            Add Quote Extensions
+            Add Product offers
           </Button>
           <Menu>
             <Menu.Button as={Button} className="px-2 !box">
@@ -205,36 +205,25 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Quote ID 
+                Product Name 
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Make
+                Type of Offer
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Model
+                Description
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Estimated Value
+                Offer duration
                 </Table.Th>
+                
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Base Premium
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                PHCF
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Training Levy
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Stamp Duty
-                </Table.Th>
-                {/* <Table.Th className="border-b-0 whitespace-nowrap">
                   STATUS
                 </Table.Th>
 
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   ACTIONS
-                </Table.Th> */}
+                </Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -251,9 +240,6 @@ function Main() {
                     {user.middlename}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.middlename}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.lastname}
                   </Table.Td>
                 
@@ -261,16 +247,7 @@ function Main() {
                     {user.phone}
                   </Table.Td>
                 
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.firstname}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.firstname}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.firstname}
-                  </Table.Td>
-                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div
                       className={clsx([
                         "flex items-center justify-center",
@@ -294,25 +271,25 @@ function Main() {
                           <Menu.Item>
                             <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Edit
                           </Menu.Item>
+                         
+                          <Menu.Item>
+                            <Lucide icon="UserCheck" className="w-4 h-4 mr-2" /> Activate
+                          </Menu.Item>
+                          <Menu.Item>
+                            <Lucide icon="UserCheck" className="w-4 h-4 mr-2" /> Deactivate
+                          </Menu.Item>
+
                           <Menu.Item onClick={() => {
                             setUserId(user.id),
                               setConfirmDelete(true);
                           }}>
                             <Lucide icon="Trash" className="w-4 h-4 mr-2" /> Delete
                           </Menu.Item>
-                          <Menu.Item>
-                            <Lucide icon="View" className="w-4 h-4 mr-2" /> Profile
-                          </Menu.Item>
-                          <Menu.Item>
-                            <Lucide icon="UserCheck" className="w-4 h-4 mr-2" /> Activate
-                          </Menu.Item>
-                          <Menu.Item>
-                            <Lucide icon="Lock" className="w-4 h-4 mr-2" /> Email Credentials
-                          </Menu.Item>
+                         
                         </Menu.Items>
                       </Menu>
                     </div>
-                  </Table.Td> */}
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -373,14 +350,14 @@ function Main() {
             <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
               <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
-                  Number of Days
+                Product Name
                 </FormLabel>
                 <FormInput
                   {...register("days")}
                   type="text"
                   name="days"
                   className={errors.firstName ? "border-danger" : ''}
-                  placeholder="e.g 10"
+                  placeholder="e.g Autocorrect"
                 />
                 {errors.firstName && (
                   <div className="mt-2 text-danger">
@@ -389,6 +366,64 @@ function Main() {
                   </div>
                 )}
               </div>
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                Type of Offer
+                </FormLabel>
+                <FormInput
+                  {...register("days")}
+                  type="text"
+                  name="days"
+                  className={errors.firstName ? "border-danger" : ''}
+                  placeholder="e.g  Discount"
+                />
+                {errors.firstName && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.firstName.message === "string" &&
+                      errors.firstName.message}
+                  </div>
+                )}
+              </div>
+             
+  <div className="col-span-12 sm:col-span-6">
+    <FormLabel htmlFor="modal-form-1">
+      Offer Description
+    </FormLabel>
+    <textarea rows={10} cols={20}></textarea>
+    {/* <FormInput
+      {...register("days")}
+      type="text"
+      name="days"
+      className={errors.firstName ? "border-danger" : ''}
+      placeholder="e.g  Discount"
+    /> */}
+    {errors.firstName && (
+      <div className="mt-2 text-danger">
+        {typeof errors.firstName.message === "string" &&
+          errors.firstName.message}
+      </div>
+    )}
+  </div>
+
+  <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                Offer duration (days)
+                </FormLabel>
+                <FormInput
+                  {...register("days")}
+                  type="text"
+                  name="days"
+                  className={errors.firstName ? "border-danger" : ''}
+                  placeholder="e.g  20"
+                />
+                {errors.firstName && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.firstName.message === "string" &&
+                      errors.firstName.message}
+                  </div>
+                )}
+              </div>
+
             
             </Dialog.Description>
             <Dialog.Footer>

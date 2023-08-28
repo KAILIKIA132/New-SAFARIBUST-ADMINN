@@ -111,14 +111,14 @@ module.exports = {
         // Default colors
         ":root": {
           
-          "--color-primary": toRGB(colors.emerald["900"]),
+          "--color-primary": toRGB(colors.blue["900"]),
           "--color-secondary": toRGB(colors.slate["200"]),
-          "--color-success": toRGB(colors.emerald["600"]),
+          "--color-success": toRGB(colors.blue["600"]),
           "--color-info": toRGB(colors.cyan["500"]),
           "--color-warning": toRGB(colors.yellow["400"]),
           "--color-pending": toRGB(colors.amber["500"]),
           "--color-danger": toRGB(colors.rose["600"]),
-          "--color-light": toRGB(colors.slate["100"]),
+          "--color-light": toRGB(colors.blue["100"]),
           "--color-dark": toRGB(colors.slate["800"]),
           "&.dark": {
             "--color-primary": toRGB(colors.cyan["800"]),

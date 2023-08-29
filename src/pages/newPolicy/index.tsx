@@ -178,7 +178,7 @@ function Main() {
           <div className="hidden mx-auto md:block text-slate-500">
             Showing {pagination.current_page + " to " + pagination.total_pages + " of " + pagination.total} entries
           </div>
-          <div className="flex items-center w-full mt-3 xl:w-auto xl:mt-0">
+          {/* <div className="flex items-center w-full mt-3 xl:w-auto xl:mt-0">
             <div className="relative w-56 text-slate-500">
               <FormInput
                 type="text"
@@ -195,7 +195,7 @@ function Main() {
               <option>Active</option>
               <option>Inactive</option>
             </FormSelect>
-          </div>
+          </div> */}
         </div>
         <div className="col-span-12 overflow-auto intro-y 2xl:overflow-visible">
           <Table className="border-spacing-y-[10px] border-separate -mt-2">
@@ -205,7 +205,7 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Registration Number 
+                Vehicle Reg Number 
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                 Model
@@ -219,13 +219,13 @@ function Main() {
                 <Table.Th className="border-b-0 whitespace-nowrap">
                 Due date
                 </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
+                {/* <Table.Th className="border-b-0 whitespace-nowrap">
                   STATUS
                 </Table.Th>
 
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   ACTIONS
-                </Table.Th>
+                </Table.Th> */}
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -263,7 +263,7 @@ function Main() {
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.firstname}
                   </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div
                       className={clsx([
                         "flex items-center justify-center",
@@ -274,9 +274,9 @@ function Main() {
                       <Lucide icon={user.approval_status ? "CheckSquare" : "XSquare"} className="w-4 h-4 mr-2" />
                       {user.approval_status ? "Active" : "Inactive"}
                     </div>
-                  </Table.Td>
+                  </Table.Td> */}
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
-                    <div className="flex items-center justify-center">
+                    {/* <div className="flex items-center justify-center">
                       <Menu>
                         <Menu.Button as={Button} className="px-2 !box">
                           <span className="flex items-center justify-center w-5 h-5">
@@ -304,7 +304,7 @@ function Main() {
                           </Menu.Item>
                         </Menu.Items>
                       </Menu>
-                    </div>
+                    </div> */}
                   </Table.Td>
                 </Table.Tr>
               ))}

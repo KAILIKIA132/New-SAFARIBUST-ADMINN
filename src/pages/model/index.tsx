@@ -38,6 +38,8 @@ function Main() {
   const [loading, isLoading] = useState(false);
   const [success, setSuccess] = useState(true);
   const [message, setMessage] = useState("");
+  const [makeId, setMakeId] = useState(null);
+
 
   // Success notification
   const notify = useRef<NotificationElement>();
@@ -62,17 +64,17 @@ function Main() {
   });
 
   useEffect(() => {
-    getUsers();
+    getModel();
     // getRoles();
     // getConferences();
   }, []);
 
-  const getUsers = async () => {
+  const getModel = async () => {
     isLoading(true);
     try {
-      let res = await ApiService.getUsers({ page: 1 });
+      let res = await ApiService.getModel(makeId);
       // setUsers(res.users);
-      setUsers(res.users);
+      setUsers(res.models);
       console.log(res);
       isLoading(false);
       setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
@@ -104,7 +106,7 @@ function Main() {
         const data = await getValues();
         // data.tenant = "64b199727fe94a1ea97a64cd";
         let res = await ApiService.signup(data);
-        getUsers();
+        getModel();
         await reset();
         isLoading(false);
         setDialog(false);
@@ -125,7 +127,7 @@ function Main() {
     isLoading(true);
     try {
       let res = await ApiService.deleteUser(userId);
-      getUsers();
+      getModel();
       isLoading(false);
       setConfirmDelete(false);
       setSuccess(true);
@@ -212,7 +214,7 @@ function Main() {
                     <FormCheck.Input type="checkbox" />
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.Business_type}
+                    {user.model}
                   </Table.Td>
                  
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
@@ -282,13 +284,13 @@ function Main() {
         {/* BEGIN: Pagination */}
         <div className="flex flex-wrap items-center col-span-12 intro-y sm:flex-row sm:flex-nowrap">
           <Pagination className="w-full sm:w-auto sm:mr-auto">
-            <Pagination.Link onClick={() => (setPage(previous_page), getUsers())} >
+            <Pagination.Link onClick={() => (setPage(previous_page), getModel())} >
               <Lucide icon="ChevronLeft" className="w-4 h-4" />
             </Pagination.Link>
             {_.times(pagination.total_pages).map((page, key) => (
-              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getUsers())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getUsers())} key={key}>{page + 1}</Pagination.Link>
+              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getModel())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getModel())} key={key}>{page + 1}</Pagination.Link>
             ))}
-            <Pagination.Link onClick={() => (setPage(next_page), getUsers())} >
+            <Pagination.Link onClick={() => (setPage(next_page), getModel())} >
               <Lucide icon="ChevronRight" className="w-4 h-4" />
             </Pagination.Link>
           </Pagination>

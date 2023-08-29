@@ -206,6 +206,21 @@ export async function deleteMakes(makeId: any) {
 
 
 
+export async function getModel(makeId: any) {
+    try {
+        console.log(makeId);
+        let res = await axios.get(c.Models+ "/"+ makeId);
+        return res.data;
+    } catch (e) {
+        throw handler(e);
+    }
+}
+
+
+
+
+
+
 export async function addFinanciers(data: FieldValues) {
     try {
         console.log(data);

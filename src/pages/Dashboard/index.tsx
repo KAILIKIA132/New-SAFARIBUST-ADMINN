@@ -122,7 +122,7 @@ function Main() {
               <div className="p-5 box">
                 <div className="flex">
                   <Lucide
-                    icon="UserCheck"
+                    icon="FileCheck"
                     className="w-[28px] h-[28px] text-info"
                   />
                   <div className="ml-auto">
@@ -159,14 +159,13 @@ function Main() {
                     icon="Volume2"
                     className="w-[28px] h-[28px] text-info"
                   />
-                  <div className="">
+                  <div className="ml-auto">
                     <Tippy
                       as="div"
                       className="cursor-pointer bg-info py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
                       content=""
                     >
                       <Lucide icon="ChevronRight" className="w-4 h-4 ml-0.5" />
-                      
                     </Tippy>
                   </div>
                 </div>

@@ -87,7 +87,7 @@ function Main() {
                 <div className="flex">
                   <Lucide
                     icon="UserCheck"
-                    className="w-[28px] h-[28px] text-blue-500"
+                    className="w-[28px] h-[28px] text-blue-800"
                   />
                   <div className="ml-auto">
                     <Tippy
@@ -123,7 +123,7 @@ function Main() {
                 <div className="flex">
                   <Lucide
                     icon="FileCheck"
-                    className="w-[28px] h-[28px] text-blue-500"
+                    className="w-[28px] h-[28px] text-blue-800"
                   />
                   <div className="ml-auto">
                     <Tippy
@@ -157,7 +157,7 @@ function Main() {
                 <div className="flex">
                   <Lucide
                     icon="Volume2"
-                    className="w-[28px] h-[28px] text-blue-500"
+                    className="w-[28px] h-[28px] text-blue-800"
                   />
                   <div className="ml-auto ">
                     <Tippy
@@ -190,7 +190,7 @@ function Main() {
                 <div className="flex">
                   <Lucide
                     icon="Briefcase"
-                    className="w-[28px] h-[28px] text-blue-500"
+                    className="w-[28px] h-[28px] text-blue-800"
                   />
                   <div className="ml-auto">
                     <Tippy
@@ -224,7 +224,7 @@ function Main() {
                 <div className="flex">
                   <Lucide
                     icon="Briefcase"
-                    className="w-[28px] h-[28px] text-blue-500"
+                    className="w-[28px] h-[28px] text-blue-800"
                   />
                   <div className="ml-auto">
                     <Tippy

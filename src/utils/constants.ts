@@ -7,6 +7,7 @@
  
 export const BASE_URL='https://heritage.techsavanna.technology/api/'
 //API Endpoints
+//devops has do it again
 export const LOGIN = `${BASE_URL}login`;
 export const REGISTER = `${BASE_URL}auth-service/auth/users/add`;
 export const FORGOT_PASSWORD = `${BASE_URL}send-password/`;

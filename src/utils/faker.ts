@@ -11,7 +11,7 @@ interface Products {
   name: string;
   category: string;
 }
-//devops
+//devopss
 interface Categories {
   name: string;
   tags: string;

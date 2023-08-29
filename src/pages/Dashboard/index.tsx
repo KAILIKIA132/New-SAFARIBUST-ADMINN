@@ -78,7 +78,7 @@ function Main() {
           <div
             className={clsx([
               "relative zoom-in",
-              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-green-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-green-800/70",
+              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-blue-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
             ])}
           >
             <Link to="">
@@ -113,7 +113,7 @@ function Main() {
           <div
             className={clsx([
               "relative zoom-in",
-              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-green-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-green-800/70",
+              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-blue-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
             ])}
           >
             <Link to="">
@@ -148,7 +148,7 @@ function Main() {
           <div
             className={clsx([
               "relative zoom-in",
-              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-green-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-green-800/70",
+              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-blue-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
             ])}
           >
             <Link to="">
@@ -181,7 +181,7 @@ function Main() {
           <div
             className={clsx([
               "relative zoom-in",
-              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-green-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-green-800/70",
+              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-blue-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
             ])}
           >
             <Link to="">
@@ -215,7 +215,7 @@ function Main() {
           <div
             className={clsx([
               "relative zoom-in",
-              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-green-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-green-800/70",
+              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-blue-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
             ])}
           >
             <Link to="">

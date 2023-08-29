@@ -290,7 +290,7 @@ function Main() {
                           }}>
                             <Lucide icon="Trash" className="w-4 h-4 mr-2" /> Delete
                           </Menu.Item>
-                          <Menu.Item>
+                          {/* <Menu.Item>
                             <Lucide icon="View" className="w-4 h-4 mr-2" /> Profile
                           </Menu.Item>
                           <Menu.Item>
@@ -298,7 +298,7 @@ function Main() {
                           </Menu.Item>
                           <Menu.Item>
                             <Lucide icon="Lock" className="w-4 h-4 mr-2" /> Email Credentials
-                          </Menu.Item>
+                          </Menu.Item> */}
                         </Menu.Items>
                       </Menu>
                     </div>

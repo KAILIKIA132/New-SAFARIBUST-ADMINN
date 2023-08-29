@@ -205,7 +205,10 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Registration Number 
+                Vehicle Reg Number 
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                Make
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                 Model
@@ -248,6 +251,9 @@ function Main() {
                      
                     </div>
                     
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.middlename}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.middlename}

@@ -71,7 +71,7 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
           </Breadcrumb>
           {/* END: Breadcrumb */}
           {/* BEGIN: Search */}
-          <div className="relative mr-3 intro-x sm:mr-6">
+          {/* <div className="relative mr-3 intro-x sm:mr-6">
             <div className="relative hidden sm:block">
               <TomSelect value={conference} onChange={selectConference} options={{
                 placeholder: "Select conference",
@@ -79,7 +79,7 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
                 {conferences.map((conference: any, key) => <option key={key} value={conference._id} >{conference.name}</option>)}
               </TomSelect>
             </div>
-          </div>
+          </div> */}
           {/* END: Search */}
           {/* BEGIN: Notifications */}
           <Popover className="mr-4 intro-x sm:mr-6">

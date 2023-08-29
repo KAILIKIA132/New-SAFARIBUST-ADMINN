@@ -229,7 +229,7 @@ function Main() {
                       {user.approval_status ? "Active" : "Inactive"} */}
                     </div>
                   </Table.Td>
-                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
                     <div className="flex items-center justify-center">
                       <Menu>
                         <Menu.Button as={Button} className="px-2 !box">
@@ -238,34 +238,34 @@ function Main() {
                           </span>
                         </Menu.Button>
                         <Menu.Items className="w-40">
-                        <Menu.Item onClick={() => {
+                        {/* <Menu.Item onClick={() => {
                             setUserId(user.id),
                             setConfirmMake(true);
                           }}>
                             <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Add Model
-                          </Menu.Item>
-                          <Menu.Item>
+                          </Menu.Item> */}
+                          {/* <Menu.Item>
                             <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Edit
-                          </Menu.Item>
+                          </Menu.Item> */}
                           <Menu.Item onClick={() => {
                             setUserId(user.id),
                               setConfirmDelete(true);
                           }}>
                             <Lucide icon="Trash" className="w-4 h-4 mr-2" /> Delete
                           </Menu.Item>
-                          <Menu.Item>
+                          {/* <Menu.Item>
                             <Lucide icon="View" className="w-4 h-4 mr-2" /> Profile
-                          </Menu.Item>
-                          <Menu.Item>
+                          </Menu.Item> */}
+                          {/* <Menu.Item>
                             <Lucide icon="UserCheck" className="w-4 h-4 mr-2" /> Activate
-                          </Menu.Item>
-                          <Menu.Item>
+                          </Menu.Item> */}
+                          {/* <Menu.Item>
                             <Lucide icon="Lock" className="w-4 h-4 mr-2" /> Email Credentials
-                          </Menu.Item>
+                          </Menu.Item> */}
                         </Menu.Items>
                       </Menu>
                     </div>
-                  </Table.Td> */}
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>

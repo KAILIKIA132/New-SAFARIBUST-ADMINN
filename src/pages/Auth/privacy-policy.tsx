@@ -35,9 +35,10 @@ function Policy() {
     const getPolicy = async (pg = 1) => {
         isLoading(true);
         try {
-            let res = await ApiService.getPolicy();
-            setPrivacyPolicy(res.privacy_policy)
-            setTermsConditions(res.terms_conditions)
+            // let res = await ApiService.getPolicy();
+            // setPrivacyPolicy(res.privacy_policy)
+            // setTermsConditions(res.terms_conditions)
+            
         } catch (error) {
             isLoading(false);
             console.log("Error fetching feeds");

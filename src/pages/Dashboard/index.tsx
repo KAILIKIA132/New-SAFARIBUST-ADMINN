@@ -159,13 +159,14 @@ function Main() {
                     icon="Volume2"
                     className="w-[28px] h-[28px] text-info"
                   />
-                  <div className="ml-auto">
+                  <div className="">
                     <Tippy
                       as="div"
                       className="cursor-pointer bg-info py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
                       content=""
                     >
                       <Lucide icon="ChevronRight" className="w-4 h-4 ml-0.5" />
+                      
                     </Tippy>
                   </div>
                 </div>

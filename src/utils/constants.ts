@@ -5,7 +5,7 @@
 // export const BASE_URL = 'https://palla.techsavanna.technology/palla-api/api/';
 // export const Login_URL =  'https://palla.techsavanna.technology:7000/fineract-provider/api/v1/authentication?username="admin"&password="password"&tenantIdentifier=default';
  
-export const BASE_URL='http://35.170.8.156:8080/api/'
+export const BASE_URL='https://heritage.techsavanna.technology/api/'
 //API Endpoints
 export const LOGIN = `${BASE_URL}login`;
 export const REGISTER = `${BASE_URL}auth-service/auth/users/add`;

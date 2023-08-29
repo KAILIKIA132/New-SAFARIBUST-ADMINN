@@ -11,7 +11,7 @@ interface Products {
   name: string;
   category: string;
 }
-//devopss
+//devops samson safari
 interface Categories {
   name: string;
   tags: string;

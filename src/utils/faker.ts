@@ -12,7 +12,7 @@ interface Products {
   category: string;
 }
 //var/lib/jenkins/.nvm/versions/node/v16.17.0/bin/node
-//devops samson safari has dio it again
+//devops samson safari has dioj it again
 interface Categories {
   name: string;
   tags: string;

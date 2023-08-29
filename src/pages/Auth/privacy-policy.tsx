@@ -37,7 +37,8 @@ function Policy() {
         try {
             // let res = await ApiService.getPolicy();
             // setPrivacyPolicy(res.privacy_policy)
-            // setTermsConditions(res.terms_conditions)
+            // setTermsConditions(res.terms_conditions) hello 
+            
             
         } catch (error) {
             isLoading(false);

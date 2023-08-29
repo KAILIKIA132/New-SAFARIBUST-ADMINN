@@ -17,8 +17,21 @@ import TransactionList from "../pages/TransactionList";
 import TransactionDetail from "../pages/TransactionDetail";
 import SellerDetail from "../pages/SellerDetail";
 import Users from "../pages/Users";
+//beginning of auth
 import Profile from "../pages/Profile";
-import Login from "../pages/Login";
+import Login from "../pages/Auth/login";
+import Logs from "../pages/Auth/audit-logs";
+// import Login from "../pages/Auth/change-password";
+// import Login from "../pages/Auth/forgot-password";
+// import LoginBacks from "../pages/Auth/loginsBacks";
+import PrivacyPolicy from "../pages/Auth/privacy-policy";
+import Privacy from "../pages/Auth/privacy";
+import NewProfile from "../pages/Auth/profile";
+
+
+
+
+import Role from "../pages/Auth/roles-permissions";
 import ForgotPassword from "../pages/ForgotPassword";
 import ErrorPage from "../pages/ErrorPage";
 import UpdateProfile from "../pages/UpdateProfile/original";
@@ -183,6 +196,42 @@ function Router() {
           path: "CoversFAQs",
           element: <CoversFAQs/>,
         },
+        
+
+
+        //security
+        {
+          path: "Role",
+          element: <Role/>,
+        },
+        {
+          path: "Logs",
+          element: <Logs/>,
+        },
+        {
+          path: "PrivacyPolicy",
+          element: <PrivacyPolicy/>,
+        },
+        {
+          path: "Privacy",
+          element: <Privacy/>,
+        },
+        {
+          path: "NewProfile",
+          element: <NewProfile/>,
+        },
+
+      
+        
+
+
+
+
+
+
+
+
+
         
         
         {

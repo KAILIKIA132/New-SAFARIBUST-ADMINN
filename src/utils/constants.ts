@@ -23,6 +23,10 @@ export const VALUERS = `${BASE_URL}vehicle/valuers`;
 export const SECURITY_FEATURES = `${BASE_URL}vehicle/security_features`;
 export const FINANCIERS = `${BASE_URL}vehicle/financiers`;
 export const Models = `${BASE_URL}vehicle/models/`;
+export const POLICY = `${BASE_URL}vehicle/users/`;
+
+
+
 
 
 

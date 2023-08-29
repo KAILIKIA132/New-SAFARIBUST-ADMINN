@@ -252,7 +252,7 @@ const initialState: SideMenuState = {
       subMenu: [
         {
           icon: "Activity",
-          pathname: "/roles-permissions",
+          pathname: "/Role",
           title: "Roles & Permissions",
         },
         {
@@ -260,10 +260,26 @@ const initialState: SideMenuState = {
           pathname: "/users",
           title: "System Users",
         },
+
         {
           icon: "Activity",
-          pathname: "/access-logs",
+          pathname: "/Logs",
           title: "Access Logs",
+        },
+        {
+          icon: "Activity",
+          pathname: "/PrivacyPolicy",
+          title: "Privacy Policy",
+        },
+        {
+          icon: "Activity",
+          pathname: "/Privacy",
+          title: "Privacy",
+        },
+        {
+          icon: "Activity",
+          pathname: "/NewProfile",
+          title: "NewProfile",
         },
         {
           icon: "Activity",

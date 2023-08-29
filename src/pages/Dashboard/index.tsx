@@ -81,7 +81,8 @@ function Main() {
               "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-green-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-green-800/70",
             ])}
           >
-            <Link to="/attendees">
+            <Link to="">
+            {/* <Link to="/attendees"> */}
               <div className="p-5 box">
                 <div className="flex">
                   <Lucide
@@ -115,7 +116,9 @@ function Main() {
               "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-green-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-green-800/70",
             ])}
           >
-            <Link to="/attendees">
+            <Link to="">
+            {/* <Link to="/attendees"> */}
+              
               <div className="p-5 box">
                 <div className="flex">
                   <Lucide
@@ -148,7 +151,8 @@ function Main() {
               "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-green-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-green-800/70",
             ])}
           >
-            <Link to="/speakers">
+            <Link to="">
+            {/* <Link to="/speakers"> */}
               <div className="p-5 box">
                 <div className="flex">
                   <Lucide
@@ -180,7 +184,8 @@ function Main() {
               "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-green-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-green-800/70",
             ])}
           >
-            <Link to="/exhibitors">
+            <Link to="">
+            {/* <Link to="/exhibitors"> */}
               <div className="p-5 box">
                 <div className="flex">
                   <Lucide
@@ -213,7 +218,8 @@ function Main() {
               "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-green-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-green-800/70",
             ])}
           >
-            <Link to="/vendors">
+            <Link to="">
+            {/* <Link to="/vendors"> */}
               <div className="p-5 box">
                 <div className="flex">
                   <Lucide

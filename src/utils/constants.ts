@@ -34,3 +34,4 @@ export const SIMCARDS = `${BASE_URL}simcard-service/simcards`;
 //Payments Endpoints
 export const WALLETS = `${BASE_URL}payments-service/wallets`;
 export const TRANSACTIONS = `${BASE_URL}payments-service/transactions`; 
+//test

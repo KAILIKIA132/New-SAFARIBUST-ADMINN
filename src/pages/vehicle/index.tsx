@@ -15,26 +15,14 @@ import * as yup from "yup";
 import Notification, { NotificationElement } from "../../base-components/Notification";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import Dropzone from "../../base-components/Dropzone";
+import { Make, Model } from "../../type";
 
 function Main() {
-  const [countries] = useState([
-    { name: 'Afghanistan', code: 'AF' },
-    { name: 'Åland Islands', code: 'AX' },
-    { name: 'Albania', code: 'AL' },
-    { name: 'Algeria', code: 'DZ' },
-    { name: 'American Samoa', code: 'AS' },
-    { name: 'AndorrA', code: 'AD' },
-    { name: 'Angola', code: 'AO' },
-    { name: 'Anguilla', code: 'AI' },
-    { name: 'Antarctica', code: 'AQ' },
- 
-  ]);
-
   const [dialog, setDialog] = useState(false);
+  const [dialogModelList, setDialogModelList] = useState(false);
   const [confirmMake, setConfirmMake] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteButtonRef = useRef(null);
-  const [makes, setMakes] = useState([]);
   const [roles, setRoles] = useState([]);
   const [makeId, setMakeId] = useState(null);
   const [conferences, setConferences] = useState([]);
@@ -46,11 +34,19 @@ function Main() {
   const [success, setSuccess] = useState(true);
   const [message, setMessage] = useState("");
 
+  // const [makes, setMakes] = useState([]);
+  const [models, setModels] = useState<Make[]>([]);
+  const [makes, setMakes] = useState<Make[]>([]);
+  const [selectedMakeId, setSelectedMakeId] = useState<number | null>(null);
+
   // Success notification
   const notify = useRef<NotificationElement>();
   const schema = yup
     .object({
       make: yup.string().required("Vehicle make is required"),
+      isRareModel: yup.string().required("Rare Model Option is required"),
+      isHighExposure: yup.string().required("High Exposure Option is required"),
+      
     }).required();
 
   const {
@@ -75,6 +71,22 @@ function Main() {
     try {
       let res = await ApiService.getMakes({ page: 1 });
       setMakes(res.makes);
+      console.log(res);
+      isLoading(false);
+      setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
+      setPreviousPage((page > 1) ? page - 1 : 1);
+      setPagination({ current_page: res.current_page, total: res.total, total_pages: res.total_pages, per_page: res.per_page });
+    } catch (error) {
+      isLoading(false);
+      console.log("Error fetching users");
+    }
+  };
+
+  const getModel = async () => {
+    isLoading(true);
+    try {
+      let res = await ApiService.getModel({ page: 1 });
+      setModels(res.models);
       console.log(res);
       isLoading(false);
       setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
@@ -204,7 +216,13 @@ function Main() {
                 <Table.Th className="border-b-0 whitespace-nowrap">
                 Make 
                 </Table.Th>
-               
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                Rare Model Status
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                High Exposure Status
+                </Table.Th>
+                
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -215,6 +233,12 @@ function Main() {
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.make}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.isRareModel}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.isHighExposure}
                   </Table.Td>
                  
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
@@ -250,6 +274,23 @@ function Main() {
                               setConfirmDelete(true);
                           }}>
                             <Lucide icon="Trash" className="w-4 h-4 mr-2" /> Delete
+                          </Menu.Item>
+                          <Menu.Item onClick={() => {
+                            setMakeId(user.id),
+                            setSelectedMakeId(user.id);
+                              setDialogModelList(true);
+                          }}>
+
+{/* <Table.Tr
+              key={key}
+              className="intro-x"
+              onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                setSelectedMakeId(user.id);
+                setDialog(true);
+              }}
+            > */}
+                            <Lucide icon="Activity" className="w-4 h-4 mr-2" /> View Models
                           </Menu.Item>
                          
                         
@@ -333,25 +374,64 @@ function Main() {
                   </div>
                 )}
               </div>
-              {/* <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Model
+              <div className="col-span-12 sm:col-span-6">
+              <FormLabel htmlFor="modal-form-1">
+                 
+                 Is it a Rare Model?
                 </FormLabel>
-                <FormInput
+                 <FormSelect {...register("isRareModel")} className="w-56 ml-2 xl:w-auto !box">
+             <option value="">Choose an option</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+              
+            </FormSelect>
+                {/* <FormInput
                   {...register("model")}
                   type="text"
                   name="model"
                   className={errors.model ? "border-danger" : ''}
                   placeholder="Prado v8"
-                />
-                {errors.model && (
+                /> */}
+                {errors.isRareModel && (
                   <div className="mt-2 text-danger">
-                    {typeof errors.model.message === "string" &&
-                      errors.model.message}
+                    {typeof errors.isRareModel.message === "string" &&
+                      errors.isRareModel.message}
                   </div>
                 )}
-              </div> */}
-             
+              </div>
+
+
+
+
+
+
+
+
+              <div className="col-span-12 sm:col-span-6">
+              <FormLabel htmlFor="modal-form-1">
+                 
+                 Is it High Exposure?
+                </FormLabel>
+                 <FormSelect {...register("isHighExposure")} className="w-56 ml-2 xl:w-auto !box">
+              <option value="">Choose an option</option> 
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+              
+            </FormSelect>
+                {/* <FormInput
+                  {...register("model")}
+                  type="text"
+                  name="model"
+                  className={errors.model ? "border-danger" : ''}
+                  placeholder="Prado v8"
+                /> */}
+                {errors.isHighExposure && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.isHighExposure.message === "string" &&
+                      errors.isHighExposure.message}
+                  </div>
+                )}
+              </div>
             </Dialog.Description>
             <Dialog.Footer>
             <Button type="button" variant="outline-secondary" onClick={() => (
@@ -389,7 +469,7 @@ function Main() {
                 <Dialog.Title key={key}>
               <h2 className="mr-auto text-base font-medium">
                  
-                  {user.Business_type} Vehicle Make
+                  {user.make} Vehicle Make
                  {/* {setUserId(user.id)} */}
                 
               </h2>
@@ -426,6 +506,56 @@ function Main() {
                 )}
               </div>
              
+              <div className="col-span-12 sm:col-span-6">
+              <FormLabel htmlFor="modal-form-1">
+             
+              Is it High Risk?
+                </FormLabel>
+                 <FormSelect className="w-56 ml-2 xl:w-auto !box">
+              <option>Select</option>   
+              <option>Yes</option>
+              <option>No</option>
+              
+            </FormSelect>
+                {/* <FormInput
+                  {...register("model")}
+                  type="text"
+                  name="model"
+                  className={errors.model ? "border-danger" : ''}
+                  placeholder="Prado v8"
+                /> */}
+                {errors.model && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.model.message === "string" &&
+                      errors.model.message}
+                  </div>
+                )}
+              </div>
+              <div className="col-span-12 sm:col-span-6">
+              <FormLabel htmlFor="modal-form-1">
+                 
+                 Is it High Exposure?
+                </FormLabel>
+                 <FormSelect className="w-56 ml-2 xl:w-auto !box">
+              <option>Select</option>   
+              <option>Yes</option>
+              <option>No</option>
+              
+            </FormSelect>
+                {/* <FormInput
+                  {...register("model")}
+                  type="text"
+                  name="model"
+                  className={errors.model ? "border-danger" : ''}
+                  placeholder="Prado v8"
+                /> */}
+                {errors.model && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.model.message === "string" &&
+                      errors.model.message}
+                  </div>
+                )}
+              </div>
             </Dialog.Description>
             <Dialog.Footer>
               <Button type="button" variant="outline-secondary" onClick={() => {
@@ -450,7 +580,76 @@ function Main() {
         </Dialog.Panel>
           
       </Dialog>
+      <Dialog staticBackdrop size="lg" open={dialogModelList} onClose={() => {
+setDialogModelList      }}
+      >
+        <Dialog.Panel>
+          <form className="validate-form" onSubmit={onSubmit}>
+          {makes.map((user: any, key) => (
 
+                <Dialog.Title key={key}>
+              <h2 className="mr-auto text-base font-medium">
+                  {/* {user.make} Vehicle Make */}
+                  {selectedMakeId ? makes.find(user => user.id === selectedMakeId)?.make || "" : ""}
+                
+              </h2>
+{/* <h2 className="mr-auto text-base font-medium">
+  {selectedMakeId
+    ? (
+      <>
+        {makes.find(user => user.id === selectedMakeId)?.make || ""}
+        <ul>
+          {models.map((model) => (
+            <li key={model.id}>{model.model}</li>
+          ))}
+        </ul>
+      </>
+    )
+    : ""
+  }
+</h2> */}
+              <a onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                setDialogModelList(false);
+              }}
+                className="absolute top-0 right-0 mt-3 mr-3"
+                href="#"
+              >
+                <Lucide icon="X" className="w-8 h-8 text-slate-400" />
+              </a>
+            </Dialog.Title>
+          ))}
+          
+            <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
+             
+             
+            </Dialog.Description>
+            <Dialog.Footer>
+              <Button type="button" variant="outline-secondary" onClick={() => {
+              setDialogModelList(false);
+                                (false);
+              }}
+                className="w-20 mr-1"
+              >
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit" className="w-20">
+                Save
+                {
+                  loading && <LoadingIcon
+                    icon="spinning-circles"
+                    color="white"
+                    className="w-4 h-4 ml-2"
+                  />
+                }
+              </Button>
+            </Dialog.Footer>
+          </form>
+        </Dialog.Panel>
+          
+      </Dialog>
+
+      ialogModelList
           
 
 

@@ -157,6 +157,15 @@ export async function getThemes(data: { page: number; }) {
     }
 }
 
+
+export async function getPolicy() {
+    try {
+      let res = await axios.get(c.POLICY);
+      return res.data;
+    } catch (e) {
+      throw handler(e);
+    }
+  }
 export async function getEvents(data: { page: any; }) {
     try {
         let res = await axios.get(c.EVENTS + "?page=" + data.page);
@@ -206,10 +215,10 @@ export async function deleteMakes(makeId: any) {
 
 
 
-export async function getModel(makeId: any) {
+export async function getModel(selectedMakeId: any) {
     try {
-        console.log(makeId);
-        let res = await axios.get(c.Models+ "/"+ makeId);
+        console.log(selectedMakeId);
+        let res = await axios.get(c.Models+ "/"+ selectedMakeId);
         return res.data;
     } catch (e) {
         throw handler(e);

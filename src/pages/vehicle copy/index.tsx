@@ -15,27 +15,16 @@ import * as yup from "yup";
 import Notification, { NotificationElement } from "../../base-components/Notification";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import Dropzone from "../../base-components/Dropzone";
+import { Make } from "../../type";
 
 function Main() {
-  const [countries] = useState([
-    { name: 'Afghanistan', code: 'AF' },
-    { name: 'Åland Islands', code: 'AX' },
-    { name: 'Albania', code: 'AL' },
-    { name: 'Algeria', code: 'DZ' },
-    { name: 'American Samoa', code: 'AS' },
-    { name: 'AndorrA', code: 'AD' },
-    { name: 'Angola', code: 'AO' },
-    { name: 'Anguilla', code: 'AI' },
-    { name: 'Antarctica', code: 'AQ' },
- 
-  ]);
-
   const [dialog, setDialog] = useState(false);
+  const [dialogModel, setDialogModel] = useState(false);
+  const [confirmMake, setConfirmMake] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteButtonRef = useRef(null);
-  const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [userId, setUserId] = useState(null);
+  const [makeId, setMakeId] = useState(null);
   const [conferences, setConferences] = useState([]);
   const [pagination, setPagination] = useState({ current_page: 1, total: 1, total_pages: 1, per_page: 1 });
   const [page, setPage] = useState(1);
@@ -45,15 +34,18 @@ function Main() {
   const [success, setSuccess] = useState(true);
   const [message, setMessage] = useState("");
 
+  // const [makes, setMakes] = useState([]);
+  const [makes, setMakes] = useState<Make[]>([]);
+  const [selectedMakeId, setSelectedMakeId] = useState<number | null>(null);
+
   // Success notification
   const notify = useRef<NotificationElement>();
   const schema = yup
     .object({
-      tenant: yup.string().required("Conference is required"),
-      role: yup.string().required("Role is required"),
-      firstName: yup.string().required("First name is required"),
-      lastName: yup.string().required("Last name is required"),
-      email: yup.string().required("Email is required").email("Email must be a valid")
+      make: yup.string().required("Vehicle make is required"),
+      isRareModel: yup.string().required("Rare Model Option is required"),
+      isHighExposure: yup.string().required("High Exposure Option is required"),
+      
     }).required();
 
   const {
@@ -68,16 +60,16 @@ function Main() {
   });
 
   useEffect(() => {
-    getUsers();
+    getMakes();
     // getRoles();
     // getConferences();
   }, []);
 
-  const getUsers = async () => {
+  const getMakes = async () => {
     isLoading(true);
     try {
-      let res = await ApiService.getUsers({ page: 1 });
-      setUsers(res.users);
+      let res = await ApiService.getMakes({ page: 1 });
+      setMakes(res.makes);
       console.log(res);
       isLoading(false);
       setNextPage((page < res.total_pages) ? page + 1 : res.total_pages);
@@ -108,8 +100,8 @@ function Main() {
       try {
         const data = await getValues();
         // data.tenant = "64b199727fe94a1ea97a64cd";
-        let res = await ApiService.signup(data);
-        getUsers();
+        let res = await ApiService.addMake(data);
+        getMakes();
         await reset();
         isLoading(false);
         setDialog(false);
@@ -129,8 +121,8 @@ function Main() {
   const deleteRecord = async () => {
     isLoading(true);
     try {
-      let res = await ApiService.deleteUser(userId);
-      getUsers();
+      let res = await ApiService.deleteMakes(makeId);
+      getMakes();
       isLoading(false);
       setConfirmDelete(false);
       setSuccess(true);
@@ -146,15 +138,15 @@ function Main() {
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Rejected Claims</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Vehicles Make</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
-          {/* <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
+          <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
             event.preventDefault();
             setDialog(true);
           }}>
-            New Speaker
-          </Button> */}
+            New Vehicle
+          </Button>
           <Menu>
             <Menu.Button as={Button} className="px-2 !box">
               <span className="flex items-center justify-center w-5 h-5">
@@ -205,75 +197,46 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Claim Number 
+                Make 
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Reg Number 
+                Rare Model Status
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Make
+                High Exposure Status
                 </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Model
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  Cover
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Policy Number
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Due date
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  STATUS
-                </Table.Th>
-
-                {/* <Table.Th className="border-b-0 whitespace-nowrap">
-                  ACTIONS
-                </Table.Th> */}
+                
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {users.map((user: any, key) => (
+              {makes.map((user: any, key) => (
                 <Table.Tr key={key} className="intro-x">
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <FormCheck.Input type="checkbox" />
                   </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.make}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.isRareModel}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.isHighExposure}
+                  </Table.Td>
                  
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.middlename}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.middlename}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.lastname}
-                  </Table.Td>
-                
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.phone}
-                  </Table.Td>
-                
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.firstname}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.firstname}
-                  </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div
                       className={clsx([
                         "flex items-center justify-center",
-                        { "text-success": user.approval_status },
-                        { "text-danger": !user.approval_status },
+                        { "text-success": user.make },
+                        { "text-danger": !user.make },
                       ])}
                     >
-                      <Lucide icon={user.approval_status ? "CheckSquare" : "XSquare"} className="w-4 h-4 mr-2" />
-                      {user.approval_status ? "Active" : "Inactive"}
+                      {/* <Lucide icon={user.approval_status ? "CheckSquare" : "XSquare"} className="w-4 h-4 mr-2" /> */}
+                      {/* {user.approval_status ? "Active" : "Inactive"} */}
                     </div>
                   </Table.Td>
-                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
                     <div className="flex items-center justify-center">
                       <Menu>
                         <Menu.Button as={Button} className="px-2 !box">
@@ -282,28 +245,44 @@ function Main() {
                           </span>
                         </Menu.Button>
                         <Menu.Items className="w-40">
-                          <Menu.Item>
-                            <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Edit
+                        <Menu.Item onClick={() => {
+                            setMakeId(user.id),
+                            setConfirmMake(true);
+                          }}>
+                            <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Add Model
                           </Menu.Item>
+                         
                           <Menu.Item onClick={() => {
-                            setUserId(user.id),
+                            setMakeId(user.id),
                               setConfirmDelete(true);
                           }}>
                             <Lucide icon="Trash" className="w-4 h-4 mr-2" /> Delete
                           </Menu.Item>
-                          <Menu.Item>
-                            <Lucide icon="View" className="w-4 h-4 mr-2" /> Profile
+                          <Menu.Item onClick={() => {
+                            setMakeId(user.id),
+                            setSelectedMakeId(user.id);
+                      
+                              setDialogModel(true);
+                          }}>
+
+{/* <Table.Tr
+              key={key}
+              className="intro-x"
+              onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                setSelectedMakeId(user.id);
+                setDialog(true);
+              }}
+            > */}
+                            <Lucide icon="Activity" className="w-4 h-4 mr-2" /> View Models
                           </Menu.Item>
-                          <Menu.Item>
-                            <Lucide icon="UserCheck" className="w-4 h-4 mr-2" /> Activate
-                          </Menu.Item>
-                          <Menu.Item>
-                            <Lucide icon="Lock" className="w-4 h-4 mr-2" /> Email Credentials
-                          </Menu.Item>
+                         
+                        
+                         
                         </Menu.Items>
                       </Menu>
                     </div>
-                  </Table.Td> */}
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -322,13 +301,13 @@ function Main() {
         {/* BEGIN: Pagination */}
         <div className="flex flex-wrap items-center col-span-12 intro-y sm:flex-row sm:flex-nowrap">
           <Pagination className="w-full sm:w-auto sm:mr-auto">
-            <Pagination.Link onClick={() => (setPage(previous_page), getUsers())} >
+            <Pagination.Link onClick={() => (setPage(previous_page), getMakes())} >
               <Lucide icon="ChevronLeft" className="w-4 h-4" />
             </Pagination.Link>
             {_.times(pagination.total_pages).map((page, key) => (
-              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getUsers())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getUsers())} key={key}>{page + 1}</Pagination.Link>
+              page + 1 == pagination.current_page ? <Pagination.Link onClick={() => (setPage(page + 1), getMakes())} active key={key}>{page + 1}</Pagination.Link> : <Pagination.Link onClick={() => (setPage(page + 1), getMakes())} key={key}>{page + 1}</Pagination.Link>
             ))}
-            <Pagination.Link onClick={() => (setPage(next_page), getUsers())} >
+            <Pagination.Link onClick={() => (setPage(next_page), getMakes())} >
               <Lucide icon="ChevronRight" className="w-4 h-4" />
             </Pagination.Link>
           </Pagination>
@@ -349,178 +328,98 @@ function Main() {
           <form className="validate-form" onSubmit={onSubmit}>
             <Dialog.Title>
               <h2 className="mr-auto text-base font-medium">
-                New Speaker
+                New Vehicle
               </h2>
-              <a onClick={(event: React.MouseEvent) => {
-                event.preventDefault();
-                setDialog(false);
-              }}
-                className="absolute top-0 right-0 mt-3 mr-3"
-                href="#"
-              >
+              <a onClick={(event: React.MouseEvent) => { event.preventDefault(); 
+              reset({ make: "" }); setDialog(false); }}
+              className="absolute top-0 right-0 mt-3 mr-3"
+              href="#"
+            >
+              
                 <Lucide icon="X" className="w-8 h-8 text-slate-400" />
               </a>
             </Dialog.Title>
             <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
               <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
-                  First Name
+                  Make
                 </FormLabel>
                 <FormInput
-                  {...register("firstName")}
+                  {...register("make")}
                   type="text"
-                  name="firstName"
-                  className={errors.firstName ? "border-danger" : ''}
-                  placeholder="John"
+                  name="make"
+                  className={errors.make ? "border-danger" : ''}
+                  placeholder="Toyota"
                 />
-                {errors.firstName && (
+                {errors.make && (
                   <div className="mt-2 text-danger">
-                    {typeof errors.firstName.message === "string" &&
-                      errors.firstName.message}
+                    {typeof errors.make.message === "string" &&
+                      errors.make.message}
                   </div>
                 )}
               </div>
               <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Last Name
+              <FormLabel htmlFor="modal-form-1">
+                 
+                 Is it a Rare Model?
                 </FormLabel>
-                <FormInput
-                  {...register("lastName")}
+                 <FormSelect {...register("isRareModel")} className="w-56 ml-2 xl:w-auto !box">
+             <option value="">Choose an option</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+              
+            </FormSelect>
+                {/* <FormInput
+                  {...register("model")}
                   type="text"
-                  name="lastName"
-                  className={errors.lastName ? "border-danger" : ''}
-                  placeholder="Doe"
-                />
-                {errors.lastName && (
+                  name="model"
+                  className={errors.model ? "border-danger" : ''}
+                  placeholder="Prado v8"
+                /> */}
+                {errors.isRareModel && (
                   <div className="mt-2 text-danger">
-                    {typeof errors.lastName.message === "string" &&
-                      errors.lastName.message}
+                    {typeof errors.isRareModel.message === "string" &&
+                      errors.isRareModel.message}
                   </div>
                 )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-6">
-                  Conference
-                </FormLabel>
-                <FormSelect {...register("tenant")} name="tenant">
-                  {conferences.map((conference: any, key) => <option key={key} value={conference._id} >{conference.name}</option>)}
-                </FormSelect>
-                {errors.role && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.role.message === "string" &&
-                      errors.role.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-6">
-                  Role
-                </FormLabel>
-                <FormSelect {...register("role")} name="role">
-                  {roles.map((role: any, key) => <option key={key} value={role._id} >{role.role}</option>)}
-                </FormSelect>
-                {errors.role && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.role.message === "string" &&
-                      errors.role.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-6">
-                  Country
-                </FormLabel>
-                <FormSelect {...register("country")} name="country" value={"Kenya"}>
-                  {countries.map((country, key) => <option key={key} value={country.name} >{country.name}</option>)}
-                </FormSelect>
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Phone Number
-                </FormLabel>
-                <FormInput
-                  {...register("phoneNumber")}
-                  type="text"
-                  name="phoneNumber"
-                  placeholder="+254 712 345 6789"
-                />
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Email
-                </FormLabel>
-                <FormInput
-                  {...register("email")}
-                  type="email"
-                  name="email"
-                  className={errors.email ? "border-danger" : ''}
-                  placeholder="info@example.com"
-                />
-                {errors.email && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.email.message === "string" &&
-                      errors.email.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Linkedin
-                </FormLabel>
-                <FormInput
-                  {...register("linkedin")}
-                  type="text"
-                  name="linkedin"
-                  placeholder="https://www.linkedin.com/"
-                />
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Twitter
-                </FormLabel>
-                <FormInput
-                  {...register("twitter")}
-                  type="text"
-                  name="twitter"
-                  placeholder="https://twitter.com/"
-                />
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Facebook
-                </FormLabel>
-                <FormInput
-                  {...register("facebook")}
-                  type="text"
-                  name="linkedin"
-                  placeholder="https://www.facebook.com/"
-                />
               </div>
 
-              <div className="col-span-12 sm:col-span-12">
-                <Dropzone getRef={(el) => { }}
-                  options={{
-                    url: "https://africaclimatesummit.org/",
-                    thumbnailWidth: 150,
-                    maxFilesize: 0.5,
-                    maxFiles: 1,
-                    headers: { "My-Awesome-Header": "header value" },
-                  }}
-                  className="dropzone"
-                >
-                  <div className="text-lg font-medium">
-                    Upload profile photo.
+
+
+
+
+
+
+
+              <div className="col-span-12 sm:col-span-6">
+              <FormLabel htmlFor="modal-form-1">
+                 
+                 Is it High Exposure?
+                </FormLabel>
+                 <FormSelect {...register("isHighExposure")} className="w-56 ml-2 xl:w-auto !box">
+              <option value="">Choose an option</option> 
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+              
+            </FormSelect>
+                {/* <FormInput
+                  {...register("model")}
+                  type="text"
+                  name="model"
+                  className={errors.model ? "border-danger" : ''}
+                  placeholder="Prado v8"
+                /> */}
+                {errors.isHighExposure && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.isHighExposure.message === "string" &&
+                      errors.isHighExposure.message}
                   </div>
-                  <div className="text-gray-600">
-                    Optional
-                  </div>
-                </Dropzone>
+                )}
               </div>
             </Dialog.Description>
             <Dialog.Footer>
-              <Button type="button" variant="outline-secondary" onClick={() => {
-                setDialog(false);
-              }}
+            <Button type="button" variant="outline-secondary" onClick={() => (
+  reset({ make: "" }), setDialog(false))}
                 className="w-20 mr-1"
               >
                 Cancel
@@ -539,6 +438,145 @@ function Main() {
           </form>
         </Dialog.Panel>
       </Dialog>
+
+
+
+
+      <Dialog staticBackdrop size="lg" open={dialogModel} onClose={() => {
+        setDialogModel(false);
+      }}
+      >
+        <Dialog.Panel>
+          <form className="validate-form" onSubmit={onSubmit}>
+          {makes.map((user: any, key) => (
+
+                <Dialog.Title key={key}>
+              <h2 className="mr-auto text-base font-medium">
+                 
+                  {user.make} Vehicle Make
+                 {/* {setUserId(user.id)} */}
+                
+              </h2>
+              <a onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                setDialogModel(false);
+              }}
+                className="absolute top-0 right-0 mt-3 mr-3"
+                href="#"
+              >
+                <Lucide icon="X" className="w-8 h-8 text-slate-400" />
+              </a>
+            </Dialog.Title>
+          ))}
+          
+            <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
+             
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                  Model
+                </FormLabel>
+                <FormInput
+                  {...register("model")}
+                  type="text"
+                  name="model"
+                  className={errors.lastName ? "border-danger" : ''}
+                  placeholder="Prado v8"
+                />
+                {errors.model && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.model.message === "string" &&
+                      errors.model.message}
+                  </div>
+                )}
+              </div>
+             
+              <div className="col-span-12 sm:col-span-6">
+              <FormLabel htmlFor="modal-form-1">
+             
+              Is it High Risk?
+                </FormLabel>
+                 <FormSelect className="w-56 ml-2 xl:w-auto !box">
+              <option>Select</option>   
+              <option>Yes</option>
+              <option>No</option>
+              
+            </FormSelect>
+                {/* <FormInput
+                  {...register("model")}
+                  type="text"
+                  name="model"
+                  className={errors.model ? "border-danger" : ''}
+                  placeholder="Prado v8"
+                /> */}
+                {errors.model && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.model.message === "string" &&
+                      errors.model.message}
+                  </div>
+                )}
+              </div>
+              <div className="col-span-12 sm:col-span-6">
+              <FormLabel htmlFor="modal-form-1">
+                 
+                 Is it High Exposure?
+                </FormLabel>
+                 <FormSelect className="w-56 ml-2 xl:w-auto !box">
+              <option>Select</option>   
+              <option>Yes</option>
+              <option>No</option>
+              
+            </FormSelect>
+                {/* <FormInput
+                  {...register("model")}
+                  type="text"
+                  name="model"
+                  className={errors.model ? "border-danger" : ''}
+                  placeholder="Prado v8"
+                /> */}
+                {errors.model && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.model.message === "string" &&
+                      errors.model.message}
+                  </div>
+                )}
+              </div>
+            </Dialog.Description>
+            <Dialog.Footer>
+              <Button type="button" variant="outline-secondary" onClick={() => {
+                setDialogModel(false);
+              }}
+                className="w-20 mr-1"
+              >
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit" className="w-20">
+                Save
+                {
+                  loading && <LoadingIcon
+                    icon="spinning-circles"
+                    color="white"
+                    className="w-4 h-4 ml-2"
+                  />
+                }
+              </Button>
+            </Dialog.Footer>
+          </form>
+        </Dialog.Panel>
+          
+      </Dialog>
+
+          
+
+
+
+
+
+
+
+
+
+
+
       {/* BEGIN: Delete Confirmation Modal */}
       <Dialog
         open={confirmDelete}

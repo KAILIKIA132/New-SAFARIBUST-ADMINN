@@ -38,9 +38,6 @@ function Policy() {
             // let res = await ApiService.getPolicy();
             // setPrivacyPolicy(res.privacy_policy)
             // setTermsConditions(res.terms_conditions) hello aaron
-            
-
-            
         } catch (error) {
             isLoading(false);
             console.log("Error fetching feeds");

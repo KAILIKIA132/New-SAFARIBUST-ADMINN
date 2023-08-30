@@ -17,3 +17,22 @@ export interface User {
 
 
 }
+export interface Make {
+  id: number;
+  make: string;
+  isRareModel: number;
+  isHighExposure: number;
+  model:string;
+  // Define other properties as needed
+
+
+}
+export interface Model {
+  id: number;
+  model: string;
+  isHighExposure: null | boolean;
+  isHighRisk: null | boolean;
+  createdAt: string;
+ 
+}
+

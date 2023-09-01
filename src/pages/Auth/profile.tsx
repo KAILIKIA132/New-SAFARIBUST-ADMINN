@@ -8,6 +8,8 @@ import {
 import Lucide from "../../base-components/Lucide";
 import { useLocation } from "react-router-dom";
 import * as ApiService from "../../services/auth";
+import Button from "../../base-components/Button";
+
 
 function Profile() {
   const location = useLocation();
@@ -50,8 +52,8 @@ function Profile() {
               <div className="w-24 text-lg font-medium truncate sm:w-40 sm:whitespace-normal">
                 {user.firstname + " " + user.lastname}
               </div>
-              <div className="text-slate-500">{user.phone}</div>
-              <div className="text-slate-500">{user.phone}</div>
+              <div className="text-slate-500">{user.gender}</div>
+              <div className="text-slate-500">{user.occupation}</div>
             </div>
           </div>
          
@@ -77,7 +79,7 @@ function Profile() {
                   id="update-profile-form-9"
                   type="text"
                   placeholder=""
-                  value={user.phone}
+                  value={user.nationality}
                   disabled
                 />
               </div>
@@ -91,19 +93,19 @@ function Profile() {
                   id="update-profile-form-10"
                   type="text"
                   placeholder="Phone number"
-                  value={user.occupation}
+                  value={user.phone}
                   disabled
                 />
               </div>
               <div className="mt-3">
                 <FormLabel htmlFor="update-profile-form-11">
-                  City
+                  County
                 </FormLabel>
                 <FormInput
                   id="update-profile-form-11"
                   type="text"
                   placeholder="City"
-                  value={user.occupation}
+                  value={user.county}
                   disabled
                 />
               </div>
@@ -114,14 +116,54 @@ function Profile() {
         <div className="p-5">
           
          
-          <div className="flex items-center mt-5">
+          {/* <div className="flex items-center mt-5">
           
             <FormSwitch className="ml-auto">
               <FormSwitch.Input type="checkbox" checked={user.occupation} />
             </FormSwitch>
-          </div>
+          </div> */}
         </div>
-     
+        <div className="intro-y box lg:mt-5">
+            <div className="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+              <h2 className="mr-auto text-base font-medium">Change Password</h2>
+            </div>
+            <div className="p-5">
+              <div>
+                <FormLabel htmlFor="change-password-form-1">
+                  Old Password
+                </FormLabel>
+                <FormInput
+                  id="change-password-form-1"
+                  type="password"
+                  placeholder="Input text"
+                />
+              </div>
+              <div className="mt-3">
+                <FormLabel htmlFor="change-password-form-2">
+                  New Password
+                </FormLabel>
+                <FormInput
+                  id="change-password-form-2"
+                  type="password"
+                  placeholder="Input text"
+                />
+              </div>
+              <div className="mt-3">
+                <FormLabel htmlFor="change-password-form-3">
+                  Confirm New Password
+                </FormLabel>
+                <FormInput
+                  id="change-password-form-3"
+                  type="password"
+                  placeholder="Input text"
+                />
+              </div>
+              <Button variant="primary" type="button" className="mt-4">
+                Change Password
+              </Button>
+            </div>
+          </div>
+          {/* END: Change Password */}
       </>
       }
     </div>

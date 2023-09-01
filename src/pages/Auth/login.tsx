@@ -10,6 +10,10 @@ import { Link } from "react-router-dom";
 import { useAuth } from '../../contexts/Auth';
 import * as ApiService from "../../services/auth";
 import * as yup from "yup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+
+
 
 const Login = () => {
   const auth = useAuth();
@@ -58,6 +62,12 @@ const Login = () => {
     }
 
   };
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const togglePasswordVisibility = () => {
+    console.log("Button clicked");
+    setShowPassword(!showPassword);
+  };
 
   return (
     <>
@@ -90,18 +100,45 @@ const Login = () => {
               <FormInput
                 {...register("password")}
                 id="validation-form-3"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
-                className={errors.password ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
+                // className={errors.password ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
+                className={
+                  errors.password
+                    ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger pr-10"
+                    : "block px-4 py-3 mt-4 intro-x min-w-[250px] xl:min-w-[350px] border pr-10"
+                }
                 placeholder="Password"
+              />  <div
+              className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+              onClick={togglePasswordVisibility}
+            >
+              <FontAwesomeIcon
+                icon={showPassword ? faEyeSlash : faEye}
+                className="text-blue-800"
               />
-              {errors.password && (
-                <div className="mt-2 text-danger">
-                  {typeof errors.password.message === "string" &&
-                    errors.password.message}
-                </div>
-              )}
             </div>
+            
+      {errors.password && (
+        
+        <div className="mt-2 text-danger">
+          {typeof errors.password.message === "string" &&
+            errors.password.message}
+        </div>
+      )}
+
+      {/* Eye Icon */}
+      <div
+        className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+        onClick={togglePasswordVisibility}
+      >
+        <FontAwesomeIcon
+          icon={showPassword ? faEyeSlash : faEye}
+          className="text-blue-800"
+        />
+      </div>
+
+    </div>
           </div>
           <div className="flex mt-4 text-xs intro-x text-slate-600 dark:text-slate-500 sm:text-sm">
             <div className="flex items-center mr-auto">

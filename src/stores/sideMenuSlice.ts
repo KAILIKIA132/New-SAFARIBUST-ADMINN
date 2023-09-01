@@ -279,13 +279,14 @@ const initialState: SideMenuState = {
         {
           icon: "Activity",
           pathname: "/NewProfile",
-          title: "NewProfile",
-        },
-        {
-          icon: "Activity",
-          pathname: "/change-password",
           title: "Change Password",
         },
+        // {
+        //   icon: "Activity",
+        //   pathname: "/change-password",
+        //   pathname: "/NewProfile",
+        //   title: "Change Password",
+        // },
       ],
     },
     {

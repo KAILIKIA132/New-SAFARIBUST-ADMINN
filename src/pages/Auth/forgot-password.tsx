@@ -88,7 +88,7 @@ const ForgotPassword = () => {
             </div>
           </div>
           <div className="mt-5 text-center intro-x xl:mt-8 xl:text-left">
-            <Button
+            {/* <Button
               type="submit" // Set the type to "submit" to trigger form submission
               variant="primary"
               className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3"
@@ -101,7 +101,15 @@ const ForgotPassword = () => {
                   className="w-4 h-4 ml-2"
                 />
               }
-            </Button>
+            </Button> */}
+            <Link to="/ForgotPasswordOTP">
+              <Button
+                variant="outline-primary"
+                className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3"
+              >
+                Reset
+              </Button>
+              </Link>
             <Link to="/login">
               <Button
                 variant="outline-primary"

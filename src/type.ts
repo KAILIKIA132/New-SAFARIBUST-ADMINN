@@ -35,4 +35,7 @@ export interface Model {
   createdAt: string;
  
 }
+export interface Errors {
+  otp?: (string | undefined)[]; // Adjust the type as needed
+}
 

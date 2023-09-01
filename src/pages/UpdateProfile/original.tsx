@@ -50,8 +50,8 @@ function Profile() {
               <div className="w-24 text-lg font-medium truncate sm:w-40 sm:whitespace-normal">
                 {user.firstname + " " + user.lastname}
               </div>
-              <div className="text-slate-500">{user.phone}</div>
-              <div className="text-slate-500">{user.phone}</div>
+              <div className="text-slate-500">{user.gender}</div>
+              <div className="text-slate-500">{user.occupation}</div>
             </div>
           </div>
          
@@ -77,7 +77,7 @@ function Profile() {
                   id="update-profile-form-9"
                   type="text"
                   placeholder=""
-                  value={user.phone}
+                  value={user.nationality}
                   disabled
                 />
               </div>
@@ -91,19 +91,19 @@ function Profile() {
                   id="update-profile-form-10"
                   type="text"
                   placeholder="Phone number"
-                  value={user.occupation}
+                  value={user.phone}
                   disabled
                 />
               </div>
               <div className="mt-3">
                 <FormLabel htmlFor="update-profile-form-11">
-                  City
+                  County
                 </FormLabel>
                 <FormInput
                   id="update-profile-form-11"
                   type="text"
                   placeholder="City"
-                  value={user.occupation}
+                  value={user.county}
                   disabled
                 />
               </div>
@@ -113,13 +113,13 @@ function Profile() {
         </div>
         <div className="p-5">
           
-         
+{/*          
           <div className="flex items-center mt-5">
           
             <FormSwitch className="ml-auto">
               <FormSwitch.Input type="checkbox" checked={user.occupation} />
             </FormSwitch>
-          </div>
+          </div> */}
         </div>
      
       </>

@@ -15,6 +15,7 @@ import * as yup from "yup";
 import Notification, { NotificationElement } from "../../base-components/Notification";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import Dropzone from "../../base-components/Dropzone";
+import TomSelect from "../../base-components/TomSelect";
 
 function Main() {
   const [countries] = useState([
@@ -277,6 +278,10 @@ function Main() {
   const [loading, isLoading] = useState(false);
   const [success, setSuccess] = useState(true);
   const [message, setMessage] = useState("");
+  const [select_role] = useState(['ADMIN', 'GENERAL MANAGER', 'MANAGER', 'MARKETER']);
+  const [selectUserRole, setUserRole] = useState([""]);
+
+
 
   // Success notification
   const notify = useRef<NotificationElement>();
@@ -303,7 +308,7 @@ function Main() {
   useEffect(() => {
     getUsers();
     getRoles();
-    getConferences();
+    // getConferences();
   }, []);
 
   const getUsers = async () => {
@@ -326,11 +331,11 @@ function Main() {
     setRoles(res);
   };
 
-  const getConferences = async () => {
-    let res = await ApiService.getConferences();
-    setConferences(res.conferences);
-    setPagination({ current_page: res.current_page, total: res.total, total_pages: res.total_pages, per_page: res.per_page });
-  };
+  // const getConferences = async () => {
+  //   let res = await ApiService.getConferences();
+  //   setConferences(res.users);
+  //   setPagination({ current_page: res.current_page, total: res.total, total_pages: res.total_pages, per_page: res.per_page });
+  // };
 
   const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -442,11 +447,14 @@ function Main() {
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   EMAIL
                 </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
+                {/* <Table.Th className="border-b-0 whitespace-nowrap">
                   PHONE
-                </Table.Th>
+                </Table.Th> */}
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   GENDER
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  ROLE
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   COUNTRY
@@ -472,42 +480,45 @@ function Main() {
                           as="img"
                           alt=""
                           className="border-white rounded-lg shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
-                          src={user.profileImage}
-                          content={user.firstName + " " + user.lastName}
+                          src={user.photo}
+                          content={user.firstname + " " + user.lastname}
                         />
                       </div>
                       <div className="ml-4">
                         <a href="" className="font-medium whitespace-nowrap">
-                          {user.firstName + " " + user.lastName}
+                          {user.firstname + " " + user.lastname}
                         </a>
-                        <div className="text-slate-500 text-xs whitespace-nowrap mt-0.5">
+                        {/* <div className="text-slate-500 text-xs whitespace-nowrap mt-0.5">
                           {user.role.role}
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.email}
                   </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.phoneNumber}
-                  </Table.Td>
+                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.phone}
+                  </Table.Td> */}
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.gender}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.country}
+                    {user.role}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.nationality}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div
                       className={clsx([
                         "flex items-center justify-center",
-                        { "text-success": user.verified },
-                        { "text-danger": !user.verified },
+                        { "text-success": user.nationality },
+                        { "text-danger": !user.nationality},
                       ])}
                     >
-                      <Lucide icon={user.verified ? "CheckSquare" : "XSquare"} className="w-4 h-4 mr-2" />
-                      {user.verified ? "Active" : "Inactive"}
+                      <Lucide icon={user.nationality ? "CheckSquare" : "XSquare"} className="w-4 h-4 mr-2" />
+                      {user.nationality ? "Active" : "Inactive"}
                     </div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
@@ -523,7 +534,7 @@ function Main() {
                             <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Edit
                           </Menu.Item>
                           <Menu.Item onClick={() => {
-                            setUserId(user._id),
+                            setUserId(user.id),
                               setConfirmDelete(true);
                           }}>
                             <Lucide icon="Trash" className="w-4 h-4 mr-2" /> Delete
@@ -607,13 +618,13 @@ function Main() {
                   {...register("firstName")}
                   type="text"
                   name="firstName"
-                  className={errors.firstName ? "border-danger" : ''}
+                  className={errors.firstname ? "border-danger" : ''}
                   placeholder="John"
                 />
-                {errors.firstName && (
+                {errors.firstname && (
                   <div className="mt-2 text-danger">
-                    {typeof errors.firstName.message === "string" &&
-                      errors.firstName.message}
+                    {typeof errors.firstname.message === "string" &&
+                      errors.firstname.message}
                   </div>
                 )}
               </div>
@@ -625,17 +636,17 @@ function Main() {
                   {...register("lastName")}
                   type="text"
                   name="lastName"
-                  className={errors.lastName ? "border-danger" : ''}
+                  className={errors.lastname ? "border-danger" : ''}
                   placeholder="Doe"
                 />
-                {errors.lastName && (
+                {errors.lastname && (
                   <div className="mt-2 text-danger">
-                    {typeof errors.lastName.message === "string" &&
-                      errors.lastName.message}
+                    {typeof errors.lastname.message === "string" &&
+                      errors.lastname.message}
                   </div>
                 )}
               </div>
-              <div className="col-span-12 sm:col-span-6">
+              {/* <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-6">
                   Conference
                 </FormLabel>
@@ -648,8 +659,8 @@ function Main() {
                       errors.role.message}
                   </div>
                 )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
+              </div> */}
+              {/* <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-6">
                   Role
                 </FormLabel>
@@ -662,7 +673,7 @@ function Main() {
                       errors.role.message}
                   </div>
                 )}
-              </div>
+              </div> */}
               <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-6">
                   Country
@@ -671,7 +682,7 @@ function Main() {
                   {countries.map((country, key) => <option key={key} value={country.name} >{country.name}</option>)}
                 </FormSelect>
               </div>
-              <div className="col-span-12 sm:col-span-6">
+              {/* <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
                   Phone Number
                 </FormLabel>
@@ -681,7 +692,8 @@ function Main() {
                   name="phoneNumber"
                   placeholder="+254 712 345 6789"
                 />
-              </div>
+              </div> */}
+              
               <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
                   Email
@@ -701,6 +713,40 @@ function Main() {
                 )}
               </div>
               <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                  Gender
+                </FormLabel>
+                <FormInput
+                  {...register("gender")}
+                  type="text"
+                  name="gender"
+                  placeholder="Male"
+                />
+              </div>
+              <div className="col-span-12 sm:col-span-12">
+                <FormLabel htmlFor="modal-form-6">
+                  Roles
+                </FormLabel>
+                <TomSelect value={selectUserRole} onChange={setUserRole} options={{
+                  placeholder: "Select Role",
+                }} className="w-full" multiple>
+                  {select_role.map((role: any, index: any) => (
+                    <option key={index} value={role}>{role}</option>
+                  ))}
+                </TomSelect>
+              </div>
+              {/* <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                  ROLE
+                </FormLabel>
+                <FormInput
+                  {...register("role")}
+                  type="text"
+                  name="role"
+                  placeholder="Admin"
+                />
+              </div> */}
+              {/* <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
                   Linkedin
                 </FormLabel>
@@ -732,9 +778,9 @@ function Main() {
                   name="linkedin"
                   placeholder="https://www.facebook.com/"
                 />
-              </div>
+              </div> */}
 
-              <div className="col-span-12 sm:col-span-12">
+              {/* <div className="col-span-12 sm:col-span-12">
                 <Dropzone getRef={(el) => { }}
                   options={{
                     url: "https://africaclimatesummit.org/",
@@ -752,7 +798,7 @@ function Main() {
                     Optional
                   </div>
                 </Dropzone>
-              </div>
+              </div> */}
             </Dialog.Description>
             <Dialog.Footer>
               <Button type="button" variant="outline-secondary" onClick={() => {

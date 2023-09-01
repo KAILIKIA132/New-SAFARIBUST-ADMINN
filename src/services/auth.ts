@@ -274,6 +274,17 @@ export async function getValuers(data: { page: number; }) {
 
 
 
+export async function exportValuers() {
+    try {
+      let res = await axios.get(c.VALUERS);
+      return res.data;
+    } catch (e) {
+      throw handler(e);
+    }
+  };
+
+
+
 
 export async function deleteValuer(valuerId: any) {
     try {

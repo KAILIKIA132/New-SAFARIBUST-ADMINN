@@ -477,7 +477,7 @@ import * as yup from "yup";
 import Notification, { NotificationElement } from "../../base-components/Notification";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import Dropzone from "../../base-components/Dropzone";
-
+import { exportToExcel,exportToPDF } from "../../utils/export";
 
 
 function Main() {
@@ -579,6 +579,23 @@ function Main() {
     }
   };
 
+  const exportValuers = async (filetype: any) => {
+    try {
+      let res = await ApiService.exportValuers();
+
+      if (filetype == 'excel') {
+        exportToExcel(res.valuers, "valuers");
+      } else {
+        exportToPDF(res.valuers, "valuers");
+      }
+    } catch (error) {
+      isLoading(false);
+      console.log("Error fetching valuers");
+    }
+  };
+
+
+
   return (
     <>
       <h2 className="mt-10 text-lg font-medium intro-y">Valuers</h2>
@@ -597,14 +614,15 @@ function Main() {
               </span>
             </Menu.Button>
             <Menu.Items className="w-40">
-              <Menu.Item>
-                <Lucide icon="Printer" className="w-4 h-4 mr-2" /> Print
-              </Menu.Item>
-              <Menu.Item>
+              <Menu.Item onClick={() => {
+                    exportValuers("excel");
+                  }}>
                 <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
                 Excel
               </Menu.Item>
-              <Menu.Item>
+              <Menu.Item onClick={() => {
+                    exportValuers("pdf");
+                  }}>
                 <Lucide icon="FileText" className="w-4 h-4 mr-2" /> Export to
                 PDF
               </Menu.Item>

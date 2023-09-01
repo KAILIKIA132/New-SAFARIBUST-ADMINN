@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import Lucide from "../../base-components/Lucide";
-function ChangePassword() {
+function CreateNewPassword() {
   const [loading, isLoading] = useState(false);
   const [success, setSuccess] = useState(true);
   const [message, setMessage] = useState("");
@@ -141,4 +141,4 @@ function ChangePassword() {
   );
 }
 
-export default ChangePassword;
+export default CreateNewPassword;

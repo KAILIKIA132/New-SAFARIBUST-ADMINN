@@ -32,10 +32,12 @@ import NewProfile from "../pages/Auth/profile";
 
 
 import Role from "../pages/Auth/roles-permissions";
-import ForgotPassword from "../pages/ForgotPassword";
+import ForgotPassword from "../pages/Auth/forgot-password";
+import ForgotPasswordOTP from "../pages/Auth/forgot-passOTP";
+import CreateNewPassword from "../pages/Auth/create-newPassword";
 import ErrorPage from "../pages/ErrorPage";
 import UpdateProfile from "../pages/UpdateProfile/original";
-import ChangePassword from "../pages/ChangePassword";
+import ChangePassword from "../pages/Auth/forgot-password";
 import AuthGuard from "../utils/route-guard/AuthGuard";
 import GuestGuard from "../utils/route-guard/GuestGuard";
 import Vehicle from "../pages/vehicle";
@@ -295,7 +297,19 @@ function Router() {
         {
           path: "/forgot-password",
           element: <ForgotPassword />,
-        },]
+        },
+
+        {
+          path: "/ForgotPasswordOTP",
+          element: <ForgotPasswordOTP />,
+        },
+        {
+          path: "/CreateNewPassword",
+          element: <CreateNewPassword />,
+        },
+        
+      
+      ]
     },
     {
       path: "/error-page",

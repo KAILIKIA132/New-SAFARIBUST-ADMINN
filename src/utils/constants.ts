@@ -32,6 +32,8 @@ export const POLICY = `${BASE_URL}vehicle/users/`;
 
 
 
+
+
 //Simcards Endpoints
 export const SIMCARDS = `${BASE_URL}simcard-service/simcards`;
 

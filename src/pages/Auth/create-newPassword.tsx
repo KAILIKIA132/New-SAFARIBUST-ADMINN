@@ -9,11 +9,20 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import Lucide from "../../base-components/Lucide";
+import { useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+
+
+
 function CreateNewPassword() {
   const [loading, isLoading] = useState(false);
   const [success, setSuccess] = useState(true);
   const [message, setMessage] = useState("");
-
+  const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state?.email;
+console.log(email)
   // Success notification
   const notify = useRef<NotificationElement>();
   const schema = yup
@@ -39,11 +48,18 @@ function CreateNewPassword() {
       isLoading(true);
       try {
         const data = await getValues();
-        let res = await ApiService.changePassword(data);
+        console.log(data)
+        let res = await ApiService.passwordReset(data);
         isLoading(false);
         setSuccess(true);
         setMessage(res.message);
         notify.current?.showToast();
+        setTimeout(() => {
+          navigate('/CreateNewPassword',{
+            replace: true ,
+         
+        });
+        }, 1000);
       } catch (error) {
         isLoading(false);
         setSuccess(false);
@@ -73,6 +89,27 @@ function CreateNewPassword() {
               placeholder="Old Password"
             />
           </div> */}
+
+<div>
+           
+            <FormInput
+              {...register("email")}
+              type="hidden"
+              name="email"
+              id="email"
+              value={email}
+              className={errors.email ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
+              placeholder="Password"
+            />
+            {errors.email&& (
+              <div className="mt-2 text-danger">
+                {typeof errors.email.message === "string" &&
+                  errors.email.message}
+              </div>
+            )}
+          </div>
+
+
           <div>
             <FormLabel htmlFor="change-password-form-2">
               New Password

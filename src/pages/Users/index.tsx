@@ -264,6 +264,8 @@ function Main() {
     { name: 'Zimbabwe', code: 'ZW' }
   ]);
 
+
+
   const [dialog, setDialog] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteButtonRef = useRef(null);
@@ -722,6 +724,27 @@ function Main() {
                   name="gender"
                   placeholder="Male"
                 />
+              </div>
+
+              <div className="col-span-12 sm:col-span-12">
+              <FormLabel htmlFor="modal-form-6">
+                 
+                 User Status
+                </FormLabel>
+                 <FormSelect className="w-56 ml-2 xl:w-auto !box">
+              <option>Select Status</option>   
+              <option>Active</option>
+              <option>Inactive</option>
+             
+              
+            </FormSelect>
+               
+                {errors.model && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.model.message === "string" &&
+                      errors.model.message}
+                  </div>
+                )}
               </div>
               <div className="col-span-12 sm:col-span-12">
                 <FormLabel htmlFor="modal-form-6">

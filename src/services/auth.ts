@@ -184,6 +184,57 @@ export async function getUsers(data: { page: number; }) {
     }
 }
 
+
+
+
+
+
+    export async function addEmailOTP(data: FieldValues) {
+    try {
+        console.log(data);
+ let res = await axios.post(c.REGISTER + "/otp", data);
+ const storeData = async () => {
+    try {
+        const jsonValue = JSON.stringify(res.data)
+        await localStorage.setItem('otp', jsonValue)
+    } catch (e) {
+        throw handler(e);
+    }
+}
+storeData();
+ 
+        return res.data;
+
+    } catch (e) {
+        throw handler(e);
+    }
+}
+
+export async function verifyEmailOTP(data: FieldValues) {
+    try {
+        console.log(data);
+ let res = await axios.post(c.REGISTER + "/verify", data);
+ 
+        return res.data;
+
+    } catch (e) {
+        throw handler(e);
+    }
+}
+
+export async function passwordReset(data: FieldValues) {
+    try {
+        console.log(data);
+ let res = await axios.post(c.REGISTER + "/password", data);
+ 
+        return res.data;
+
+    } catch (e) {
+        throw handler(e);
+    }
+}
+
+
 export async function addMake(data: FieldValues) {
     try {
         console.log(data);

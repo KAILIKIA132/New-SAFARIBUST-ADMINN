@@ -89,9 +89,9 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
               before:content-[''] before:w-[8px] before:h-[8px] before:rounded-full before:absolute before:top-[-2px] before:right-0 before:bg-danger
             "
             >
-              <Lucide icon="Bell" className="w-5 h-5 dark:text-slate-500" />
+              {/* <Lucide icon="Bell" className="w-5 h-5 dark:text-slate-500" /> */}
             </Popover.Button>
-            <Popover.Panel className="w-[280px] sm:w-[350px] p-5 mt-2">
+            {/* <Popover.Panel className="w-[280px] sm:w-[350px] p-5 mt-2">
               <div className="mb-5 font-medium">Notifications</div>
               {_.take(fakerData, 5).map((faker, fakerKey) => (
                 <div
@@ -124,7 +124,7 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
                   </div>
                 </div>
               ))}
-            </Popover.Panel>
+            </Popover.Panel> */}
           </Popover>
           {/* END: Notifications */}
           {/* BEGIN: Account Menu */}

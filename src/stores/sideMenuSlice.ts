@@ -182,6 +182,16 @@ const initialState: SideMenuState = {
       pathname: "/CoversFAQs",
       title: "Covers FAQs",
     },
+    {
+      icon: "Activity",
+      pathname: "/PrivacyPolicy",
+      title: "Privacy Policy",
+    },
+    {
+      icon: "Activity",
+      pathname: "/Terms",
+      title: "Terms & Conditions",
+    },
     
   ]},
     {
@@ -253,8 +263,14 @@ const initialState: SideMenuState = {
         {
           icon: "Activity",
           pathname: "/Role",
-          title: "Roles & Permissions",
+          title: "Roles",
         },
+        {
+          icon: "Activity",
+          pathname: "/Permissions",
+          title: " Permissions",
+        },
+       
         {
           icon: "Activity",
           pathname: "/users",
@@ -266,16 +282,14 @@ const initialState: SideMenuState = {
           pathname: "/Logs",
           title: "Access Logs",
         },
-        {
-          icon: "Activity",
-          pathname: "/PrivacyPolicy",
-          title: "Privacy Policy",
-        },
-        {
-          icon: "Activity",
-          pathname: "/Privacy",
-          title: "Privacy",
-        },
+      
+        
+        // {
+        //   icon: "Activity",
+        //   pathname: "/Privacy",
+        //   title: "Privacy",
+        // },
+
         {
           icon: "Activity",
           pathname: "/NewProfile",

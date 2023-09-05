@@ -25,13 +25,15 @@ import Logs from "../pages/Auth/audit-logs";
 // import Login from "../pages/Auth/forgot-password";
 // import LoginBacks from "../pages/Auth/loginsBacks";
 import PrivacyPolicy from "../pages/Auth/privacy-policy";
+import Terms from "../pages/Auth/terms&conditions";
 import Privacy from "../pages/Auth/privacy";
 import NewProfile from "../pages/Auth/profile";
 
 
 
 
-import Role from "../pages/Auth/roles-permissions";
+import Role from "../pages/Auth/roles";
+import Permissions from "../pages/Auth/permissions";
 import ForgotPassword from "../pages/Auth/forgot-password";
 import ForgotPasswordOTP from "../pages/Auth/forgot-passOTP";
 import CreateNewPassword from "../pages/Auth/create-newPassword";
@@ -155,6 +157,11 @@ function Router() {
           element: <NewPolicy />,
         },
         {
+          path: "Terms",
+          element: <Terms/>,
+        },
+       
+        {
           path: "extension",
           element: <Extension />,
         },
@@ -206,6 +213,11 @@ function Router() {
           path: "Role",
           element: <Role/>,
         },
+        {
+          path: "Permissions",
+          element: <Permissions/>,
+        },
+        
         {
           path: "Logs",
           element: <Logs/>,

@@ -11,13 +11,8 @@ import Lucide from '../../base-components/Lucide';
 import { Link, useNavigate } from 'react-router-dom';
 import LoadingIcon from '../../base-components/LoadingIcon';
 import { Errors } from '../../type';
-import { useLocation } from 'react-router-dom';
-
 
 const ForgotPasswordOTP = () => {
-  const location = useLocation();
-  const email = location.state?.email;
-  const channel = location.state?.channel;
   const navigate = useNavigate();
   const [loading, isLoading] = useState(false);
   const [success, setSuccess] = useState(true);
@@ -49,27 +44,14 @@ const ForgotPasswordOTP = () => {
       isLoading(true);
       try {
         const data = await getValues();
-        console.log("Good morning great men of God")
-        console.log(data);
-        let res = await ApiService.verifyEmailOTP(data);
+        // let res = await ApiService.verifyOTP(data);
         isLoading(false);
         setSuccess(true);
         // setMessage(res.message);
         notify.current?.showToast();
         setTimeout(() => {
-          navigate('/CreateNewPassword',{
-            replace: true ,
-          state: { email}
-         
-        });
+          navigate('/login', { replace: true });
         }, 1000);
-
-        // setTimeout(() => {
-        //   navigate('/CreateNewPassword', {
-        //     state: { email: data.email},
-        //     replace: true,
-        //   });
-        // }, 1000);
       } catch (err: any) {
         isLoading(false);
         setSuccess(false);
@@ -86,42 +68,7 @@ const ForgotPasswordOTP = () => {
         <div className="mt-2 text-center intro-x text-slate-400 xl:hidden">Enter the 4-digit OTP sent to your email.</div>
         <form className="validate-form" onSubmit={onSubmit}>
           <div className="mt-8 intro-x">
-
-          <div className="input-form">
-              <FormInput
-                {...register("email")}
-                id="validation-form-2"
-                type="hidden"
-                name="email"
-                value={email}
-                className={errors.email ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
-                placeholder="Email"
-              />
-              {errors.email && (
-                <div className="mt-2 text-danger">
-                  {typeof errors.email.message === "string" &&
-                    errors.email.message}
-                </div>
-              )}
-            </div>
-            <div className="input-form">
-              <FormInput
-                {...register("channel")}
-                id="validation-form-2"
-                type="hidden"
-                name="channel"
-                value={channel}
-                className={errors.channel ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
-                placeholder="channel"
-              />
-              {errors.channel && (
-                <div className="mt-2 text-danger">
-                  {typeof errors.channel.message === "string" &&
-                    errors.channel.message}
-                </div>
-              )}
-            </div>
-            {/* <div className="input-form flex items-center justify-center space-x-2">
+            <div className="input-form flex items-center justify-center space-x-2">
               {[0, 1, 2, 3].map((index) => (
                 <FormInput
                   key={index}
@@ -141,44 +88,23 @@ const ForgotPasswordOTP = () => {
                 }
                   placeholder=""
                 />
-
-
-
-                
               ))}
-            </div> */}
-            {/* {errors.otp && (
-              <div className="mt-2 text-danger">{typeof errors.otp.message === 'string' && errors.otp.message}</div>
-            )} */}
-          </div>
-          <div className="input-form">
-              <FormInput
-                {...register("otp")}
-                id="validation-form-2"
-                type="number"
-                name="otp"
-                className={errors.otp ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
-                placeholder="otp"
-              />
-              {errors.otp && (
-                <div className="mt-2 text-danger">
-                  {typeof errors.otp.message === "string" &&
-                    errors.otp.message}
-                </div>
-              )}
             </div>
-
+            {errors.otp && (
+              <div className="mt-2 text-danger">{typeof errors.otp.message === 'string' && errors.otp.message}</div>
+            )}
+          </div>
           <div className="mt-5 text-center intro-x xl:mt-8 xl:text-left">
-            <Button
+            {/* <Button
               type="submit"
               variant="primary"
               className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3"
             >
               Verify
               {loading && <LoadingIcon icon="spinning-circles" color="white" className="w-4 h-4 ml-2" />}
-            </Button>
+            </Button> */}
             
-            {/* <Link to="/CreateNewPassword">
+            <Link to="/CreateNewPassword">
               <Button variant="outline-primary" className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3">
                 Verify
               </Button>
@@ -187,7 +113,7 @@ const ForgotPasswordOTP = () => {
               <Button variant="outline-primary" className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3">
                 Resend Code
               </Button>
-            </Link> */}
+            </Link>
           </div>
         </form>
       </div>

@@ -66,9 +66,9 @@ function Log() {
               <Table.Th className="border-b-0 whitespace-nowrap">
                 IP
               </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
+              {/* <Table.Th className="border-b-0 whitespace-nowrap">
                 PLATFORM
-              </Table.Th>
+              </Table.Th> */}
               <Table.Th className="border-b-0 whitespace-nowrap">
                 ACTION
               </Table.Th>
@@ -93,11 +93,11 @@ function Log() {
                       {log.ip}
                     </div>
                   </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div className="text-slate-500 mt-0.5">
                       {log.platform}
                     </div>
-                  </Table.Td>
+                  </Table.Td> */}
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div className="text-slate-500 mt-0.5">
                       {log.action}

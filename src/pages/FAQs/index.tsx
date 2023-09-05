@@ -31,6 +31,10 @@ function Main() {
   ]);
 
   const [dialog, setDialog] = useState(false);
+  const [dialogComp, setDialogComp] = useState(false);
+  const [dialogThird, setDialogThird] = useState(false);
+  const [dialogAuto, setDialogAuto] = useState(false);
+  const [dialogExt, setDialogExt] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteButtonRef = useRef(null);
   const [users, setUsers] = useState([]);
@@ -146,14 +150,32 @@ function Main() {
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Product Offers</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">Definition</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
+        <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
+            event.preventDefault();
+            setDialogComp(true);
+          }}>
+            Comprehensive
+          </Button>
+          <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
+            event.preventDefault();
+            setDialogThird(true);
+          }}>
+             Third party
+          </Button>
+          <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
+            event.preventDefault();
+            setDialogAuto(true);
+          }}>
+              Autocorrect
+          </Button>
           <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
             event.preventDefault();
             setDialog(true);
           }}>
-            Add Product offers
+            Extension
           </Button>
           <Menu>
             <Menu.Button as={Button} className="px-2 !box">
@@ -205,25 +227,12 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Product Name 
+                Cover 
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Type of Offer
+                Definition
                 </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Description
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Offer duration
-                </Table.Th>
-                
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  STATUS
-                </Table.Th>
-
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  ACTIONS
-                </Table.Th>
+               
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -237,59 +246,10 @@ function Main() {
                     {user.middlename}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.middlename}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.lastname}
+                    {user.email}
                   </Table.Td>
                 
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.phone}
-                  </Table.Td>
-                
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div
-                      className={clsx([
-                        "flex items-center justify-center",
-                        { "text-success": user.approval_status },
-                        { "text-danger": !user.approval_status },
-                      ])}
-                    >
-                      <Lucide icon={user.approval_status ? "CheckSquare" : "XSquare"} className="w-4 h-4 mr-2" />
-                      {user.approval_status ? "Active" : "Inactive"}
-                    </div>
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
-                    <div className="flex items-center justify-center">
-                      <Menu>
-                        <Menu.Button as={Button} className="px-2 !box">
-                          <span className="flex items-center justify-center w-5 h-5">
-                            <Lucide icon="MoreVertical" className="w-4 h-4" />
-                          </span>
-                        </Menu.Button>
-                        <Menu.Items className="w-40">
-                          <Menu.Item>
-                            <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Edit
-                          </Menu.Item>
-                         
-                          <Menu.Item>
-                            <Lucide icon="UserCheck" className="w-4 h-4 mr-2" /> Activate
-                          </Menu.Item>
-                          <Menu.Item>
-                            <Lucide icon="UserCheck" className="w-4 h-4 mr-2" /> Deactivate
-                          </Menu.Item>
-
-                          <Menu.Item onClick={() => {
-                            setUserId(user.id),
-                              setConfirmDelete(true);
-                          }}>
-                            <Lucide icon="Trash" className="w-4 h-4 mr-2" /> Delete
-                          </Menu.Item>
-                         
-                        </Menu.Items>
-                      </Menu>
-                    </div>
-                  </Table.Td>
+                 
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -335,7 +295,7 @@ function Main() {
           <form className="validate-form" onSubmit={onSubmit}>
             <Dialog.Title>
               <h2 className="mr-auto text-base font-medium">
-                Product Offer
+                Define Extension
               </h2>
               <a onClick={(event: React.MouseEvent) => {
                 event.preventDefault();
@@ -348,25 +308,16 @@ function Main() {
               </a>
             </Dialog.Title>
             <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
-  <div className="col-span-12 sm:col-span-6">
-    <FormLabel htmlFor="modal-form-1">
-      Upload Product Offer File
-    </FormLabel>
-    <div className="col-span-12 sm:col-span-12">
-                        <input {...register("product")} type="file" name="product" />
-                    </div>
-  </div>
-
-  <div className="col-span-12 sm:col-span-6">
+              <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
-                Offer duration (days)
+                Define Extension
                 </FormLabel>
                 <FormInput
                   {...register("days")}
                   type="text"
                   name="days"
                   className={errors.firstName ? "border-danger" : ''}
-                  placeholder="e.g  20"
+                  placeholder=""
                 />
                 {errors.firstName && (
                   <div className="mt-2 text-danger">
@@ -375,12 +326,202 @@ function Main() {
                   </div>
                 )}
               </div>
-
             
             </Dialog.Description>
             <Dialog.Footer>
               <Button type="button" variant="outline-secondary" onClick={() => {
                 setDialog(false);
+              }}
+                className="w-20 mr-1"
+              >
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit" className="w-20">
+                Save
+                {
+                  loading && <LoadingIcon
+                    icon="spinning-circles"
+                    color="white"
+                    className="w-4 h-4 ml-2"
+                  />
+                }
+              </Button>
+            </Dialog.Footer>
+          </form>
+        </Dialog.Panel>
+      </Dialog>
+
+      <Dialog staticBackdrop size="lg" open={dialogThird} onClose={() => {
+        setDialogThird(false);
+      }}
+      >
+        <Dialog.Panel>
+          <form className="validate-form" onSubmit={onSubmit}>
+            <Dialog.Title>
+              <h2 className="mr-auto text-base font-medium">
+                Define Third Party
+              </h2>
+              <a onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                setDialogThird(false);
+              }}
+                className="absolute top-0 right-0 mt-3 mr-3"
+                href="#"
+              >
+                <Lucide icon="X" className="w-8 h-8 text-slate-400" />
+              </a>
+            </Dialog.Title>
+            <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                  Define Third Party
+                </FormLabel>
+                <FormInput
+                  {...register("days")}
+                  type="text"
+                  name="days"
+                  className={errors.firstName ? "border-danger" : ''}
+                  placeholder=""
+                />
+                {errors.firstName && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.firstName.message === "string" &&
+                      errors.firstName.message}
+                  </div>
+                )}
+              </div>
+            
+            </Dialog.Description>
+            <Dialog.Footer>
+              <Button type="button" variant="outline-secondary" onClick={() => {
+                setDialogThird(false);
+              }}
+                className="w-20 mr-1"
+              >
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit" className="w-20">
+                Save
+                {
+                  loading && <LoadingIcon
+                    icon="spinning-circles"
+                    color="white"
+                    className="w-4 h-4 ml-2"
+                  />
+                }
+              </Button>
+            </Dialog.Footer>
+          </form>
+        </Dialog.Panel>
+      </Dialog>
+      <Dialog staticBackdrop size="lg" open={dialogAuto} onClose={() => {
+        setDialogAuto(false);
+      }}
+      >
+        <Dialog.Panel>
+          <form className="validate-form" onSubmit={onSubmit}>
+            <Dialog.Title>
+              <h2 className="mr-auto text-base font-medium">
+                Define Autocorrect
+              </h2>
+              <a onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                setDialogAuto(false);
+              }}
+                className="absolute top-0 right-0 mt-3 mr-3"
+                href="#"
+              >
+                <Lucide icon="X" className="w-8 h-8 text-slate-400" />
+              </a>
+            </Dialog.Title>
+            <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                  Define Autocorrect
+                </FormLabel>
+                <FormInput
+                  {...register("days")}
+                  type="text"
+                  name="days"
+                  className={errors.firstName ? "border-danger" : ''}
+                  placeholder=""
+                />
+                {errors.firstName && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.firstName.message === "string" &&
+                      errors.firstName.message}
+                  </div>
+                )}
+              </div>
+            
+            </Dialog.Description>
+            <Dialog.Footer>
+              <Button type="button" variant="outline-secondary" onClick={() => {
+                setDialogAuto(false);
+              }}
+                className="w-20 mr-1"
+              >
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit" className="w-20">
+                Save
+                {
+                  loading && <LoadingIcon
+                    icon="spinning-circles"
+                    color="white"
+                    className="w-4 h-4 ml-2"
+                  />
+                }
+              </Button>
+            </Dialog.Footer>
+          </form>
+        </Dialog.Panel>
+      </Dialog>
+
+      <Dialog staticBackdrop size="lg" open={dialogComp} onClose={() => {
+        setDialog(false);
+      }}
+      >
+        <Dialog.Panel>
+          <form className="validate-form" onSubmit={onSubmit}>
+            <Dialog.Title>
+              <h2 className="mr-auto text-base font-medium">
+                Define Comprehensive
+              </h2>
+              <a onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                setDialog(false);
+              }}
+                className="absolute top-0 right-0 mt-3 mr-3"
+                href="#"
+              >
+                <Lucide icon="X" className="w-8 h-8 text-slate-400" />
+              </a>
+            </Dialog.Title>
+            <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-1">
+                  Number of Days
+                </FormLabel>
+                <FormInput
+                  {...register("days")}
+                  type="text"
+                  name="days"
+                  className={errors.firstName ? "border-danger" : ''}
+                  placeholder=""
+                />
+                {errors.firstName && (
+                  <div className="mt-2 text-danger">
+                    {typeof errors.firstName.message === "string" &&
+                      errors.firstName.message}
+                  </div>
+                )}
+              </div>
+            
+            </Dialog.Description>
+            <Dialog.Footer>
+              <Button type="button" variant="outline-secondary" onClick={() => {
+                setDialogComp(false);
               }}
                 className="w-20 mr-1"
               >

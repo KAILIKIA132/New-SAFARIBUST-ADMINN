@@ -109,7 +109,8 @@ const Login = () => {
                     : "block px-4 py-3 mt-4 intro-x min-w-[250px] xl:min-w-[350px] border pr-10"
                 }
                 placeholder="Password"
-              />  <div
+              />  
+              <div
               className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
               onClick={togglePasswordVisibility}
             >
@@ -128,7 +129,7 @@ const Login = () => {
       )}
 
       {/* Eye Icon */}
-      <div
+      {/* <div
         className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
         onClick={togglePasswordVisibility}
       >
@@ -136,12 +137,12 @@ const Login = () => {
           icon={showPassword ? faEyeSlash : faEye}
           className="text-blue-800"
         />
-      </div>
+      </div> */}
 
     </div>
           </div>
           <div className="flex mt-4 text-xs intro-x text-slate-600 dark:text-slate-500 sm:text-sm">
-            <div className="flex items-center mr-auto">
+            {/* <div className="flex items-center mr-auto">
               <FormCheck.Input
                 id="remember-me"
                 type="checkbox"
@@ -153,7 +154,7 @@ const Login = () => {
               >
                 Remember me
               </label>
-            </div>
+            </div> */}
             <Link to="/forgot-password">Forgot Password?</Link>
           </div>
           <div className="mt-5 text-center intro-x xl:mt-8 xl:text-left">

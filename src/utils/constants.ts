@@ -8,11 +8,11 @@
 export const BASE_URL='https://heritage.techsavanna.technology/api/'
 //API Endpoints
 //devops has do it again
+export const REGISTER = `${BASE_URL}register`;
 export const LOGIN = `${BASE_URL}login`;
-export const REGISTER = `${BASE_URL}auth-service/auth/users/add`;
 export const FORGOT_PASSWORD = `${BASE_URL}send-password/`;
 export const CHANGE_PASSWORD = `${BASE_URL}change-password`;
-export const ROLES = `${BASE_URL}auth-service/auth/roles`;
+export const ROLES = `${BASE_URL}users/roles`;
 export const CONFERENCES = `${BASE_URL}events-service/conference`;
 export const THEMES = `${BASE_URL}events-service/theme`;
 export const EVENTS = `${BASE_URL}events-service/event`;
@@ -24,6 +24,11 @@ export const SECURITY_FEATURES = `${BASE_URL}vehicle/security_features`;
 export const FINANCIERS = `${BASE_URL}vehicle/financiers`;
 export const Models = `${BASE_URL}vehicle/models/`;
 export const POLICY = `${BASE_URL}vehicle/users/`;
+
+
+
+
+
 
 
 

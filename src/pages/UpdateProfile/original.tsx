@@ -85,13 +85,13 @@ function Profile() {
             <div className="col-span-12 xl:col-span-6">
               <div className="mt-3 xl:mt-0">
                 <FormLabel htmlFor="update-profile-form-10">
-                  Phone Number
+                  Gender
                 </FormLabel>
                 <FormInput
                   id="update-profile-form-10"
                   type="text"
-                  placeholder="Phone number"
-                  value={user.phone}
+                  placeholder="Male"
+                  value={user.gender}
                   disabled
                 />
               </div>

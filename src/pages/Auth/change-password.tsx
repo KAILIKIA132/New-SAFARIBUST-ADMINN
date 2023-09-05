@@ -39,7 +39,7 @@ function ChangePassword() {
       isLoading(true);
       try {
         const data = await getValues();
-        let res = await ApiService.changePassword(data);
+        let res = await ApiService.passwordReset(data);
         isLoading(false);
         setSuccess(true);
         setMessage(res.message);
@@ -60,7 +60,7 @@ function ChangePassword() {
       </div>
       <form className="validate-form" onSubmit={onSubmit}>
         <div className="p-5">
-          {/* <div>
+          <div>
             <FormLabel htmlFor="change-password-form-1">
               Old Password
             </FormLabel>
@@ -72,7 +72,7 @@ function ChangePassword() {
               className={errors.confirm_password ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
               placeholder="Old Password"
             />
-          </div> */}
+          </div>
           <div>
             <FormLabel htmlFor="change-password-form-2">
               New Password
@@ -94,7 +94,7 @@ function ChangePassword() {
           </div>
           <div className="mt-3">
             <FormLabel htmlFor="change-password-form-3">
-              Confirm New Password
+              Confirm New Passwords
             </FormLabel>
             <FormInput
               {...register("confirm_password")}

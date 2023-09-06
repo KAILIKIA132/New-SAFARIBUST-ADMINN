@@ -179,6 +179,11 @@ const initialState: SideMenuState = {
     },
     {
       icon: "Activity",
+      pathname: "/FAQs",
+      title: "FAQs",
+    },
+    {
+      icon: "Activity",
       pathname: "/CoversFAQs",
       title: "Covers FAQs",
     },

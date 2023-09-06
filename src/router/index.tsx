@@ -61,6 +61,8 @@ import Thirdparty from "../pages/qthird_party";
 import Theft from "../pages/qtheft_party";
 import Contents from "../pages/contents";
 import CoversFAQs from "../pages/coverFAQs";
+import FAQs from "../pages/FAQs";
+
 
 
 
@@ -205,6 +207,11 @@ function Router() {
           path: "CoversFAQs",
           element: <CoversFAQs/>,
         },
+        {
+          path: "FAQs",
+          element: <FAQs/>,
+        },
+        
         
 
 

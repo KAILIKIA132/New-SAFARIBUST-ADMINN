@@ -15,6 +15,14 @@ import * as yup from "yup";
 import Notification, { NotificationElement } from "../../base-components/Notification";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import Dropzone from "../../base-components/Dropzone";
+import AccountDetails from "../accountDetails";
+import fakerData from "../../utils/faker";
+import {
+  FormTextarea,
+} from "../../base-components/Form";
+import TomSelect from "../../base-components/TomSelect";
+import { User } from "../../type";
+
 
 function Main() {
   const [countries] = useState([
@@ -33,7 +41,7 @@ function Main() {
   const [dialog, setDialog] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteButtonRef = useRef(null);
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [userId, setUserId] = useState(null);
   const [conferences, setConferences] = useState([]);
@@ -44,6 +52,13 @@ function Main() {
   const [loading, isLoading] = useState(false);
   const [success, setSuccess] = useState(true);
   const [message, setMessage] = useState("");
+  // const [selectedUserId, setSelectedUserId] = useState(null);
+
+  
+  const [users, setUsers] = useState<User[]>([]); // Initialize with appropriate type
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+
+
 
   // Success notification
   const notify = useRef<NotificationElement>();
@@ -66,6 +81,9 @@ function Main() {
     mode: "onChange",
     resolver: yupResolver(schema),
   });
+
+
+  const [select, setSelect] = useState("1");
 
   useEffect(() => {
     getUsers();
@@ -146,7 +164,7 @@ function Main() {
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Active Claims</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">System Users</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
           {/* <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
@@ -190,11 +208,11 @@ function Main() {
                 className="absolute inset-y-0 right-0 w-4 h-4 my-auto mr-3"
               />
             </div>
-            {/* <FormSelect className="w-56 ml-2 xl:w-auto !box">
+            <FormSelect className="w-56 ml-2 xl:w-auto !box">
               <option>Status</option>
               <option>Active</option>
               <option>Inactive</option>
-            </FormSelect> */}
+            </FormSelect>
           </div>
         </div>
         <div className="col-span-12 overflow-auto intro-y 2xl:overflow-visible">
@@ -205,63 +223,91 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Claim Number 
+                USERNAME
+                </Table.Th>
+                {/* <Table.Th className="border-b-0 whitespace-nowrap">
+                Middle Name
+                </Table.Th> */}
+                {/* <Table.Th className="border-b-0 whitespace-nowrap">
+                Last Name
+                </Table.Th> */}
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  PHONE
+                </Table.Th>
+                {/* <Table.Th className="border-b-0 whitespace-nowrap">
+                  EMAIL
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Reg Number 
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Make
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Model
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  Cover
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Policy Number
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Due date
-                </Table.Th>
+                NATIONALITY
+                </Table.Th> */}
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   STATUS
                 </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  ACTION
+                </Table.Th>
 
-                {/* <Table.Th className="border-b-0 whitespace-nowrap">
-                  ACTIONS
-                </Table.Th> */}
+               
+               
+              
+              
+               
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
               {users.map((user: any, key) => (
-                <Table.Tr key={key} className="intro-x">
+              <Table.Tr
+              key={key}
+              className="intro-x"
+              onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                setSelectedUserId(user.id);
+                setDialog(true);
+
+
+  
+              }}
+            >
+
                   <Table.Td className="first:rounded-l-md last:rounded-r-md w-10 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <FormCheck.Input type="checkbox" />
                   </Table.Td>
-                 
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md !py-3.5 bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    <div className="flex items-center">
+                      <div className="w-9 h-9 image-fit zoom-in">
+                        <Tippy
+                          as="img"
+                          alt=""
+                          className="border-white rounded-lg shadow-[0px_0px_0px_2px_#fff,_1px_1px_5px_rgba(0,0,0,0.32)] dark:shadow-[0px_0px_0px_2px_#3f4865,_1px_1px_5px_rgba(0,0,0,0.32)]"
+                          src={user.profileImage}
+                          content={user.firstName + " " + user.lastname}
+                        />
+                      </div>
+                      <div className="ml-4">
+                        {/* <a href="" className="font-medium whitespace-nowrap">
+                          {user.firstname + " " + user.lastname}
+                        </a> */}
+                        {/* <div className="text-slate-500 text-xs whitespace-nowrap mt-0.5">
+                          {user.role.role}
+                        </div> */}
+                        {user.firstname}
+                      </div>
+                    </div>
+                  </Table.Td>
+                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.middlename}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.middlename}
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.lastname}
-                  </Table.Td>
+                  </Table.Td> */}
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.lastname}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.phone}
                   </Table.Td>
-                
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.firstname}
+                    {user.email}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.firstname}
+                    {user.nationality}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div
@@ -275,7 +321,7 @@ function Main() {
                       {user.approval_status ? "Active" : "Inactive"}
                     </div>
                   </Table.Td>
-                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
                     <div className="flex items-center justify-center">
                       <Menu>
                         <Menu.Button as={Button} className="px-2 !box">
@@ -305,11 +351,23 @@ function Main() {
                         </Menu.Items>
                       </Menu>
                     </div>
-                  </Table.Td> */}
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
           </Table>
+
+
+
+          
+ 
+
+
+
+
+
+
+
           {
             loading &&
             <div className="flex flex-col items-center">
@@ -348,178 +406,379 @@ function Main() {
       }}
       >
         <Dialog.Panel>
-          <form className="validate-form" onSubmit={onSubmit}>
-            <Dialog.Title>
-              <h2 className="mr-auto text-base font-medium">
-                New Speaker
-              </h2>
-              <a onClick={(event: React.MouseEvent) => {
-                event.preventDefault();
-                setDialog(false);
-              }}
-                className="absolute top-0 right-0 mt-3 mr-3"
-                href="#"
-              >
-                <Lucide icon="X" className="w-8 h-8 text-slate-400" />
-              </a>
-            </Dialog.Title>
-            <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  First Name
-                </FormLabel>
-                <FormInput
-                  {...register("firstName")}
-                  type="text"
-                  name="firstName"
-                  className={errors.firstName ? "border-danger" : ''}
-                  placeholder="John"
-                />
-                {errors.firstName && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.firstName.message === "string" &&
-                      errors.firstName.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Last Name
-                </FormLabel>
-                <FormInput
-                  {...register("lastName")}
-                  type="text"
-                  name="lastName"
-                  className={errors.lastName ? "border-danger" : ''}
-                  placeholder="Doe"
-                />
-                {errors.lastName && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.lastName.message === "string" &&
-                      errors.lastName.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-6">
-                  Conference
-                </FormLabel>
-                <FormSelect {...register("tenant")} name="tenant">
-                  {conferences.map((conference: any, key) => <option key={key} value={conference._id} >{conference.name}</option>)}
-                </FormSelect>
-                {errors.role && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.role.message === "string" &&
-                      errors.role.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-6">
-                  Role
-                </FormLabel>
-                <FormSelect {...register("role")} name="role">
-                  {roles.map((role: any, key) => <option key={key} value={role._id} >{role.role}</option>)}
-                </FormSelect>
-                {errors.role && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.role.message === "string" &&
-                      errors.role.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-6">
-                  Country
-                </FormLabel>
-                <FormSelect {...register("country")} name="country" value={"Kenya"}>
-                  {countries.map((country, key) => <option key={key} value={country.name} >{country.name}</option>)}
-                </FormSelect>
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Phone Number
-                </FormLabel>
-                <FormInput
-                  {...register("phoneNumber")}
-                  type="text"
-                  name="phoneNumber"
-                  placeholder="+254 712 345 6789"
-                />
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Email
-                </FormLabel>
-                <FormInput
-                  {...register("email")}
-                  type="email"
-                  name="email"
-                  className={errors.email ? "border-danger" : ''}
-                  placeholder="info@example.com"
-                />
-                {errors.email && (
-                  <div className="mt-2 text-danger">
-                    {typeof errors.email.message === "string" &&
-                      errors.email.message}
-                  </div>
-                )}
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Linkedin
-                </FormLabel>
-                <FormInput
-                  {...register("linkedin")}
-                  type="text"
-                  name="linkedin"
-                  placeholder="https://www.linkedin.com/"
-                />
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Twitter
-                </FormLabel>
-                <FormInput
-                  {...register("twitter")}
-                  type="text"
-                  name="twitter"
-                  placeholder="https://twitter.com/"
-                />
-              </div>
-              <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">
-                  Facebook
-                </FormLabel>
-                <FormInput
-                  {...register("facebook")}
-                  type="text"
-                  name="linkedin"
-                  placeholder="https://www.facebook.com/"
-                />
-              </div>
 
-              <div className="col-span-12 sm:col-span-12">
-                <Dropzone getRef={(el) => { }}
-                  options={{
-                    url: "https://africaclimatesummit.org/",
-                    thumbnailWidth: 150,
-                    maxFilesize: 0.5,
-                    maxFiles: 1,
-                    headers: { "My-Awesome-Header": "header value" },
-                  }}
-                  className="dropzone"
-                >
-                  <div className="text-lg font-medium">
-                    Upload profile photo.
+
+
+
+
+        <>
+      <div className="flex items-center mt-8 intro-y">
+        <h2 className="mr-auto text-lg font-medium">Account details</h2>
+      </div>
+      <div className="grid grid-cols-12 gap-6">
+       
+        <div className="col-span-12 lg:col-span-8 2xl:col-span-9">
+          
+          {/* BEGIN: Display Information */}
+
+{/* BEGIN: Personal Information */}
+<div className="mt-5 intro-y box">
+            <div className="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+              <h2 className="mr-auto text-base font-medium">
+                Personal Information
+              </h2>
+            </div>
+            <div className="p-5">
+              <div className="grid grid-cols-12 gap-x-5">
+                <div className="col-span-12 xl:col-span-6">
+                  <div>
+                  
+                    <FormLabel htmlFor="update-profile-form-6">first  name</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.firstname || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
                   </div>
-                  <div className="text-gray-600">
-                    Optional
+                  <div>
+                  
+                  <FormLabel htmlFor="update-profile-form-6">middle name</FormLabel>
+                  <FormInput
+                    id="update-profile-form-6"
+                    type="text"
+                    placeholder="Input text"
+                    // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.middlename || "" : ""}
+         
+                    onChange={() => {}}
+                    disabled
+                  />   
+                   <FormLabel htmlFor="update-profile-form-6">last name</FormLabel>
+                  <FormInput
+                    id="update-profile-form-6"
+                    type="text"
+                    placeholder="Input text"
+                    // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.lastname || "" : ""}
+         
+                    onChange={() => {}}
+                    disabled
+                  />
+                  
+                  <FormLabel htmlFor="update-profile-form-6">Document Type</FormLabel>
+                  <FormInput
+                    id="update-profile-form-6"
+                    type="text"
+                    placeholder="Input text"
+                    // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.document_type || "" : ""}
+         
+                    onChange={() => {}}
+                    disabled
+                  />
+                  <FormLabel htmlFor="update-profile-form-6">ID Number</FormLabel>
+                  <FormInput
+                    id="update-profile-form-6"
+                    type="text"
+                    placeholder="Input text"
+                    // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.document_number || "" : ""}
+         
+                    onChange={() => {}}
+                    disabled
+                  />
+                  <FormLabel htmlFor="update-profile-form-6">Nationality</FormLabel>
+                  <FormInput
+                    id="update-profile-form-6"
+                    type="text"
+                    placeholder="Input text"
+                    // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.nationality || "" : ""}
+         
+                    onChange={() => {}}
+                    disabled
+                  />
+                  
+
+
+                  <FormLabel htmlFor="update-profile-form-7">Gender</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.gender || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                 
+
+
+
+                </div>
+                
+                 
+              
+                </div>
+                <div className="col-span-12 xl:col-span-6">
+                  <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">Phone Number</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.phone || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
                   </div>
-                </Dropzone>
+
+                  <div className="mt-3">
+                    <FormLabel htmlFor="update-profile-form-7">Email</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.email || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                    
+                  </div>
+                 
+
+                  <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">Marital status</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.maritalStatus || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                  <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">Occupation</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.occupation || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                  <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">Source of income</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.sourceOfIncome || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                  <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">County</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.county || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                  <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">Town</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      // value={selectedUserId ? users.find(user => user.id === selectedUserId)?.town || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                
               </div>
-            </Dialog.Description>
-            <Dialog.Footer>
+             
+            </div>
+          </div>
+          {/* END: Personal Information */}
+
+
+
+          {/* <div className="intro-y box lg:mt-5">
+            <div className="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+              <h2 className="mr-auto text-base font-medium">
+                Display Information
+              </h2>
+            </div>
+            <div className="p-5">
+              <div className="flex flex-col xl:flex-row">
+                <div className="flex-1 mt-6 xl:mt-0">
+                  <div className="grid grid-cols-12 gap-x-5">
+                    <div className="col-span-12 2xl:col-span-6">
+                   
+                      <div className="mt-3 xl:mt-0">
+                  <FormLabel htmlFor="update-profile-form-7">First Name</FormLabel>
+                    <FormInput
+                      id="update-profile-form-6"
+                      type="text"
+                      placeholder="Input text"
+                      value={selectedUserId ? users.find(user => user.id === selectedUserId)?.town || "" : ""}
+           
+                      onChange={() => {}}
+                      disabled
+                    />
+                  </div>
+                      <div className="mt-3">
+                        <FormLabel htmlFor="update-profile-form-2">
+                          Nearest MRT Station
+                        </FormLabel>
+                        <TomSelect
+                          id="update-profile-form-2"
+                          value={select}
+                          onChange={setSelect}
+                          className="w-full"
+                        >
+                          <option value="1">Admiralty</option>
+                          <option value="2">Aljunied</option>
+                          <option value="3">Ang Mo Kio</option>
+                          <option value="4">Bartley</option>
+                          <option value="5">Beauty World</option>
+                        </TomSelect>
+                      </div>
+                    </div>
+                    <div className="col-span-12 2xl:col-span-6">
+                      <div className="mt-3 2xl:mt-0">
+                        <FormLabel htmlFor="update-profile-form-3">
+                          Postal Code
+                        </FormLabel>
+                        <TomSelect
+                          id="update-profile-form-3"
+                          value={select}
+                          onChange={setSelect}
+                          className="w-full"
+                        >
+                          <option value="1">
+                            018906 - 1 STRAITS BOULEVARD SINGA...
+                          </option>
+                          <option value="2">
+                            018910 - 5A MARINA GARDENS DRIVE...
+                          </option>
+                          <option value="3">
+                            018915 - 100A CENTRAL BOULEVARD...
+                          </option>
+                          <option value="4">
+                            018925 - 21 PARK STREET MARINA...
+                          </option>
+                          <option value="5">
+                            018926 - 23 PARK STREET MARINA...
+                          </option>
+                        </TomSelect>
+                      </div>
+                      <div className="mt-3">
+                        <FormLabel htmlFor="update-profile-form-4">
+                          Phone Number
+                        </FormLabel>
+                        <FormInput
+                          id="update-profile-form-4"
+                          type="text"
+                          placeholder="Input text"
+                          value="65570828"
+                          onChange={() => {}}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-span-12">
+                      <div className="mt-3">
+                        <FormLabel htmlFor="update-profile-form-5">
+                          Address
+                        </FormLabel>
+                        <FormTextarea
+                          id="update-profile-form-5"
+                          placeholder="Adress"
+                          value="10 Anson Road, International Plaza, #10-11, 079903
+                            Singapore, Singapore"
+                          onChange={() => {}}
+                        ></FormTextarea>
+                      </div>
+                    </div>
+                  </div>
+                  <Button variant="primary" type="button" className="w-20 mt-3">
+                    Save
+                  </Button>
+                </div>
+                <div className="mx-auto w-52 xl:mr-0 xl:ml-6">
+                  <div className="p-5 border-2 border-dashed rounded-md shadow-sm border-slate-200/60 dark:border-darkmode-400">
+                    <div className="relative h-40 mx-auto cursor-pointer image-fit zoom-in">
+                      <img
+                        className="rounded-md"
+                        alt=""
+                        src={fakerData[0].photos[0]}
+                      />
+                      <Tippy
+                        as="div"
+                        content="Remove this profile photo?"
+                        className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 -mt-2 -mr-2 text-white rounded-full bg-danger"
+                      >
+                        <Lucide icon="X" className="w-4 h-4" />
+                      </Tippy>
+                    </div>
+                    <div className="relative mx-auto mt-5 cursor-pointer">
+                      <Button
+                        variant="primary"
+                        type="button"
+                        className="w-full"
+                      >
+                        Change Photo
+                      </Button>
+                      <FormInput
+                        type="file"
+                        className="absolute top-0 left-0 w-full h-full opacity-0"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> */}
+          {/* END: Display Information */}
+          
+        </div>
+      </div>
+    </>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               <Button type="button" variant="outline-secondary" onClick={() => {
                 setDialog(false);
               }}
@@ -527,7 +786,7 @@ function Main() {
               >
                 Cancel
               </Button>
-              <Button variant="primary" type="submit" className="w-20">
+              {/* <Button variant="primary" type="submit" className="w-20">
                 Save
                 {
                   loading && <LoadingIcon
@@ -537,8 +796,8 @@ function Main() {
                   />
                 }
               </Button>
-            </Dialog.Footer>
-          </form>
+            */}
+         
         </Dialog.Panel>
       </Dialog>
       {/* BEGIN: Delete Confirmation Modal */}

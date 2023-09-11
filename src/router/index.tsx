@@ -46,7 +46,7 @@ import Vehicle from "../pages/vehicle";
 import Documents from "../pages/documents";
 import SecurityFeature from "../pages/security";
 import Financiers from "../pages/financiers";
-// import Accounts from "../pages/accounts";
+import Accounts from "../pages/accounts";
 import Quotes from "../pages/quotes";
 import NewPolicy from "../pages/newPolicy";
 import Extension from "../pages/policyExtension";
@@ -62,6 +62,7 @@ import Theft from "../pages/qtheft_party";
 import Contents from "../pages/contents";
 import CoversFAQs from "../pages/coverFAQs";
 import FAQs from "../pages/FAQs";
+import Settings from "../pages/Auth/settings";
 
 
 
@@ -146,10 +147,10 @@ function Router() {
           element: <Valuers />,
         },
         
-        // {
-        //   path: "accounts",
-        //   element: <Accounts />,
-        // },
+        {
+          path: "accounts",
+          element: <Accounts />,
+        },
         {
           path: "quotes",
           element: <Quotes />,
@@ -241,7 +242,12 @@ function Router() {
           path: "NewProfile",
           element: <NewProfile/>,
         },
+        {
+          path: "Settings",
+          element: <Settings/>,
+        },
 
+        
       
         
 

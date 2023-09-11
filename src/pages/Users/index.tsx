@@ -444,23 +444,23 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                  USER
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  EMAIL
+                  USERNAME
                 </Table.Th>
                 {/* <Table.Th className="border-b-0 whitespace-nowrap">
-                  PHONE
+                  EMAIL
                 </Table.Th> */}
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  PHONE
+                </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   GENDER
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   ROLE
                 </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
+                {/* <Table.Th className="border-b-0 whitespace-nowrap">
                   COUNTRY
-                </Table.Th>
+                </Table.Th> */}
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   STATUS
                 </Table.Th>
@@ -614,7 +614,7 @@ function Main() {
             <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
               <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
-                  First Name
+                  Username
                 </FormLabel>
                 <FormInput
                   {...register("firstName")}
@@ -630,7 +630,7 @@ function Main() {
                   </div>
                 )}
               </div>
-              <div className="col-span-12 sm:col-span-6">
+              {/* <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
                   Last Name
                 </FormLabel>
@@ -647,7 +647,7 @@ function Main() {
                       errors.lastname.message}
                   </div>
                 )}
-              </div>
+              </div> */}
               {/* <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-6">
                   Conference
@@ -676,14 +676,14 @@ function Main() {
                   </div>
                 )}
               </div> */}
-              <div className="col-span-12 sm:col-span-6">
+              {/* <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-6">
                   Country
                 </FormLabel>
                 <FormSelect {...register("country")} name="country" value={"Kenya"}>
                   {countries.map((country, key) => <option key={key} value={country.name} >{country.name}</option>)}
                 </FormSelect>
-              </div>
+              </div> */}
               {/* <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
                   Phone Number
@@ -696,7 +696,7 @@ function Main() {
                 />
               </div> */}
               
-              <div className="col-span-12 sm:col-span-6">
+              {/* <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
                   Email
                 </FormLabel>
@@ -713,7 +713,7 @@ function Main() {
                       errors.email.message}
                   </div>
                 )}
-              </div>
+              </div> */}
               <div className="col-span-12 sm:col-span-6">
                 <FormLabel htmlFor="modal-form-1">
                   Gender

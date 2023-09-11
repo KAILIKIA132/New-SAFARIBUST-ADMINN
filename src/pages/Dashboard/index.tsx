@@ -78,7 +78,7 @@ function Main() {
           <div
             className={clsx([
               "relative zoom-in",
-              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-blue-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
+              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-black before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
             ])}
           >
             <Link to="">
@@ -92,7 +92,7 @@ function Main() {
                   <div className="ml-auto">
                     <Tippy
                       as="div"
-                      className="cursor-pointer bg-blue-800 py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
+                      className="cursor-pointer bg-red-500 py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
                       content=""
                     >
                       <Lucide icon="ChevronRight" className="w-4 h-4 ml-0.5" />
@@ -103,8 +103,9 @@ function Main() {
                   {/* {stats.attendees} */}
                   {/* {totalUsers} */}
                   {totalUsers !== null ? totalUsers : "Loading..."}
+                  {/* <h1>KSH 70,000</h1> */}
                 </div>
-                <div className="mt-1 text-base text-slate-500">Registered Customers </div>
+                <div className="mt-1 text-base text-slate-500">Daily House Revenue </div>
               </div>
             </Link>
           </div>
@@ -113,11 +114,12 @@ function Main() {
           <div
             className={clsx([
               "relative zoom-in",
-              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-blue-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
+              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-black before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
             ])}
           >
             <Link to="">
             {/* <Link to="/attendees"> */}
+           
               
               <div className="p-5 box">
                 <div className="flex">
@@ -128,7 +130,7 @@ function Main() {
                   <div className="ml-auto">
                     <Tippy
                       as="div"
-                      className="cursor-pointer bg-blue-800 py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
+                      className="cursor-pointer bg-red-500 py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
                       content=""
                     >
                       <Lucide icon="ChevronRight" className="w-4 h-4 ml-0.5" />
@@ -136,9 +138,11 @@ function Main() {
                   </div>
                 </div>
                 <div className="mt-6 text-3xl font-medium leading-8">
-                  {stats.attendees}
+                  {/* {stats.attendees} */}
+                  <h3>KSH 20,000</h3>
                 </div>
-                <div className="mt-1 text-base text-slate-500">policies purchased</div>
+                <div className="mt-1 text-base text-slate-500">Mpesa Balance</div>
+                <div className="mt-1 text-base text-slate-500">Paybill Total</div>
               </div>
             </Link>
           </div>
@@ -148,7 +152,7 @@ function Main() {
           <div
             className={clsx([
               "relative zoom-in",
-              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-blue-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
+              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-black before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
             ])}
           >
             <Link to="">
@@ -162,7 +166,7 @@ function Main() {
                   <div className="ml-auto ">
                     <Tippy
                       as="div"
-                      className="cursor-pointer bg-blue-800 py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
+                      className="cursor-pointer bg-red-500 py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
                       content=""
                     >
                       <Lucide icon="ChevronRight" className="w-4 h-4 ml-0.5" />
@@ -170,9 +174,10 @@ function Main() {
                   </div>
                 </div>
                 <div className="mt-6 text-3xl font-medium leading-8">
-                  {stats.speakers}
+                  {/* {stats.speakers} */}
+                  <h1>194</h1>
                 </div>
-                <div className="mt-1 text-base text-slate-500">Drop-offs during purchase journey</div>
+                <div className="mt-1 text-base text-slate-500">Total Players</div>
               </div>
             </Link>
           </div>
@@ -181,7 +186,7 @@ function Main() {
           <div
             className={clsx([
               "relative zoom-in",
-              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-blue-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
+              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-black before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
             ])}
           >
             <Link to="">
@@ -195,7 +200,7 @@ function Main() {
                   <div className="ml-auto">
                     <Tippy
                       as="div"
-                      className="cursor-pointer bg-blue-800 py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
+                      className="cursor-pointer bg-red-500 py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
                       content=""
                     >
                       <Lucide icon="ChevronRight" className="w-4 h-4 ml-0.5" />
@@ -203,9 +208,10 @@ function Main() {
                   </div>
                 </div>
                 <div className="mt-6 text-3xl font-medium leading-8">
-                  {stats.exhibitors}
+                  {/* {stats.exhibitors} */}
+                  <h3>KSH 71,000</h3>
                 </div>
-                <div className="mt-1 text-base text-slate-500">Claims registered</div>
+                <div className="mt-1 text-base text-slate-500">Withholding Tax Total</div>
               </div>
             </Link>
           </div>
@@ -215,7 +221,7 @@ function Main() {
           <div
             className={clsx([
               "relative zoom-in",
-              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-blue-800 before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
+              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-black before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
             ])}
           >
             <Link to="">
@@ -229,7 +235,7 @@ function Main() {
                   <div className="ml-auto">
                     <Tippy
                       as="div"
-                      className="cursor-pointer bg-blue-800 py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
+                      className="cursor-pointer bg-red-500 py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
                       content=""
                     >
                       <Lucide icon="ChevronRight" className="w-4 h-4 ml-0.5" />
@@ -237,20 +243,96 @@ function Main() {
                   </div>
                 </div>
                 <div className="mt-6 text-3xl font-medium leading-8">
-                  {stats.vendors}
+                  {/* {stats.vendors} */}
+                  <h3>KSH 130,000</h3>
                 </div>
-                <div className="mt-1 text-base text-slate-500">Quotations requested</div>
+                <div className="mt-1 text-base text-slate-500">Wallet Total</div>
+              </div>
+            </Link>
+          </div>
+        </div>
+        <div className="col-span-12 sm:col-span-3 xl:col-span-3 intro-y">
+          <div
+            className={clsx([
+              "relative zoom-in",
+              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-black before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
+            ])}
+          >
+            <Link to="">
+            {/* <Link to="/vendors"> */}
+              <div className="p-5 box">
+                <div className="flex">
+                  <Lucide
+                    icon="Briefcase"
+                    className="w-[28px] h-[28px] text-blue-800"
+                  />
+                  <div className="ml-auto">
+                    <Tippy
+                      as="div"
+                      className="cursor-pointer bg-red-500 py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
+                      content=""
+                    >
+                      <Lucide icon="ChevronRight" className="w-4 h-4 ml-0.5" />
+                    </Tippy>
+                  </div>
+                </div>
+                <div className="mt-6 text-3xl font-medium leading-8">
+                  {/* {stats.vendors} */}
+                  <h3>KSH 200,000</h3>
+                </div>
+                <div className="mt-1 text-base text-slate-500">House Wins</div>
+                <div className="mt-1 text-base text-slate-500">Played Rounds  <h1>124</h1></div>
+              </div>
+            </Link>
+          </div>
+        </div>
+        <div className="col-span-12 sm:col-span-3 xl:col-span-3 intro-y">
+          <div
+            className={clsx([
+              "relative zoom-in",
+              "before:content-[''] before:w-[90%] before:shadow-[0px_3px_20px_#0000000b] before:bg-black before:h-full before:mt-3 before:absolute before:rounded-md before:mx-auto before:inset-x-0 before:dark:bg-blue-800/70",
+            ])}
+          >
+            <Link to="">
+            {/* <Link to="/vendors"> */}
+              <div className="p-5 box">
+                <div className="flex">
+                  <Lucide
+                    icon="Briefcase"
+                    className="w-[28px] h-[28px] text-blue-800"
+                  />
+                  <div className="ml-auto">
+                    <Tippy
+                      as="div"
+                      className="cursor-pointer bg-red-500 py-[3px] flex rounded-full text-white text-xs pl-2 pr-1 items-center font-medium"
+                      content=""
+                    >
+                      <Lucide icon="ChevronRight" className="w-4 h-4 ml-0.5" />
+                    </Tippy>
+                  </div>
+                </div>
+                <div className="mt-6 text-3xl font-medium leading-8">
+                  {/* {stats.vendors} */}
+                  <h3>KSH 38,000</h3>
+                </div>
+                <div className="mt-1 text-base text-slate-500">House Loses</div>
+                <div className="mt-1 text-base text-slate-500">Played Rounds  <h1>124</h1></div>
               </div>
             </Link>
           </div>
         </div>
       </div>
 
+      
+
+      
+
       <div className="grid grid-cols-12 gap-6 mt-5">
         {/* BEGIN: simcard stats */}
+        
         <div className="col-span-12 sm:col-span-4 md:col-span-4 lg:col-span-4">
           <div className="flex h-10 intro-y">
-            <h2 className="mr-5 text-lg font-medium truncate">Customer Statisctics</h2>
+            <h2 className="mr-5 text-lg font-medium truncate">Players Statisctics</h2>
           </div>
           <div className="p-5 mt-4 intro-y box padding-top:23 flex justify-center">
             <ReportDonutChart height={290} width={300} />
@@ -263,7 +345,17 @@ function Main() {
         <div className="col-span-12 sm:col-span-4 md:col-span-4 lg:col-span-4">
           <div className="flex h-10 intro-y">
             <h2 className="text-lg font-medium truncate">
-              Policy Statistics
+              Games Statistics
+            </h2>
+          </div>
+          <div className="p-5 mt-4 intro-y box padding-top:23 flex justify-center">
+            <ReportPieChart height={290} width={300} />
+          </div>
+        </div>
+        <div className="col-span-12 sm:col-span-4 md:col-span-4 lg:col-span-4">
+          <div className="flex h-10 intro-y">
+            <h2 className="text-lg font-medium truncate">
+              Games wins vs loss statisctics
             </h2>
           </div>
           <div className="p-5 mt-4 intro-y box padding-top:23 flex justify-center">

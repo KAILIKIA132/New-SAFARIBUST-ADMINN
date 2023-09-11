@@ -36,84 +36,105 @@ const initialState: SideMenuState = {
     //   title: "Account Details",
     // },
     
-    
+
     {
         icon: "FileCheck",
-        title: "Policy",
-        subMenu: [
-          {
-            icon: "Activity",
-            pathname: "/policy",
-            title: "Active Policy",
-          },
+        pathname: "/extension",
+        title: "Transactions",
+      },
+    
+    // {
+    //     icon: "FileCheck",
+    //     title: "Transactions",
+    //     subMenu: [
+    //       {
+    //         icon: "Activity",
+    //         pathname: "/policy",
+    //         title: "Active Policy",
+    //       },
         
-          {
-            icon: "Activity",
-            pathname: "/extension",
-            title: "Inactive Policy",
-          },
+    //       {
+    //         icon: "Activity",
+    //         pathname: "/extension",
+    //         title: "Inactive Policy",
+    //       },
         
           
           
           
-        ]},
+    //     ]},
         {
-          icon: "BaggageClaim",
-          title: "Claims",
+          icon: "Users",
+          title: "Accounts",
           subMenu: [
-            {
-              icon: "Activity",
-              pathname: "/active",
-              title: "Active Claims",
-            },
+
+             {
+      icon: "Activity",
+      pathname: "/accounts",
+      title: "Players",
+    },
+    // {
+    //   icon: "Activity",
+    //   pathname: "/active",
+    //   title: "Admin",
+    // },
+            // {
+            //   icon: "Activity",
+            //   pathname: "/active",
+            //   title: "Regular Users",
+            // },
           
-            {
-              icon: "Activity",
-              pathname: "/pendingClaim",
-              title: "Paid Claims",
-            },
-            {
-              icon: "Activity",
-              pathname: "/rejectedClaim",
-              title: "Rejected Claims",
-            },
+            // {
+            //   icon: "Activity",
+            //   pathname: "/pendingClaim",
+            //   title: "Admin",
+            // },
+            // {
+            //   icon: "Activity",
+            //   pathname: "/rejectedClaim",
+            //   title: "Rejected Claims",
+            // },
             
             
             
           ]},
   
-
+          {
+            icon: "Umbrella",
+            pathname: "/quotes",
+            title: "Bets",
+          },
        
 
-        {
-          icon: "Umbrella",
-          title: "Quotes",
-          subMenu: [
-            {
-              icon: "Activity",
-              pathname: "/quotes",
-              title: "Private Comprehensive Cover",
-            },
-            {
-              icon: "Activity",
-              pathname: "/Autocorrect",
-              title: "Autocorrect Cover",
-            },
-            {
-              icon: "Activity",
-              pathname: "/Thirdparty",
-              title: "Third Party Cover",
-            },
-            {
-              icon: "Activity",
-              pathname: "/Theft",
-              title: "Third Party Fire and Theft",
-            },
+        // {
+        //   icon: "Umbrella",
+        //   title: "Bets",
+        //   subMenu: [
+        //     {
+        //       icon: "Activity",
+        //       pathname: "/quotes",
+        //       title: "Private Comprehensive Cover",
+        //     },
+        //     {
+        //       icon: "Activity",
+        //       pathname: "/Autocorrect",
+        //       title: "Autocorrect Cover",
+        //     },
+        //     {
+        //       icon: "Activity",
+        //       pathname: "/Thirdparty",
+        //       title: "Third Party Cover",
+        //     },
+        //     {
+        //       icon: "Activity",
+        //       pathname: "/Theft",
+        //       title: "Third Party Fire and Theft",
+        //     },
 
 
             
             
-          ]},
+        //   ]},
 
 
 
@@ -172,21 +193,21 @@ const initialState: SideMenuState = {
       icon: "Info",
       title: "Contents",
       subMenu: [
-     {
-      icon: "Activity",
-      pathname: "/Contents",
-      title: "Product Offers",
-    },
+    //  {
+    //   icon: "Activity",
+    //   pathname: "/Contents",
+    //   title: "Product Offers",
+    // },
     {
       icon: "Activity",
       pathname: "/FAQs",
       title: "FAQs",
     },
-    {
-      icon: "Activity",
-      pathname: "/CoversFAQs",
-      title: "Covers FAQs",
-    },
+    // {
+    //   icon: "Activity",
+    //   pathname: "/CoversFAQs",
+    //   title: "Covers FAQs",
+    // },
     {
       icon: "Activity",
       pathname: "/PrivacyPolicy",
@@ -199,45 +220,45 @@ const initialState: SideMenuState = {
     },
     
   ]},
-    {
-      icon: "Car",
-      title: "Vehicle",
-      subMenu: [
-        {
-          icon: "Activity",
-          pathname: "/Vehicle",
-          title: "Vehicle Make",
-        },
-        {
-          icon: "Activity",
-          pathname: "/model",
-          title: "Vehicle Model",
-        },
-        {
-          icon: "Activity",
-          pathname: "/valuers",
-          title: "Valuers",
-        },
+    // {
+      // icon: "Car",
+      // title: "Game Logs",
+      // subMenu: [
+      //   {
+      //     icon: "Activity",
+      //     pathname: "/Vehicle",
+      //     title: "Vehicle Make",
+      //   },
+      //   {
+      //     icon: "Activity",
+      //     pathname: "/model",
+      //     title: "Vehicle Model",
+      //   },
+      //   {
+      //     icon: "Activity",
+      //     pathname: "/valuers",
+      //     title: "Valuers",
+      //   },
         
         // {
         //   icon: "Activity",
         //   pathname: "/documents",
         //   title: "Documents Types",
         // },
-        {
-          icon: "Activity",
-          pathname: "/securityFeature",
-          title: "Security Feature",
-        },
-        {
-          icon: "Activity",
-          pathname: "/financiers",
-          title: "Financiers",
-        },
+      //   {
+      //     icon: "Activity",
+      //     pathname: "/securityFeature",
+      //     title: "Security Feature",
+      //   },
+      //   {
+      //     icon: "Activity",
+      //     pathname: "/financiers",
+      //     title: "Financiers",
+      //   },
         
         
         
-      ]},
+      // ]},
     // {
     //   icon: "CreditCard",
     //   title: "Payments",
@@ -261,6 +282,8 @@ const initialState: SideMenuState = {
     //   title: "Simcard Booking"
     // },
     "divider",
+
+    
     {
       icon: "Shield",
       title: "Security",
@@ -285,7 +308,12 @@ const initialState: SideMenuState = {
         {
           icon: "Activity",
           pathname: "/Logs",
-          title: "Access Logs",
+          title: "Games Logs",
+        },
+        {
+          icon: "Activity",
+          pathname: "/Logs",
+          title: "System Logs",
         },
       
         
@@ -300,6 +328,13 @@ const initialState: SideMenuState = {
           pathname: "/NewProfile",
           title: "Change Password",
         },
+        // {
+        //   icon: "Activity",
+        //   pathname: "/Settings",
+        //   title: "Settings",
+        // },
+
+        
         // {
         //   icon: "Activity",
         //   pathname: "/change-password",

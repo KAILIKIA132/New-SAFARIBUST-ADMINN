@@ -24,7 +24,7 @@ const Auth = () => {
                   src={illustrationUrl}
                 />
                 <div className="mt-10 text-4xl font-medium leading-tight text-white -intro-x">
-                Welcome to the Bima Yetu App – Admin Portal<br /> 
+                Welcome to the SAFARIBUST – Admin Portal<br /> 
                 {/* 3 Days */}
                 </div>
                 {/* <div className="mt-5 text-lg text-white -intro-x text-opacity-70 dark:text-slate-400">

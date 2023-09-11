@@ -164,7 +164,7 @@ function Main() {
 
   return (
     <>
-      <h2 className="mt-10 text-lg font-medium intro-y">Mpesa Transactions Table</h2>
+      <h2 className="mt-10 text-lg font-medium intro-y">PLAYERS</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y xl:flex-nowrap">
           {/* <Button variant="primary" className="mr-2 shadow-md" onClick={(event: React.MouseEvent) => {
@@ -223,28 +223,22 @@ function Main() {
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Username
+                USERNAME
                 </Table.Th>
                 {/* <Table.Th className="border-b-0 whitespace-nowrap">
                 Middle Name
                 </Table.Th> */}
+                {/* <Table.Th className="border-b-0 whitespace-nowrap">
+                Last Name
+                </Table.Th> */}
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Phone
+                  PHONE
                 </Table.Th>
+                {/* <Table.Th className="border-b-0 whitespace-nowrap">
+                  EMAIL
+                </Table.Th> */}
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                Trans ID
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Type
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Acc Balance
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Date
-                </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                Time
+                ACCOUNT BALANCE
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   STATUS

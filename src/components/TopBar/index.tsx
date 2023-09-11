@@ -50,7 +50,7 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
           >
             <img
               alt="ACS"
-              className="w-20"
+              className="w-35"
               src={logoUrl}
             />
           </Link>

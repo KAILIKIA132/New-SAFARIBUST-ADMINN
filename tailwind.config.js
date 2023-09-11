@@ -111,7 +111,7 @@ module.exports = {
         // Default colors
         ":root": {
           
-          "--color-primary": toRGB(colors.blue["900"]),
+          "--color-primary": toRGB(colors.red["700"]),
           "--color-secondary": toRGB(colors.slate["200"]),
           "--color-success": toRGB(colors.blue["600"]),
           "--color-info": toRGB(colors.cyan["500"]),

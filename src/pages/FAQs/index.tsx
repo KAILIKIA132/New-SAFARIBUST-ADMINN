@@ -354,7 +354,7 @@ function Main() {
                   type="text"
                   name="days"
                   className={errors.firstName ? "border-danger" : ''}
-                  placeholder="e.g  Who is Heritage?"
+                  placeholder="e.g  Who is SAFARIBUST?"
                 />
                 {errors.firstName && (
                   <div className="mt-2 text-danger">

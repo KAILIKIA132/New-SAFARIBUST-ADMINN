@@ -1,19 +1,19 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import Button from "../../base-components/Button";
-import Notification, { NotificationElement } from "../../base-components/Notification";
+import Notification, {
+  NotificationElement,
+} from "../../base-components/Notification";
 import Lucide from "../../base-components/Lucide";
 import { FormInput, FormCheck } from "../../base-components/Form";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link } from "react-router-dom";
-import { useAuth } from '../../contexts/Auth';
+import { useAuth } from "../../contexts/Auth";
 import * as ApiService from "../../services/auth";
 import * as yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-
-
 
 const Login = () => {
   const auth = useAuth();
@@ -26,8 +26,9 @@ const Login = () => {
   const schema = yup
     .object({
       username: yup.string().required().email(),
-      password: yup.string().required().min(4)
-    }).required();
+      password: yup.string().required().min(4),
+    })
+    .required();
 
   const {
     register,
@@ -37,31 +38,53 @@ const Login = () => {
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
-
   });
 
+  // const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const result = await trigger();
+  //   if (result && !loading) {
+  //     isLoading(true);
+  //     try {
+  //       const data = await getValues();
+  //       let res = await ApiService.login(data);
+  //       isLoading(false);
+  //       await auth.signIn(res);
+  //       setSuccess(true);
+  //       setMessage("Authenticated successfully");
+  //       notify.current?.showToast();
+  //     } catch (error) {
+  //       isLoading(false);
+  //       setSuccess(false);
+  //       setMessage("Incorrect credetials.");
+  //       notify.current?.showToast();
+  //     }
+  //   }
+  // };
+
+  //to be removed once tested
   const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const result = await trigger();
-    if (result && !loading) {
-      isLoading(true);
-      try {
-        const data = await getValues();
-        let res = await ApiService.login(data);
-        isLoading(false);
-        await auth.signIn(res);
-        setSuccess(true);
-        setMessage("Authenticated successfully");
-        notify.current?.showToast();
-      } catch (error) {
-        isLoading(false);
-        setSuccess(false);
-        setMessage("Incorrect credetials.");
-        notify.current?.showToast();
-      }
-    }
 
+    try {
+      const data = await getValues();
+      isLoading(true);
+      const username = "example@email.com";
+      const password = "Password";
+      const res = await { username, password };
+      isLoading(false);
+      await auth.signIn(res);
+      setSuccess(true);
+      setMessage("Authenticated successfully");
+      notify.current?.showToast();
+    } catch (error) {
+      isLoading(false);
+      setSuccess(false);
+      setMessage("Incorrect credentials.");
+      notify.current?.showToast();
+    }
   };
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const togglePasswordVisibility = () => {
@@ -86,7 +109,11 @@ const Login = () => {
                 id="validation-form-2"
                 type="email"
                 name="username"
-                className={errors.email ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger" : 'block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]'}
+                className={
+                  errors.email
+                    ? "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px] border-danger"
+                    : "block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]"
+                }
                 placeholder="Email"
               />
               {errors.email && (
@@ -109,27 +136,26 @@ const Login = () => {
                     : "block px-4 py-3 mt-4 intro-x min-w-[250px] xl:min-w-[350px] border pr-10"
                 }
                 placeholder="Password"
-              />  
-              <div
-              className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-              onClick={togglePasswordVisibility}
-            >
-              <FontAwesomeIcon
-                icon={showPassword ? faEyeSlash : faEye}
-                className="text-blue-800"
               />
-            </div>
-            
-      {errors.password && (
-        
-        <div className="mt-2 text-danger">
-          {typeof errors.password.message === "string" &&
-            errors.password.message}
-        </div>
-      )}
+              <div
+                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                onClick={togglePasswordVisibility}
+              >
+                <FontAwesomeIcon
+                  icon={showPassword ? faEyeSlash : faEye}
+                  className="text-blue-800"
+                />
+              </div>
 
-      {/* Eye Icon */}
-      {/* <div
+              {errors.password && (
+                <div className="mt-2 text-danger">
+                  {typeof errors.password.message === "string" &&
+                    errors.password.message}
+                </div>
+              )}
+
+              {/* Eye Icon */}
+              {/* <div
         className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
         onClick={togglePasswordVisibility}
       >
@@ -138,8 +164,7 @@ const Login = () => {
           className="text-blue-800"
         />
       </div> */}
-
-    </div>
+            </div>
           </div>
           <div className="flex mt-4 text-xs intro-x text-slate-600 dark:text-slate-500 sm:text-sm">
             {/* <div className="flex items-center mr-auto">
@@ -163,33 +188,37 @@ const Login = () => {
               className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3"
             >
               Login
-              {
-                loading && <LoadingIcon
+              {loading && (
+                <LoadingIcon
                   icon="spinning-circles"
                   color="white"
                   className="w-4 h-4 ml-2"
                 />
-              }
+              )}
             </Button>
           </div>
         </form>
       </div>
-      <Notification getRef={(el) => { notify.current = el; }}
+      <Notification
+        getRef={(el) => {
+          notify.current = el;
+        }}
         options={{
           duration: 3000,
         }}
         className="flex"
       >
-        <Lucide icon={success ? "CheckCircle" : "XCircle"} className={success ? "text-success" : "text-danger"} />
+        <Lucide
+          icon={success ? "CheckCircle" : "XCircle"}
+          className={success ? "text-success" : "text-danger"}
+        />
         <div className="ml-4 mr-4">
           <div className="font-medium">{success ? "Success" : "Failed"}</div>
-          <div className="mt-1 text-slate-500">
-            {message}
-          </div>
+          <div className="mt-1 text-slate-500">{message}</div>
         </div>
       </Notification>
     </>
   );
-}
+};
 
 export default Login;

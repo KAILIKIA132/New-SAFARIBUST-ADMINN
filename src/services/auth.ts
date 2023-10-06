@@ -3,6 +3,364 @@ import axios from 'axios';
 import * as c from '../utils/constants';
 import { FieldValues } from 'react-hook-form';
 
+//Users
+export const createUser = async (username: any,phone: any, password:any,roleId: any) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    const graphql = JSON.stringify({
+      query: `mutation createAdmin ($userInput: AdminUserInput) {
+        createAdmin (userInput: $userInput) {
+          userId
+          token
+          type
+          username
+          online
+          phone
+          dataToken
+          tokenExpiration
+          otp
+        }
+      }`,
+      variables: {
+        userInput: {
+          username: username,
+          phone: phone,
+          password: password,
+          roleId:roleId,
+        }
+      }
+    });
+  
+    const requestOptions: RequestInit = {
+      method: 'POST',
+      headers: myHeaders,
+      body: graphql,
+      redirect: 'follow'
+    };
+  
+    try {
+      const response = await fetch(c.BASE_URL, requestOptions);
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      return data; 
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+      throw error; 
+    }
+  };
+  
+//Roles
+export  const createRole = async (name:any,permissions:any)  => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    const graphql = JSON.stringify({
+      query: `mutation createRole($roleInput: CreateRoleInput) {
+        createRole(roleInput: $roleInput) {
+          _id
+          name
+          permissions {
+            _id
+            entity_name
+            action_name
+            description
+          }
+        }
+      }`,
+      variables: {
+        "roleInput": {
+          "name": name,
+          "permissions": permissions
+        }
+      }
+    });
+  
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: graphql,
+      redirect: 'follow' as RequestRedirect
+    };
+  
+    try {
+      const response = await fetch(c.BASE_URL, requestOptions);
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const result = await response.text();
+      console.log(result);
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  }
+  
+
+  
+//getRoles
+export const getRoles = async () =>  {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    const graphql = JSON.stringify({
+      query: `query roles {
+        roles {
+          _id
+          name
+          permissions {
+            _id
+            entity_name
+            action_name
+            description
+          }
+        }
+      }`,
+      variables: {}
+    });
+  
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: graphql,
+      redirect: 'follow' as RequestRedirect
+    };
+  
+    try {
+      const response = await fetch(c.BASE_URL, requestOptions);
+      
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const result = await response.text();
+      console.log(result);
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  }
+  
+
+  
+  //permissions
+  export const fetchPermissions = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    const graphql = JSON.stringify({
+      query: `query permissions {
+        permissions {
+          _id
+          entity_name
+          action_name
+          description
+        }
+      }`,
+      variables: {}
+    });
+  
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: graphql,
+      redirect: 'follow' as RequestRedirect
+    };
+  
+    try {
+      const response = await fetch("https://sb-backend-test.onrender.com/graphql", requestOptions);
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  }
+  
+  
+
+  //logs
+export const createLogs = async (ip:any, description:any, round:any, userId:any, point:any, at:any, crush:any)  => {
+    const query = `
+      mutation createLogs($logsInput: LogsInput) {
+        createLogs(logsInput: $logsInput) {
+          _id
+          ip
+          description
+          transactionId
+          user {
+            _id
+            phone
+            type
+            active
+            online
+            password
+            dataToken
+            username
+            label
+            firstDeposit
+            createdAt
+            updatedAt
+          }
+          round
+          point
+          at
+          crush
+          balance
+          won
+          createdAt
+          updatedAt
+        }
+      }
+    `;
+  
+    const variables = {
+      "logsInput": {
+        "ip": ip,
+        "description": description,
+        "round": round,
+        "userId": userId,
+        "point": point,
+        "at": at,
+        "crush": crush
+      }
+    };
+  
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify({
+        query: query,
+        variables: variables
+      }),
+      redirect: 'follow' as RequestRedirect
+    };
+  
+    try {
+      const response = await fetch(c.BASE_URL, requestOptions);
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+  
+  //fetchLogs
+ export const fetchLogs = async() =>  {
+    const query = `
+      query logs {
+        logs {
+          _id
+          ip
+          description
+          transactionId
+          user {
+            _id
+            phone
+            type
+            active
+            online
+            password
+            dataToken
+            username
+            label
+            firstDeposit
+            createdAt
+            updatedAt
+          }
+          round
+          point
+          at
+          crush
+          balance
+          won
+          createdAt
+          updatedAt
+        }
+      }
+    `;
+  
+    const variables = {};
+  
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify({
+        query: query,
+        variables: variables
+      }),
+      redirect: 'follow' as RequestRedirect
+    };
+  
+    try {
+      const response = await fetch(c.BASE_URL, requestOptions);
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+  
+
+  
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const getData = async () => {
     try {
         const user = await localStorage.getItem('user')
@@ -77,23 +435,9 @@ export async function getUserData() {
 
 
 
-export async function getRoles() {
-    try {
-        let res = await axios.get(c.ROLES);
-        return res.data;
-    } catch (e) {
-        throw handler(e);
-    }
-}
 
-export async function createRole(data: FieldValues) {
-    try {
-      let res = await axios.post(c.ROLES, data);
-      return res.data;
-    } catch (e) {
-      throw handler(e);
-    }
-  }
+
+
 
 export async function deleteRole(id: any) {
     try {

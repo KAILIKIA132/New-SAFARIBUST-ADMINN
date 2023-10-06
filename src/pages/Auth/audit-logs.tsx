@@ -8,7 +8,9 @@ import Table from "../../base-components/Table";
 import * as ApiService from "../../services/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Notification, { NotificationElement } from "../../base-components/Notification";
+import Notification, {
+  NotificationElement,
+} from "../../base-components/Notification";
 import { useForm } from "react-hook-form";
 import LoadingIcon from "../../base-components/LoadingIcon";
 
@@ -30,8 +32,7 @@ function Log() {
 
   const getAccessLogs = async () => {
     // let res = await ApiService.getAccessLogs();
-    // setAccessLogs(res);
-
+    // setAccessLogs(res);//put here to fetch
   };
 
   return (
@@ -39,9 +40,7 @@ function Log() {
       <h2 className="mt-10 text-lg font-medium intro-y">Access Logs</h2>
       <div className="grid grid-cols-12 gap-6 mt-5">
         <div className="flex flex-wrap items-center col-span-12 mt-2 intro-y sm:flex-nowrap">
-          <div className="hidden mx-auto md:block text-slate-500">
-
-          </div>
+          <div className="hidden mx-auto md:block text-slate-500"></div>
           <div className="w-full mt-3 sm:w-auto sm:mt-0 sm:ml-auto md:ml-0">
             <div className="relative w-56 text-slate-500">
               <FormInput
@@ -58,40 +57,35 @@ function Log() {
         </div>
         {/* BEGIN: Data List */}
         <div className="col-span-12 overflow-auto intro-y lg:overflow-visible">
-          <Table className="border-spacing-y-[10px] border-separate -mt-2"><Table.Thead>
-            <Table.Tr>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                USER
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                IP
-              </Table.Th>
-              {/* <Table.Th className="border-b-0 whitespace-nowrap">
+          <Table className="border-spacing-y-[10px] border-separate -mt-2">
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  USER
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">IP</Table.Th>
+                {/* <Table.Th className="border-b-0 whitespace-nowrap">
                 PLATFORM
               </Table.Th> */}
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                ACTION
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                RESPONSE
-              </Table.Th>
-              <Table.Th className="border-b-0 whitespace-nowrap">
-                TIME
-              </Table.Th>
-            </Table.Tr>
-          </Table.Thead>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  ACTION
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  RESPONSE
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  TIME
+                </Table.Th>
+              </Table.Tr>
+            </Table.Thead>
             <Table.Tbody>
               {logs.map((log: any, key) => (
                 <Table.Tr key={key} className="intro-x">
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="text-slate-500 mt-0.5">
-                      {log.user}
-                    </div>
+                    <div className="text-slate-500 mt-0.5">{log.user}</div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="text-slate-500 mt-0.5">
-                      {log.ip}
-                    </div>
+                    <div className="text-slate-500 mt-0.5">{log.ip}</div>
                   </Table.Td>
                   {/* <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div className="text-slate-500 mt-0.5">
@@ -99,19 +93,13 @@ function Log() {
                     </div>
                   </Table.Td> */}
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="text-slate-500 mt-0.5">
-                      {log.action}
-                    </div>
+                    <div className="text-slate-500 mt-0.5">{log.action}</div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="text-slate-500 mt-0.5">
-                      {log.response}
-                    </div>
+                    <div className="text-slate-500 mt-0.5">{log.response}</div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="text-slate-500 mt-0.5">
-                      {log.time}
-                    </div>
+                    <div className="text-slate-500 mt-0.5">{log.time}</div>
                   </Table.Td>
                 </Table.Tr>
               ))}

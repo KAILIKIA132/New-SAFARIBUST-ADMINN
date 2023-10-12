@@ -69,11 +69,9 @@ const Login = () => {
     try {
       const data = await getValues();
       isLoading(true);
-      const username = "example@email.com";
-      const password = "Password";
-      const res = await { username, password };
+      // const res = await { datasusername, password };
       isLoading(false);
-      await auth.signIn(res);
+      await ApiService.handleLogin(data.username, data.password);
       setSuccess(true);
       setMessage("Authenticated successfully");
       notify.current?.showToast();
@@ -138,12 +136,12 @@ const Login = () => {
                 placeholder="Password"
               />
               <div
-                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                className="absolute inset-y-20 right-0 flex items-center pr-3 cursor-pointer"
                 onClick={togglePasswordVisibility}
               >
                 <FontAwesomeIcon
                   icon={showPassword ? faEyeSlash : faEye}
-                  className="text-blue-800"
+                  className="text-red-800"
                 />
               </div>
 
@@ -155,15 +153,6 @@ const Login = () => {
               )}
 
               {/* Eye Icon */}
-              {/* <div
-        className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-        onClick={togglePasswordVisibility}
-      >
-        <FontAwesomeIcon
-          icon={showPassword ? faEyeSlash : faEye}
-          className="text-blue-800"
-        />
-      </div> */}
             </div>
           </div>
           <div className="flex mt-4 text-xs intro-x text-slate-600 dark:text-slate-500 sm:text-sm">

@@ -42,51 +42,47 @@ export const createUser = async (username:any, phone:any, password:any, roleId:a
 
   //fetchusers
   export const getUsers = async () => {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-  
-    const graphql = JSON.stringify({
-      query: `
-        query users {
-          users {
-            _id
-            phone
-            type
-            active
-            online
-            password
-            dataToken
-            username
-            label
-            firstDeposit
-            createdAt
-            updatedAt
-          }
-        }`,
-      variables: {}
-    });
-  
-    const requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: graphql,
-      redirect: 'follow' as RequestRedirect
-    };
-  
     try {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+  
+      const graphqlQuery = {
+        query: `
+          query admins {
+            admins {
+              _id
+              phone
+              password
+              username
+              createdAt
+              updatedAt
+            }
+          }
+        `,
+        variables: {}
+      };
+  
+      const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(graphqlQuery),
+        redirect: 'follow' as RequestRedirect
+      };
+  
       const response = await fetch(c.BASE_URL, requestOptions);
   
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
   
-      const data = await response.json();
-      return data;
+      const result = await response.json();
+      return result.data.admins;
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
       throw error;
     }
   };
+  
   
 
   
@@ -404,7 +400,311 @@ export const getAllPlayers = async () => {
   }
 }
 
+
+//bets
+export const fetchBets = async () => {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const graphql = JSON.stringify({
+    query: `
+      query allBets {
+        allBets {
+          _id
+          betAmount
+          point
+          round
+          win
+          userId {
+            _id
+            phone
+            type
+            active
+            online
+            password
+            dataToken
+            username
+            label
+            firstDeposit
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+        }
+      }
+    `,
+    variables: {}
+  });
+
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: graphql,
+    redirect: 'follow' as RequestRedirect
+  };
+  try {
+    const response = await fetch(c.BASE_URL, requestOptions);
+    const data = await response.json();
+    console.log(data.data.allBets);
+    return data.data.allBets;
+  } catch (error) {
+    console.log('Error:', error);
+    throw error; 
+  }
+}
+
+
+  //Fetchaccounts
+  export const getAllAccounts = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
   
+    const graphql = JSON.stringify({
+      query: `
+        query accounts {
+          accounts {
+            _id
+            balance
+            active
+            user {
+              _id
+              phone
+              type
+              active
+              online
+              password
+              dataToken
+              username
+              otp
+              label
+              firstDeposit
+              createdAt
+              updatedAt
+              bets {
+                _id
+                betAmount
+                point
+                userId {
+                  _id
+                  phone
+                  type
+                  active
+                  online
+                  password
+                  dataToken
+                  username
+                  otp
+                  label
+                  firstDeposit
+                  createdAt
+                  updatedAt
+                }
+                round
+                possibleWin
+                win
+                createdAt
+                updatedAt
+              }
+            }
+            phone
+            createdAt
+            updatedAt
+          }
+        }
+      `,
+      variables: {}
+    });
+  
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: graphql,
+      redirect: 'follow' as RequestRedirect
+    };
+  
+    try {
+      const response = await fetch(c.BASE_URL, requestOptions);
+      const accounts = await response.json();
+      console.log(accounts);
+      // return accounts;
+    } catch (error) {
+      console.log('Error:', error);
+      throw error; // Rethrow the error to handle it at a higher level if needed.
+    }
+  };
+
+  //allTransactions
+  export const getAllTransactions = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    const graphql = JSON.stringify({
+      query: `
+        query allTransactions {
+          allTransactions {
+            _id
+            type
+            amount
+            user {
+              _id
+              phone
+              type
+              active
+              online
+              password
+              dataToken
+              username
+              label
+              firstDeposit
+              createdAt
+              updatedAt
+            }
+            transactionId
+            trans_id
+            bill_ref_number
+            trans_time
+            balance
+            MerchantRequestID
+            CheckoutRequestID
+            mpesaReceiptNumber
+            username
+            createdAt
+            updatedAt
+          }
+        }
+      `,
+      variables: {}
+    });
+  
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: graphql,
+      redirect: 'follow' as RequestRedirect
+    };
+  
+    try {
+      const response = await fetch(c.BASE_URL, requestOptions);
+      const transactions = await response.json();
+      return transactions.data.allTransactions;
+    } catch (error) {
+      console.log('Error:', error);
+      throw error; // Rethrow the error to handle it at a higher level if needed.
+    }
+  };
+
+  //logs for players
+export const getLogs= async () => {
+const myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+const graphql = JSON.stringify({
+  query: `
+    query logs {
+      logs {
+        _id
+        ip
+        description
+        transactionId
+        user {
+          _id
+          phone
+          type
+          active
+          online
+          password
+          dataToken
+          username
+          label
+          firstDeposit
+          createdAt
+          updatedAt
+        }
+        round
+        point
+        at
+        crush
+        balance
+        won
+        createdAt
+        updatedAt
+      }
+    }
+  `,
+  variables: {}
+});
+
+const requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: graphql,
+  redirect: 'follow' as RequestRedirect
+};
+try {
+  const response = await fetch(c.BASE_URL, requestOptions);
+  const res = await response.json();
+  console.log(res)
+  // return data
+} catch (error) {
+  console.log('Error:', error);
+  throw error;
+}
+  }
+
+  //login
+ export const handleLogin = async (username:any, password:any) => {
+    const url = "https://sb-backend-test.onrender.com/graphql";
+  
+    const data = {
+      query: `
+        query adminLogin($loginInput: LoginInput) {
+          adminLogin(loginInput: $loginInput) {
+            userId
+            token
+            type
+            username
+            online
+            phone
+            dataToken
+            tokenExpiration
+            otp
+          }
+        }
+      `,
+      variables: {
+        loginInput: {
+          username: username,
+          password: password,
+        },
+      },
+    };
+  
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        redirect: 'follow',
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const result = await response.json();
+      console.log(result.data.adminLogin);
+      return result.data.adminLogin;
+    } catch (error) {
+      throw new Error(`HTTP error! `);
+    }
+  };
+  
+
+  
+
   
   
 

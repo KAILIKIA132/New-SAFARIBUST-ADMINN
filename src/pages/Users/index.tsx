@@ -327,8 +327,8 @@ function Main() {
   });
 
   useEffect(() => {
-    // getUsers();
-    // getRoles();
+    getUsers();
+    getRoles();
     // getConferences();
   }, []);
 
@@ -376,26 +376,23 @@ function Main() {
       isLoading(true);
       try {
         const data = await getValues();
-        console.log(data);
         await ApiService.createUser(
-          data.name,
+          data.username,
           data.phone,
-          data.Password,
+          data.password,
           data.roleId
         );
-        await getRoles();
+        await getUsers();
         await reset();
         isLoading(false);
         setDialog(false);
         setSuccess(true);
-        setMessage("Role created successfully.");
+        setMessage("User created successfully.");
         notify.current?.showToast();
       } catch (error: any) {
         isLoading(false);
         setSuccess(false);
-        setMessage(
-          error.message || "An error occurred while creating the role."
-        );
+        setMessage(error.message || "An error occurred while creating user.");
         notify.current?.showToast();
       }
     }
@@ -490,14 +487,15 @@ function Main() {
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   <FormCheck.Input type="checkbox" />
                 </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap"></Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   USERNAME
                 </Table.Th>
-                {/* <Table.Th className="border-b-0 whitespace-nowrap">
-                  EMAIL
-                </Table.Th> */}
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   PHONE
+                </Table.Th>
+                <Table.Th className="border-b-0 whitespace-nowrap">
+                  PASSWORD
                 </Table.Th>
 
                 <Table.Th className="border-b-0 whitespace-nowrap">
@@ -531,21 +529,36 @@ function Main() {
                           content={user.firstname + " " + user.lastname}
                         />
                       </div>
-                      <div className="ml-4">
-                        <a href="" className="font-medium whitespace-nowrap">
-                          {user.username}
-                        </a>
-                      </div>
                     </div>
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.username}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.phone}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    {user.password}
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.roleId}
                   </Table.Td>
-
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    <div
+                      className={clsx([
+                        "flex items-center justify-center",
+                        { "text-success": user.approval_status },
+                        { "text-danger": !user.approval_status },
+                      ])}
+                    >
+                      <Lucide
+                        icon={user.approval_status ? "CheckSquare" : "XSquare"}
+                        className="w-4 h-4 mr-2"
+                      />
+                      {user.approval_status ? "Active" : "Inactive"}
+                    </div>
+                  </Table.Td>
+                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.nationality}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
@@ -562,7 +575,7 @@ function Main() {
                       />
                       {user.nationality ? "Active" : "Inactive"}
                     </div>
-                  </Table.Td>
+                  </Table.Td> */}
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
                     <div className="flex items-center justify-center">
                       <Menu>

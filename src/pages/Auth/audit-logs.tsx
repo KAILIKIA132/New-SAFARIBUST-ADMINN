@@ -18,7 +18,7 @@ function Log() {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteButtonRef = useRef(null);
 
-  const [logs, setAccessLogs] = useState([]);
+  const [accessLogs, setAccessLogs] = useState([]);
   const [loading, isLoading] = useState(false);
   const [success, setSuccess] = useState(true);
   const [message, setMessage] = useState("");
@@ -31,6 +31,10 @@ function Log() {
   }, []);
 
   const getAccessLogs = async () => {
+    const response = await ApiService.getAccessLogs();
+    console.log(response);
+    setAccessLogs(response);
+
     // let res = await ApiService.getAccessLogs();
     // setAccessLogs(res);//put here to fetch
   };
@@ -68,10 +72,10 @@ function Log() {
                 PLATFORM
               </Table.Th> */}
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                  ACTION
+                  PHONE
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
-                  RESPONSE
+                  DESCRIPTION
                 </Table.Th>
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   TIME
@@ -79,27 +83,31 @@ function Log() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {logs.map((log: any, key) => (
-                <Table.Tr key={key} className="intro-x">
+              {accessLogs.map((accessLog: any) => (
+                <Table.Tr key={accessLog._id} className="intro-x">
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="text-slate-500 mt-0.5">{log.user}</div>
-                  </Table.Td>
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="text-slate-500 mt-0.5">{log.ip}</div>
-                  </Table.Td>
-                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     <div className="text-slate-500 mt-0.5">
-                      {log.platform}
+                      {accessLog.user?.username}
                     </div>
-                  </Table.Td> */}
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="text-slate-500 mt-0.5">{log.action}</div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="text-slate-500 mt-0.5">{log.response}</div>
+                    <div className="text-slate-500 mt-0.5">{accessLog.ip}</div>
+                  </Table.Td>
+
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    <div className="text-slate-500 mt-0.5">
+                      {accessLog.user?.phone}
+                    </div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    <div className="text-slate-500 mt-0.5">{log.time}</div>
+                    <div className="text-slate-500 mt-0.5">
+                      {accessLog.description}
+                    </div>
+                  </Table.Td>
+                  <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                    <div className="text-slate-500 mt-0.5">
+                      {accessLog.createdAt}
+                    </div>
                   </Table.Td>
                 </Table.Tr>
               ))}

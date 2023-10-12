@@ -56,6 +56,7 @@ function Role() {
   const [loading, isLoading] = useState(false);
   const [success, setSuccess] = useState(true);
   const [message, setMessage] = useState("");
+  const [userPermissions, setUserPermissions] = useState([]);
 
   // Success notification
   const notify = useRef<NotificationElement>();
@@ -76,45 +77,41 @@ function Role() {
     resolver: yupResolver(schema),
   });
 
+  const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const result = await trigger();
+    if (result && !loading) {
+      isLoading(true);
+      try {
+        const data = await getValues();
+        console.log(data);
+        await ApiService.createRole(data.role, ["651e560e5266d29b76bf27ae"]);
+        await getRoles();
+        await reset();
+        isLoading(false);
+        setDialog(false);
+        setSuccess(true);
+        setMessage("Role created successfully.");
+        notify.current?.showToast();
+      } catch (error: any) {
+        isLoading(false);
+        setSuccess(false);
+        setMessage(
+          error.message || "An error occurred while creating the role."
+        );
+        notify.current?.showToast();
+      }
+    }
+  };
+
   useEffect(() => {
     getRoles();
   }, []);
 
   const getRoles = async () => {
     const response = await ApiService.getRoles();
-
-    const roles = response.data.roles;
-    console.log(roles);
+    setRoles(response);
   };
-
-  // const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const result = await trigger();
-  //   if (result && !loading) {
-  //     isLoading(true);
-  //     try {
-  //       const data = await getValues();
-  //       data.permissions = selectPermission;
-  //       data.groups = selectGroup;
-  //       console.log(data);
-  //       let res = await ApiService.createRole(data);
-  //       getRoles();
-  //       await reset();
-  //       isLoading(false);
-  //       setDialog(false);
-  //       setSuccess(true);
-  //       setMessage(res.message);
-  //       notify.current?.showToast();
-  //     } catch (error: any) {
-  //       isLoading(false);
-  //       setSuccess(false);
-  //       setMessage(error.message);
-  //       notify.current?.showToast();
-  //     }
-  //   }
-  // };
-
-  const onSubmit = async () => {};
 
   const deleteRecord = async () => {
     isLoading(true);
@@ -197,21 +194,25 @@ function Role() {
                   </div>
                 )}
               </div>
-              {/* <div className="col-span-12 sm:col-span-12">
-                <FormLabel htmlFor="modal-form-6">
-                  Groups
-                </FormLabel>
-                <TomSelect value={selectGroup} onChange={setGroup} options={{
-                  placeholder: "Select groups",
-                }} className="w-full" multiple>
-                  {groups.map((group: any, index: any) => (
-                    <option key={index} value={group}>{group}</option>
-                  ))}
-                </TomSelect>
-              </div> */}
             </div>
             <div>
               <br />
+              <div className="col-span-12 sm:col-span-12">
+                <FormLabel htmlFor="modal-form-6">Roles</FormLabel>
+                <TomSelect
+                  value={selectPermission}
+                  onChange={setPermission}
+                  options={{
+                    placeholder: "Select Permission",
+                  }}
+                  className="w-full"
+                  multiple
+                >
+                  {permissions.map((permissions: any) => (
+                    <option>{permissions}</option>
+                  ))}
+                </TomSelect>
+              </div>
               <Button
                 type="button"
                 variant="outline-secondary"
@@ -259,9 +260,9 @@ function Role() {
                     <Table.Th className="border-b-0 whitespace-nowrap">
                       ROLE
                     </Table.Th>
-                    <Table.Th className="border-b-0 whitespace-nowrap">
+                    {/* <Table.Th className="border-b-0 whitespace-nowrap">
                       MODULES
-                    </Table.Th>
+                    </Table.Th> */}
                     <Table.Th className="border-b-0 whitespace-nowrap">
                       PERMISSIONS
                     </Table.Th>
@@ -275,11 +276,15 @@ function Role() {
                     <Table.Tr key={key} className="intro-x">
                       <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                         <span className="font-medium whitespace-nowrap">
-                          {role.role}
+                          {role.name}
                         </span>
                       </Table.Td>
                       <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                        {role.groups.map((group: any, key: any) => (
+                        {permissions}
+                      </Table.Td>
+
+                      <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
+                        {/* {role.groups.map((group: any, key: any) => (
                           <Button
                             key={key}
                             size="sm"
@@ -288,19 +293,7 @@ function Role() {
                           >
                             {group}
                           </Button>
-                        ))}
-                      </Table.Td>
-                      <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                        {role.permissions.map((permission: any, key: any) => (
-                          <Button
-                            key={key}
-                            size="sm"
-                            variant="outline-primary"
-                            className="mr-1 inline-block mt-1"
-                          >
-                            {permission}
-                          </Button>
-                        ))}
+                        ))} */}
                       </Table.Td>
                       <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
                         <div className="flex items-center justify-center">

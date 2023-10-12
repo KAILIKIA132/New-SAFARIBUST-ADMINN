@@ -16,6 +16,8 @@ import { Dialog, Menu } from "../../base-components/Headless";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as ApiService from "../../services/auth";
+import { getUsers } from "../../services/auth";
+
 import * as yup from "yup";
 import Notification, {
   NotificationElement,
@@ -325,35 +327,41 @@ function Main() {
   });
 
   useEffect(() => {
-    getUsers();
-    getRoles();
-
+    // getUsers();
+    // getRoles();
     // getConferences();
   }, []);
 
   const getUsers = async () => {
-    isLoading(true);
-    try {
-      let res = await ApiService.getUsers({ page: 1 });
-      setUsers(res.users);
-      isLoading(false);
-      setNextPage(page < res.total_pages ? page + 1 : res.total_pages);
-      setPreviousPage(page > 1 ? page - 1 : 1);
-      setPagination({
-        current_page: res.current_page,
-        total: res.total,
-        total_pages: res.total_pages,
-        per_page: res.per_page,
-      });
-    } catch (error) {
-      isLoading(false);
-      console.log("Error fetching users");
-    }
+    const response = await ApiService.getUsers();
+    setUsers(response);
+    console.log(response);
   };
+
+  // const getUsers = async () => {
+  //   isLoading(true);
+  //   try {
+  //     let res = await ApiService.getUsers({ page: 1 });
+  //     setUsers(res.users);
+  //     isLoading(false);
+  //     setNextPage(page < res.total_pages ? page + 1 : res.total_pages);
+  //     setPreviousPage(page > 1 ? page - 1 : 1);
+  //     setPagination({
+  //       current_page: res.current_page,
+  //       total: res.total,
+  //       total_pages: res.total_pages,
+  //       per_page: res.per_page,
+  //     });
+  //   } catch (error) {
+  //     isLoading(false);
+  //     console.log("Error fetching users");
+  //   }
+  // };
 
   const getRoles = async () => {
     let res = await ApiService.getRoles();
     setRoles(res);
+    console.log(res);
   };
 
   // const getConferences = async () => {
@@ -361,7 +369,6 @@ function Main() {
   //   setConferences(res.users);
   //   setPagination({ current_page: res.current_page, total: res.total, total_pages: res.total_pages, per_page: res.per_page });
   // };
-
   const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await trigger();
@@ -369,19 +376,26 @@ function Main() {
       isLoading(true);
       try {
         const data = await getValues();
-        // data.tenant = "64b199727fe94a1ea97a64cd";
-        let res = await ApiService.signup(data);
-        getUsers();
+        console.log(data);
+        await ApiService.createUser(
+          data.name,
+          data.phone,
+          data.Password,
+          data.roleId
+        );
+        await getRoles();
         await reset();
         isLoading(false);
         setDialog(false);
         setSuccess(true);
-        setMessage(res.message);
+        setMessage("Role created successfully.");
         notify.current?.showToast();
       } catch (error: any) {
         isLoading(false);
         setSuccess(false);
-        setMessage(error.message);
+        setMessage(
+          error.message || "An error occurred while creating the role."
+        );
         notify.current?.showToast();
       }
     }
@@ -485,9 +499,7 @@ function Main() {
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   PHONE
                 </Table.Th>
-                <Table.Th className="border-b-0 whitespace-nowrap">
-                  GENDER
-                </Table.Th>
+
                 <Table.Th className="border-b-0 whitespace-nowrap">
                   ROLE
                 </Table.Th>
@@ -521,26 +533,18 @@ function Main() {
                       </div>
                       <div className="ml-4">
                         <a href="" className="font-medium whitespace-nowrap">
-                          {user.firstname + " " + user.lastname}
+                          {user.username}
                         </a>
-                        {/* <div className="text-slate-500 text-xs whitespace-nowrap mt-0.5">
-                          {user.role.role}
-                        </div> */}
                       </div>
                     </div>
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.email}
-                  </Table.Td>
-                  {/* <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.phone}
-                  </Table.Td> */}
-                  <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.gender}
                   </Table.Td>
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                    {user.role}
+                    {user.roleId}
                   </Table.Td>
+
                   <Table.Td className="first:rounded-l-md last:rounded-r-md capitalize bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                     {user.nationality}
                   </Table.Td>
@@ -770,12 +774,12 @@ function Main() {
                 )}
               </div> */}
               <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-1">Gender</FormLabel>
+                <FormLabel htmlFor="modal-form-1">Phone</FormLabel>
                 <FormInput
-                  {...register("gender")}
+                  {...register("phone")}
                   type="text"
-                  name="gender"
-                  placeholder="Male"
+                  name="phone"
+                  placeholder="Phone Number"
                 />
               </div>
 
@@ -805,9 +809,9 @@ function Main() {
                   className="w-full"
                   multiple
                 >
-                  {select_role.map((role: any, index: any) => (
-                    <option key={index} value={role}>
-                      {role}
+                  {roles.map((role: any) => (
+                    <option key={role._id} value={role._id}>
+                      {role.name}
                     </option>
                   ))}
                 </TomSelect>

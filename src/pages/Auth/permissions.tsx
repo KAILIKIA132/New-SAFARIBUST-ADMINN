@@ -8,32 +8,55 @@ import Table from "../../base-components/Table";
 import * as ApiService from "../../services/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Notification, { NotificationElement } from "../../base-components/Notification";
+import Notification, {
+  NotificationElement,
+} from "../../base-components/Notification";
 import { useForm } from "react-hook-form";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import TomSelect from "../../base-components/TomSelect";
 
 function Permissions() {
-
-
-
   const [roles_role] = useState([
-    { name: 'ADMIN', code: 'AF' },
-    { name: 'MANAGER', code: 'AX' },
-    { name: 'DIRECTOR', code: 'AL' },
-    { name: 'MARKETER', code: 'DZ' },
-    { name: 'GENERAL MANAGER', code: 'AS' },
-   
+    { name: "ADMIN", code: "AF" },
+    { name: "MANAGER", code: "AX" },
+    { name: "DIRECTOR", code: "AL" },
+    { name: "MARKETER", code: "DZ" },
+    { name: "GENERAL MANAGER", code: "AS" },
   ]);
-
 
   const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteButtonRef = useRef(null);
 
   const [roles, setRoles] = useState([]);
-  const [groups] = useState(["Dashboard", "Feeds", "Resources", "Users", "Attendees", "Speakers", "Vendors", "Exhibitors", "Places", "Conferences", "Themes", "Tags", "Events", "Wallets", "Transactions", "Payments", "SIM Cards", "Mobility", "Wallets", "Roles & Permissions", "System Users", "Access Logs", "Change Password", "Security", "Privacy Policy"]);
+  const [groups] = useState([
+    "Dashboard",
+    "Feeds",
+    "Resources",
+    "Users",
+    "Attendees",
+    "Speakers",
+    "Vendors",
+    "Exhibitors",
+    "Places",
+    "Conferences",
+    "Themes",
+    "Tags",
+    "Events",
+    "Wallets",
+    "Transactions",
+    "Payments",
+    "SIM Cards",
+    "Mobility",
+    "Wallets",
+    "Roles & Permissions",
+    "System Users",
+    "Access Logs",
+    "Change Password",
+    "Security",
+    "Privacy Policy",
+  ]);
   // const [permissions] = useState(['create', 'read-feed', 'update-feed', 'delete-feed', 'create-resource', 'read-resource', 'update-resource', 'delete-resource', 'create-user', 'read-user', 'update-user', 'delete-user', 'create-vendor', 'read-vendor', 'update-vendor', 'delete-vendor', 'create-speaker', 'read-speaker', 'update-speaker', 'delete-speaker', 'create-exhibitor', 'read-exhibitor', 'update-exhibitor', 'delete-exhibitor',  'create-place', 'read-place', 'update-place', 'delete-place', 'create-conference', 'read-conference', 'update-conference', 'delete-conference', 'create-theme', 'read-theme', 'update-theme', 'delete-theme', 'create-tag', 'read-tag', 'update-tag', 'delete-tag', 'create-event', 'read-event', 'update-event', 'delete-event', 'create-booking', 'read-booking', 'update-booking', 'cancel-booking', 'create-bus-schedule', 'read-bus-schedule', 'update-bus-schedule', 'delete-bus-schedule', 'manage-security-settings', 'update-policy']);
-  const [permissions] = useState(['Add', 'Edit', 'View', 'Delete']);
+  const [permissions] = useState(["Add", "Edit", "View", "Delete"]);
   const [selectGroup, setGroup] = useState([""]);
   const [selectPermission, setPermission] = useState([""]);
   const [recordId, setRecordId] = useState(null);
@@ -46,8 +69,9 @@ function Permissions() {
   const notify = useRef<NotificationElement>();
   const schema = yup
     .object({
-      role: yup.string().required("Role is required")
-    }).required();
+      role: yup.string().required("Role is required"),
+    })
+    .required();
 
   const {
     register,
@@ -78,13 +102,13 @@ function Permissions() {
         const data = await getValues();
         data.permissions = selectPermission;
         data.groups = selectGroup;
-        let res = await ApiService.createRole(data);
+        // let res = await ApiService.createRole(data);
         getRoles();
         await reset();
         isLoading(false);
         setDialog(false);
         setSuccess(true);
-        setMessage(res.message);
+        // setMessage(res.message);
         notify.current?.showToast();
       } catch (error: any) {
         isLoading(false);
@@ -118,79 +142,101 @@ function Permissions() {
     setPermission(record.permissions);
     reset(record);
     setDialog(true);
-  }
+  };
 
   const cancel = (record: any) => {
     setGroup([""]);
     setPermission([""]);
     reset(record);
     setDialog(false);
-  }
+  };
 
   return (
     <>
       {dialog ? (
         <>
           <div className="flex items-center mt-8 intro-y">
-            <a onClick={(event: React.MouseEvent) => { event.preventDefault(); reset({ name: "" }); setDialog(false); }} href="#">
+            <a
+              onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                reset({ name: "" });
+                setDialog(false);
+              }}
+              href="#"
+            >
               <Lucide icon="ArrowLeft" className="text-slate-400 mr-3" />
             </a>
             <h2 className="mr-auto text-lg font-medium">New Permissions</h2>
           </div>
           <br />
-          <form className="mt-5 p-5 intro-y box validate-form" onSubmit={onSubmit}>
+          <form
+            className="mt-5 p-5 intro-y box validate-form"
+            onSubmit={onSubmit}
+          >
             <div>
-
-              <a onClick={(event: React.MouseEvent) => {
-                event.preventDefault();
-                setDialog(false);
-              }}
+              <a
+                onClick={(event: React.MouseEvent) => {
+                  event.preventDefault();
+                  setDialog(false);
+                }}
                 className="absolute top-0 right-0 mt-3 mr-3"
                 href="#"
-              >
-
-              </a>
+              ></a>
             </div>
             <div className="grid grid-cols-12 gap-4 gap-y-3">
-            <div className="col-span-12 sm:col-span-6">
-                <FormLabel htmlFor="modal-form-6">
-                  Select Role
-                </FormLabel>
-                <FormSelect {...register("role")} name="role" placeholder="Select Role">
-                  {roles_role.map((roles_role, key) => <option key={key} value={roles_role.name} >{roles_role.name}</option>)}
+              <div className="col-span-12 sm:col-span-6">
+                <FormLabel htmlFor="modal-form-6">Select Role</FormLabel>
+                <FormSelect
+                  {...register("role")}
+                  name="role"
+                  placeholder="Select Role"
+                >
+                  {roles_role.map((roles_role, key) => (
+                    <option key={key} value={roles_role.name}>
+                      {roles_role.name}
+                    </option>
+                  ))}
                 </FormSelect>
               </div>
-              
-             
+
               <div className="col-span-12 sm:col-span-12">
-                <FormLabel htmlFor="modal-form-6">
-                  Permissions
-                </FormLabel>
-                <TomSelect value={selectPermission} onChange={setPermission} options={{
-                  placeholder: "Select permissions",
-                }} className="w-full" multiple>
+                <FormLabel htmlFor="modal-form-6">Permissions</FormLabel>
+                <TomSelect
+                  value={selectPermission}
+                  onChange={setPermission}
+                  options={{
+                    placeholder: "Select permissions",
+                  }}
+                  className="w-full"
+                  multiple
+                >
                   {permissions.map((permission: any, index: any) => (
-                    <option key={index} value={permission}>{permission}</option>
+                    <option key={index} value={permission}>
+                      {permission}
+                    </option>
                   ))}
                 </TomSelect>
               </div>
             </div>
             <div>
               <br />
-              <Button type="button" variant="outline-secondary" onClick={() => cancel({ name: "" })}
+              <Button
+                type="button"
+                variant="outline-secondary"
+                onClick={() => cancel({ name: "" })}
                 className="w-20 mr-1"
               >
                 Cancel
               </Button>
               <Button variant="primary" type="submit" className="w-20">
                 Save
-                {
-                  loading && <LoadingIcon
+                {loading && (
+                  <LoadingIcon
                     icon="spinning-circles"
                     color="white"
                     className="w-4 h-4 ml-2"
                   />
-                }
+                )}
               </Button>
             </div>
           </form>
@@ -211,9 +257,7 @@ function Permissions() {
                 Add New Permissions
               </Button>
 
-              <div className="hidden mx-auto md:block text-slate-500">
-
-              </div>
+              <div className="hidden mx-auto md:block text-slate-500"></div>
             </div>
             {/* BEGIN: Data List */}
             <div className="col-span-12 overflow-auto intro-y 2xl:overflow-visible">
@@ -223,9 +267,7 @@ function Permissions() {
                     <Table.Th className="border-b-0 whitespace-nowrap">
                       ROLE
                     </Table.Th>
-                    <Table.Th className="border-b-0 whitespace-nowrap">
-                      MODULES
-                    </Table.Th>
+
                     <Table.Th className="border-b-0 whitespace-nowrap">
                       PERMISSIONS
                     </Table.Th>
@@ -235,49 +277,54 @@ function Permissions() {
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
-                  {roles.map((role: any, key) => (
-                    <Table.Tr key={key} className="intro-x">
+                  {roles.map((role: any) => (
+                    <Table.Tr key={role._id} className="intro-x">
                       <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
                         <span className="font-medium whitespace-nowrap">
-                          {role.role}
+                          {role.name}
                         </span>
                       </Table.Td>
                       <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                        {role.groups.map((group: any, key: any) => (
-                          <Button key={key} size="sm" variant="outline-primary" className="mr-1 inline-block mt-1">
-                            {group}
-                          </Button>
-                        ))}
-                      </Table.Td>
-                      <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                        {role.permissions.map((permission: any, key: any) => (
-                          <Button key={key} size="sm" variant="outline-primary" className="mr-1 inline-block mt-1">
-                            {permission}
-                          </Button>
-                        ))}
+                        {permissions}
                       </Table.Td>
                       <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
                         <div className="flex items-center justify-center">
-                          {(role.role != "Admin" && role.role != "Speaker" && role.role != "Vendor" && role.role != "Attendee") &&
-                            <Menu>
-                              <Menu.Button as={Button} className="px-2 !box">
-                                <span className="flex items-center justify-center w-5 h-5">
-                                  <Lucide icon="MoreVertical" className="w-4 h-4" />
-                                </span>
-                              </Menu.Button>
-                              <Menu.Items>
-                                <Menu.Item onClick={() => editRecord(role)}>
-                                  <Lucide icon="Edit" className="w-4 h-4 mr-2" /> Edit
-                                </Menu.Item>
-                                <Menu.Item onClick={() => {
-                                  setRecordId(role._id),
-                                    setConfirmDelete(true);
-                                }}>
-                                  <Lucide icon="Trash" className="w-4 h-4 mr-2" /> Delete
-                                </Menu.Item>
-                              </Menu.Items>
-                            </Menu>
-                          }
+                          {role.role != "Admin" &&
+                            role.role != "Speaker" &&
+                            role.role != "Vendor" &&
+                            role.role != "Attendee" && (
+                              <Menu>
+                                <Menu.Button as={Button} className="px-2 !box">
+                                  <span className="flex items-center justify-center w-5 h-5">
+                                    <Lucide
+                                      icon="MoreVertical"
+                                      className="w-4 h-4"
+                                    />
+                                  </span>
+                                </Menu.Button>
+                                <Menu.Items>
+                                  <Menu.Item onClick={() => editRecord(role)}>
+                                    <Lucide
+                                      icon="Edit"
+                                      className="w-4 h-4 mr-2"
+                                    />{" "}
+                                    Edit
+                                  </Menu.Item>
+                                  <Menu.Item
+                                    onClick={() => {
+                                      setRecordId(role._id),
+                                        setConfirmDelete(true);
+                                    }}
+                                  >
+                                    <Lucide
+                                      icon="Trash"
+                                      className="w-4 h-4 mr-2"
+                                    />{" "}
+                                    Delete
+                                  </Menu.Item>
+                                </Menu.Items>
+                              </Menu>
+                            )}
                         </div>
                       </Table.Td>
                     </Table.Tr>
@@ -287,13 +334,15 @@ function Permissions() {
             </div>
             {/* END: Data List */}
           </div>
-          <Dialog staticBackdrop size="lg" open={dialog} onClose={() => {
-            setDialog(false);
-          }}
+          <Dialog
+            staticBackdrop
+            size="lg"
+            open={dialog}
+            onClose={() => {
+              setDialog(false);
+            }}
           >
-            <Dialog.Panel>
-
-            </Dialog.Panel>
+            <Dialog.Panel></Dialog.Panel>
           </Dialog>
           {/* BEGIN: Delete Confirmation Modal */}
           <Dialog
@@ -326,7 +375,8 @@ function Permissions() {
                 >
                   Cancel
                 </Button>
-                <Button onClick={() => deleteRecord()}
+                <Button
+                  onClick={() => deleteRecord()}
                   variant="danger"
                   type="button"
                   className="w-24"
@@ -338,13 +388,22 @@ function Permissions() {
             </Dialog.Panel>
           </Dialog>
           {/* END: Delete Confirmation Modal */}
-          <Notification options={{ duration: 3000 }} getRef={(el) => { notify.current = el; }} className="flex">
-            <Lucide icon={success ? "CheckCircle" : "XCircle"} className={success ? "text-success" : "text-danger"} />
+          <Notification
+            options={{ duration: 3000 }}
+            getRef={(el) => {
+              notify.current = el;
+            }}
+            className="flex"
+          >
+            <Lucide
+              icon={success ? "CheckCircle" : "XCircle"}
+              className={success ? "text-success" : "text-danger"}
+            />
             <div className="ml-4 mr-4">
-              <div className="font-medium">{success ? "Success" : "Failed"}</div>
-              <div className="mt-1 text-slate-500">
-                {message}
+              <div className="font-medium">
+                {success ? "Success" : "Failed"}
               </div>
+              <div className="mt-1 text-slate-500">{message}</div>
             </div>
           </Notification>
         </>

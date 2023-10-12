@@ -81,10 +81,10 @@ function Role() {
   }, []);
 
   const getRoles = async () => {
-    let res = await ApiService.getRoles();
-    setRoles(res);
+    const response = await ApiService.getRoles();
+    setRoles(response);
   };
-
+  //create event
   const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -310,20 +310,9 @@ function Role() {
                           {role.role}
                         </span>
                       </Table.Td>
+
                       <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                        {role.groups.map((group: any, key: any) => (
-                          <Button
-                            key={key}
-                            size="sm"
-                            variant="outline-primary"
-                            className="mr-1 inline-block mt-1"
-                          >
-                            {group}
-                          </Button>
-                        ))}
-                      </Table.Td>
-                      <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b]">
-                        {role.permissions.map((permission: any, key: any) => (
+                        {/* {role.permissions.map((permission: any, key: any) => (
                           <Button
                             key={key}
                             size="sm"
@@ -332,7 +321,14 @@ function Role() {
                           >
                             {permission}
                           </Button>
-                        ))}
+                        ))} */}
+                        <ul>
+                          {role.permissions.map((permission: any) => (
+                            <li key={permission._id}>
+                              {`${permission.entity_name} - ${permission.action_name} - ${permission.description}`}
+                            </li>
+                          ))}
+                        </ul>
                       </Table.Td>
                       <Table.Td className="first:rounded-l-md last:rounded-r-md bg-white border-b-0 dark:bg-darkmode-600 shadow-[20px_3px_20px_#0000000b] py-0 relative before:block before:w-px before:h-8 before:bg-slate-200 before:absolute before:left-0 before:inset-y-0 before:my-auto before:dark:bg-darkmode-400">
                         <div className="flex items-center justify-center">
